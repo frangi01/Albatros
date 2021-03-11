@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="Albatros:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/Albatros_jar</output-path>
+    <root id="archive" name="Albatros.jar">
+      <element id="module-output" name="Albatros" />
+    </root>
+  </artifact>
+</component>

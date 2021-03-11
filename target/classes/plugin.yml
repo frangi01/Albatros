@@ -1,0 +1,6 @@
+name: Albatros
+version: 1.0-SNAPSHOT
+main: it.overlands.albatros.Albatros
+api-version: 1.13
+commands:
+  albatros:

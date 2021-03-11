@@ -1,0 +1,6 @@
+name: Albatros
+version: ${project.version}
+main: it.overlands.albatros.Albatros
+api-version: 1.13
+commands:
+  albatros:
