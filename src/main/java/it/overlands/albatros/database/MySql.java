@@ -27,7 +27,7 @@ public class MySql {
 
 
     private final static String CREATE_TABLE_CHEST = "CREATE TABLE `CHEST` (\n" +
-            "  `id` int NOT NULL,\n" +
+            "  `id` int NOT NULL AUTO_INCREMENT,\n" +
             "  `player` varchar(100) NOT NULL,\n" +
             "  `world` varchar(100) NOT NULL,\n" +
             "  `x` double NOT NULL,\n" +
@@ -36,6 +36,24 @@ public class MySql {
             "  `pitch` double NOT NULL,\n" +
             "  `yaw` double NOT NULL,\n" +
             "  PRIMARY KEY (`id`)\n" +
+            ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;";
+
+    private final static String CREATE_TABLE_ENCHANTMENTS = "CREATE TABLE `ENCHANTMENTS` (\n" +
+            "  `id` int NOT NULL,\n" +
+            "  `name` varchar(100) NOT NULL,\n" +
+            "  `level` int NOT NULL,\n" +
+            "  `itemstack` int NOT NULL,\n" +
+            "   PRIMARY KEY (`id`)\n"+
+            ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;";
+
+    private final static String CREATE_TABLE_ITEMSTACK = "CREATE TABLE `ITEMSTACK` (\n" +
+            "  `id` int NOT NULL,\n" +
+            "  `amount` int NOT NULL,\n" +
+            "  `durability` double NOT NULL,\n" +
+            "  `enchantements` tinyint(1) NOT NULL,\n" +
+            "  `type` varchar(100) NOT NULL,\n" +
+            "  `chest` int NOT NULL,\n" +
+            "   PRIMARY KEY (`id`)\n"+
             ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;";
 
 
@@ -77,17 +95,9 @@ public class MySql {
         DatabaseMetaData dbm = null;
         try {
             dbm = c.getMetaData();
-            ResultSet tables = dbm.getTables(null, null, "your_table_name", null);
-            if (tables.next()) {
-                // Table exists
-            }
-            else {
-                // Table does not exist
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+            ResultSet tables = dbm.getTables(null, null, name, null);
+            if (tables.next()) return true;
+        } catch (SQLException e) { e.printStackTrace(); }
         return false;
     }
 
@@ -107,7 +117,21 @@ public class MySql {
             pstmt.execute();
             Logger.getLogger(MySql.class.getName()).log(Level.INFO, "Database selezionato");
             // cotrolla se ci sono le tabelle e se non ci sono creale
-
+            if(!checkTable("CHEST")){
+                pstmt = c.prepareStatement(CREATE_TABLE_CHEST);
+                pstmt.execute();
+                Logger.getLogger(MySql.class.getName()).log(Level.INFO, "Tabella CHEST creata con successo");
+            }
+            if(!checkTable("ITEMSTACK")){
+                pstmt = c.prepareStatement(CREATE_TABLE_ITEMSTACK);
+                pstmt.execute();
+                Logger.getLogger(MySql.class.getName()).log(Level.INFO, "Tabella ITEMSTACK creata con successo");
+            }
+            if(!checkTable("ENCHANTMENTS")){
+                pstmt = c.prepareStatement(CREATE_TABLE_ENCHANTMENTS);
+                pstmt.execute();
+                Logger.getLogger(MySql.class.getName()).log(Level.INFO, "Tabella ENCHANTMENTS creata con successo");
+            }
         } catch (SQLException e) {
             Logger.getLogger(Albatros.class.getName()).log(Level.SEVERE, null, e);
         }

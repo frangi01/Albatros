@@ -16,9 +16,9 @@ import java.util.ArrayList;
 
 public class BlockPlaceListener implements Listener {
     @EventHandler
-/**Un listener per confermare la posa delle chest
- *
- */
+    /**
+    * Un listener per confermare la posa delle chest
+    **/
 
     // all'evento del blocco piazzato
     public void BlockPlaceEvent(BlockPlaceEvent e) {
