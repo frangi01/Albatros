@@ -1,4 +1,4 @@
-package it.overlands.albatros.events;
+package it.overlands.albatros.listeners;
 
 
 import it.overlands.albatros.Albatros;
@@ -8,12 +8,18 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.inventory.InventoryMoveItemEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class BlockPlace implements Listener {
+public class BlockPlaceListener implements Listener {
     @EventHandler
+/**Un listener per confermare la posa delle chest
+ *
+ */
+
     // all'evento del blocco piazzato
     public void BlockPlaceEvent(BlockPlaceEvent e) {
         System.out.println(e.getBlockPlaced().getLocation());
@@ -23,16 +29,21 @@ public class BlockPlace implements Listener {
 
         Block placed_block = e.getBlock();
         Player issuer = e.getPlayer();
-        ArrayList<Player> ep = Albatros.getInstance().getExecutingPlayers();
+        ArrayList<Player> ep = Albatros.getExecutingPlayers();
 
-        // se il player che ha piazzato la cassa non ha attivato il comando l'evento
-        // è ignorato
+        /*se il player che ha piazzato la cassa non ha attivato il comando l'evento è ignorato */
         if(!ep.contains(issuer)){return;}
 
         if(placed_block.getType().equals(Material.CHEST)){
             //ha piazzato una chest
             int aux = Albatros.getInstance().addChest2Player(issuer,placed_block);
+            /** piazzo la chest nell'arraylist del player in questione
+             * aux mi ritorna -1 se ho superato il limite, altrimenti il numero di chest
+             * attualmente piazzate.
+             */
+
             int _MAXNUMCHEST = Albatros.getInstance().get_MAXNUMCHEST();
+
             if(aux>0 && aux< _MAXNUMCHEST){
                 String message ="Chest confermata, te ne mancano" + (_MAXNUMCHEST -1);
                 issuer.sendMessage(message);
@@ -42,5 +53,4 @@ public class BlockPlace implements Listener {
             }
         }
     }
-
 }

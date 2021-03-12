@@ -2,7 +2,7 @@ package it.overlands.albatros;
 
 import it.overlands.albatros.commands.CommandsHandler;
 import it.overlands.albatros.database.MySql;
-import it.overlands.albatros.events.BlockPlace;
+import it.overlands.albatros.listeners.BlockPlaceListener;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
@@ -75,7 +75,7 @@ public final class Albatros extends JavaPlugin {
         this.getCommand("albatros").setExecutor(new CommandsHandler());
         PluginManager pmg = getServer().getPluginManager();
         /* Sezione Handlers & GuiEvents */
-        pmg.registerEvents(new BlockPlace(), this);
+        pmg.registerEvents(new BlockPlaceListener(), this);
         //TODO CONNESSIONE AL DB
         MySql.openConnection();
         MySql.loadDatabase();
@@ -91,4 +91,7 @@ public final class Albatros extends JavaPlugin {
     public void onDisable() {
         // Plugin shutdown logic
     }
+
+
+
 }
