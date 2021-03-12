@@ -1,5 +1,7 @@
 package it.overlands.albatros.database;
 
+import it.overlands.albatros.Albatros;
+
 import java.sql.*;
 import java.util.Properties;
 import java.util.logging.Level;
@@ -13,10 +15,10 @@ public class MySql {
     private final static String PASSWORD = "@6W9{Xb8";
     
     
-    private final static String DBNAME = "albatros";
+    private final static String DBNAME = "Albatros";
     private final static String DRIVER = "com.mysql.cj.jdbc.Driver";
 
-    private final static String CREATE_DATABASE = "CREATE DATABASE IF EXIST {DBNAME};";
+    private final static String CREATE_DATABASE = "CREATE DATABASE {DBNAME};";
     private final static String USE_DATABASE = "USE {DBNAME};";
 
 
@@ -52,33 +54,36 @@ public class MySql {
         }
     }
 
+    private static boolean checkDatabase(){
+        /* recupera tutti database e torna vero se trova nella lista il DBNAME */
+        ResultSet rs = null;
+        try {
+            rs = c.getMetaData().getCatalogs();
+            while(rs.next())
+                if(DBNAME.equals(rs.getString(1))) return true;
+        } catch (SQLException e) { e.printStackTrace(); }
+        return false;
+    }
+
 
     public static void loadDatabase() {
         //Statement stmt = c.createStatement();
         try {
             PreparedStatement pstmt = null;
-            pstmt = c.prepareStatement(CREATE_DATABASE.replace("{DBNAME}",DBNAME));
-            pstmt.execute();
-            Logger.getLogger(MySql.class.getName()).log(Level.INFO, "Database creato o esistente");
+            // se il database non esiste lo crea
+            if(!checkDatabase()){
+                pstmt = c.prepareStatement(CREATE_DATABASE.replace("{DBNAME}",DBNAME));
+                pstmt.execute();
+                Logger.getLogger(MySql.class.getName()).log(Level.INFO, "Database creato");
+            }
+            // seleziona il database da usare
             pstmt = c.prepareStatement(USE_DATABASE.replace("{DBNAME}",DBNAME));
             pstmt.execute();
             Logger.getLogger(MySql.class.getName()).log(Level.INFO, "Database selezionato");
+            // cotrolla se ci sono le tabelle e se non ci sono creale
+
         } catch (SQLException e) {
-            Logger.getLogger(MySql.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(Albatros.class.getName()).log(Level.SEVERE, null, e);
         }
     }
-
-    
-    /*
-    
-    public static void main(String[] args) {
-    //Qui il codice JDBC
-        try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
-        Statement stmt = conn.createStatement();
-        PreparedStatement pstmt = conn.prepareStatement(INSERT);) {
-                    
-        } catch (ClassNotFoundException | SQLException ex) {
-                    Logger.getLogger(MySql.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }*/
 }
