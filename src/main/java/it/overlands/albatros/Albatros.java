@@ -40,6 +40,7 @@ public final class Albatros extends JavaPlugin {
             if(playerChests.get(p).size()<_MAXNUMCHEST){
                 //p ha ancora chest da claimare?
                 playerChests.get(p).add(chestID);
+                //TODO AGGIUNGI AL DB
                 return playerChests.get(p).size();
             }
             else return -1;

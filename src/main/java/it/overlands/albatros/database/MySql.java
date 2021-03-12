@@ -23,14 +23,22 @@ public class MySql {
 
 
 
-    private final static String DROP_TABLE = "DROP TABLE IF NOT EXISTS animals";
+    //private final static String DROP_TABLE = "DROP TABLE IF NOT EXISTS animals";
 
 
-    private final static String CREATE_TABLE = "CREATE TABLE animals (\n" +
-	"     id MEDIUMINT NOT NULL AUTO_INCREMENT,\n" +
-	"     name CHAR(30) NOT NULL,\n" +
-	"     PRIMARY KEY (id)\n" +
-	");";
+    private final static String CREATE_TABLE_CHEST = "CREATE TABLE `CHEST` (\n" +
+            "  `id` int NOT NULL,\n" +
+            "  `player` varchar(100) NOT NULL,\n" +
+            "  `world` varchar(100) NOT NULL,\n" +
+            "  `x` double NOT NULL,\n" +
+            "  `y` double NOT NULL,\n" +
+            "  `z` double NOT NULL,\n" +
+            "  `pitch` double NOT NULL,\n" +
+            "  `yaw` double NOT NULL,\n" +
+            "  PRIMARY KEY (`id`)\n" +
+            ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;";
+
+
     private final static String INSERT = "INSERT INTO animals " + "(name) values (?)";
     private final static String SELECT = "SELECT * from animals";
     
@@ -62,6 +70,24 @@ public class MySql {
             while(rs.next())
                 if(DBNAME.equals(rs.getString(1))) return true;
         } catch (SQLException e) { e.printStackTrace(); }
+        return false;
+    }
+
+    private static boolean checkTable(String name){
+        DatabaseMetaData dbm = null;
+        try {
+            dbm = c.getMetaData();
+            ResultSet tables = dbm.getTables(null, null, "your_table_name", null);
+            if (tables.next()) {
+                // Table exists
+            }
+            else {
+                // Table does not exist
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return false;
     }
 
