@@ -1,13 +1,11 @@
 package it.overlands.albatros.commands;
 
 import it.overlands.albatros.Albatros;
-import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
 import java.util.Set;
 
 public class CommandsHandler implements CommandExecutor {

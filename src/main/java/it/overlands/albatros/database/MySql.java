@@ -61,9 +61,13 @@ public class MySql {
 
 
     public final static String ADD_CHEST = "INSERT INTO `CHEST`(`id`, `player`, `world`, `x`, `y`, `z`, `pitch`, `yaw`) VALUES (NULL,?,?,?,?,?,?,?)";
+    public final static String RELOAD_ITEMS = "INSERT INTO `ITEMSTACK`(`id`, `amount`, `durability`, `enchantements`, `type`, `chest`) VALUES (NULL,?,?,?,?,?)";
+    public final static String ADD_ENCHANTS = "INSERT INTO `ENCHANTMENTS`(`id`, `name`, `level`, `itemstack`) VALUES (NULL,?,?,?)";
     public final static String RESET_ALL_CHESTS = "DELETE FROM `CHEST` WHERE `player` = ?";
 
-    private final static String GET_ALL_CHEST = "SELECT * FROM `CHEST`";
+    private final static String GET_ALL_CHESTS = "SELECT * FROM `CHEST`";
+    public final static String GET_CHEST = "SELECT `id` FROM `CHEST` WHERE `x` = ? AND `y` = ? AND `z` = ?";
+
     
     public static Connection c = null;
     private static Statement stmt;
@@ -135,7 +139,7 @@ public class MySql {
     public static void loadFields(){
         PreparedStatement pstmt = null;
         try {
-            pstmt = c.prepareStatement(GET_ALL_CHEST);
+            pstmt = c.prepareStatement(GET_ALL_CHESTS);
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
                 /*System.out.println("caricamento dati.....");

@@ -15,12 +15,13 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 public class BlockPlaceListener implements Listener {
-    @EventHandler
+
     /**
     * Un listener per confermare la posa delle chest
     **/
 
     // all'evento del blocco piazzato
+    @EventHandler
     public void BlockPlaceEvent(BlockPlaceEvent e) {
         //System.out.println(e.getBlockPlaced().getLocation());
 

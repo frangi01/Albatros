@@ -19,7 +19,7 @@ import java.util.Set;
 
 public final class Albatros extends JavaPlugin {
     private static Albatros instance;
-    private static final int _MAXNUMCHEST = 10;
+    private static final int _MAXNUMCHEST = 5;
 
     //playerCheck tiene il conto di quante casse hanno claimato contiene
     private static HashMap<String, ArrayList<Block>> playerChestsMap = new HashMap<>();
@@ -95,7 +95,7 @@ public final class Albatros extends JavaPlugin {
     }
 
     public static void removeChests2Player(Player p){
-        if(playerChestsMap.containsKey(p)){
+        if(playerChestsMap.containsKey(p.getName())){
             playerChestsMap.put(p.getName(), new ArrayList<>());
             // cancella tutte le righe della tabella con il nome del player
             PreparedStatement pstmt = null;
@@ -131,11 +131,12 @@ public final class Albatros extends JavaPlugin {
         /* Sezione Handlers & GuiEvents */
         pmg.registerEvents(new BlockPlaceListener(), this);
         pmg.registerEvents(new ItemPlacedListener(), this);
+        //pmg.registerEvents(new ItemPlacedListener(), this);
         //CONNESSIONE AL DB
         MySql.openConnection();
         //CREAZIONE DELLE TABELLE SE NON ESISTONO
         MySql.loadDatabase();
-        //TODO SE ESISTONO CARICA playerChests E executingPlayers CON I DATI SUL DB
+        //carica playerChests con i dati sul db
         MySql.loadFields();
 
 
