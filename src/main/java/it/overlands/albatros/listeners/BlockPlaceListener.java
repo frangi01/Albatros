@@ -36,16 +36,16 @@ public class BlockPlaceListener implements Listener {
 
         if(placed_block.getType().equals(Material.CHEST)){
             //ha piazzato una chest
-            int aux = Albatros.getInstance().addChest2Player(issuer,placed_block);
+            int aux = Albatros.addChest2Player(issuer,placed_block);
             /** piazzo la chest nell'arraylist del player in questione
              * aux mi ritorna -1 se ho superato il limite, altrimenti il numero di chest
              * attualmente piazzate.
              */
 
-            int _MAXNUMCHEST = Albatros.getInstance().get_MAXNUMCHEST();
+            int _MAXNUMCHEST = Albatros.get_MAXNUMCHEST();
 
             if(aux>0 && aux< _MAXNUMCHEST){
-                String message ="Chest confermata, te ne mancano" + (_MAXNUMCHEST -1);
+                String message ="Chest confermata, te ne mancano: " + (_MAXNUMCHEST - aux);
                 issuer.sendMessage(message);
             }
             if (aux == -1){

@@ -33,7 +33,7 @@ public class ItemPlacedListener implements Listener {
 
         Player player =(Player) e.getInitiator().getHolder();
         Block chest = (Block) e.getDestination().getHolder();
-        HashMap<Player, ArrayList<Block>> pcmap = Albatros.getInstance().getPlayerChests();
+        HashMap<Player, ArrayList<Block>> pcmap = Albatros.getInstance().getPlayerChestsMap();
         ItemStack item = e.getItem();
 
         if(pcmap.containsKey(player)) {
