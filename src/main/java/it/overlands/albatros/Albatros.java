@@ -4,6 +4,7 @@ import it.overlands.albatros.commands.CommandsHandler;
 import it.overlands.albatros.database.MySql;
 import it.overlands.albatros.listeners.BlockPlaceListener;
 import it.overlands.albatros.listeners.ItemPlacedListener;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
@@ -28,7 +29,6 @@ public final class Albatros extends JavaPlugin {
     /**
      * PROBLEMI DA CORREGERE
      * 1) nel map se io piazzo 5 chest me ne inserisce 4
-     * 2) dal nome del mondo non recupera il mondo(Mysql:141)
      *
      *
      * ATTENZIONE
@@ -124,6 +124,7 @@ public final class Albatros extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        instance = this;
         // Plugin startup logic
         this.getCommand("albatros").setExecutor(new CommandsHandler());
         PluginManager pmg = getServer().getPluginManager();
@@ -136,8 +137,6 @@ public final class Albatros extends JavaPlugin {
         MySql.loadDatabase();
         //TODO SE ESISTONO CARICA playerChests E executingPlayers CON I DATI SUL DB
         MySql.loadFields();
-
-        
 
 
     }

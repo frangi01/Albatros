@@ -138,17 +138,17 @@ public class MySql {
             pstmt = c.prepareStatement(GET_ALL_CHEST);
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
-                System.out.println("caricamento dati.....");
+                /*System.out.println("caricamento dati.....");
                 System.out.println(rs.getString("world"));
                 System.out.println(rs.getDouble("x"));
                 System.out.println(rs.getDouble("y"));
                 System.out.println(rs.getDouble("z"));
                 System.out.println(rs.getFloat("pitch"));
-                System.out.println(rs.getFloat("yaw"));
+                System.out.println(rs.getFloat("yaw"));*/
 
-                /*Location loc = new Location(Albatros.getInstance().getServer().getWorld(rs.getString("world")),rs.getDouble("x"),rs.getDouble("y"),rs.getDouble("z"),rs.getFloat("pitch"),rs.getFloat("yaw"));
+                Location loc = new Location(Albatros.getInstance().getServer().getWorld(rs.getString("world")),rs.getDouble("x"),rs.getDouble("y"),rs.getDouble("z"),rs.getFloat("pitch"),rs.getFloat("yaw"));
                 Block b = loc.getBlock();
-                Albatros.addChest2Player(rs.getString("player"),b);*/
+                Albatros.addChest2Player(rs.getString("player"),b);
             }
             Logger.getLogger(MySql.class.getName()).log(Level.INFO, "Dati recuperati con successo");
         } catch (SQLException e) {
