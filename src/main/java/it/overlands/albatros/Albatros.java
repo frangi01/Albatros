@@ -10,6 +10,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
@@ -18,10 +20,21 @@ public final class Albatros extends JavaPlugin {
     private static Albatros instance;
     private static final int _MAXNUMCHEST = 10;
 
-    //playerCheck tiene il conto di quante casse hanno claimato
-    private static HashMap<Player, ArrayList<Block>> playerChestsMap = new HashMap<Player, ArrayList<Block>>();
+    //playerCheck tiene il conto di quante casse hanno claimato contiene
+    private static HashMap<String, ArrayList<Block>> playerChestsMap = new HashMap<>();
     // player che hanno lanciato il comando e stanno lavorando con le casse
     private static ArrayList<Player> executingPlayers = new ArrayList<>();
+
+    /**
+     * PROBLEMI DA CORREGERE
+     * 1) nel map se io piazzo 5 chest me ne inserisce 4
+     * 2) dal nome del mondo non recupera il mondo(Mysql:141)
+     *
+     *
+     * ATTENZIONE
+     * playerChestsMap da ora contiene il nome<String> e non il <Player> perchè al riavvio del plugin non si può recuperare il <Player> dal nome se questo è offline
+     *
+     * **/
 
 
 
@@ -31,11 +44,11 @@ public final class Albatros extends JavaPlugin {
     public static Albatros getInstance(){return instance;}
 
     /***************** playerChest functions ******************************/
-    public static HashMap<Player, ArrayList<Block>> getPlayerChestsMap(){return playerChestsMap;}
-    public static Set<Player> getPlayerList() {return playerChestsMap.keySet();}
+    public static HashMap<String, ArrayList<Block>> getPlayerChestsMap(){return playerChestsMap;}
+    public static Set<String> getPlayerList() {return playerChestsMap.keySet();}
     public  static int getSizeChestListofPlayer(Player p){
-        if(playerChestsMap.containsKey(p)){
-            return playerChestsMap.get(p).size();
+        if(playerChestsMap.containsKey(p.getName())){
+            return playerChestsMap.get(p.getName()).size();
         }
         return -1;
     }
@@ -46,7 +59,7 @@ public final class Albatros extends JavaPlugin {
         return null;
     }
 
-    public static int addChest2Player(Player p,Block chestID){
+    public static int addChest2Player(String p,Block chestID){
         //aggiunge la chest al player e ritorna il numero di chest attuali,
         // -1 se ha superato il limite
         if(playerChestsMap.containsKey(p)){
@@ -54,7 +67,20 @@ public final class Albatros extends JavaPlugin {
             if(playerChestsMap.get(p).size()<_MAXNUMCHEST){
                 //p ha ancora chest da claimare?
                 playerChestsMap.get(p).add(chestID);
-                //TODO AGGIUNGI AL DB
+                //caricamento dati chest sul db
+                try {
+                    PreparedStatement pstmt = MySql.c.prepareStatement(MySql.ADD_CHEST);
+                    pstmt.setString (1, p);
+                    pstmt.setString (2, chestID.getLocation().getWorld().getName());
+                    pstmt.setDouble (3, chestID.getLocation().getX());
+                    pstmt.setDouble (4, chestID.getLocation().getY());
+                    pstmt.setDouble (5, chestID.getLocation().getZ());
+                    pstmt.setFloat (6, chestID.getLocation().getPitch());
+                    pstmt.setFloat (7, chestID.getLocation().getYaw());
+                    pstmt.execute();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
                 return playerChestsMap.get(p).size();
             }
             else return -1;
@@ -69,7 +95,19 @@ public final class Albatros extends JavaPlugin {
     }
 
     public static void removeChests2Player(Player p){
-        if(playerChestsMap.containsKey(p)){ playerChestsMap.put(p, new ArrayList<>());}
+        if(playerChestsMap.containsKey(p)){
+            playerChestsMap.put(p.getName(), new ArrayList<>());
+            // cancella tutte le righe della tabella con il nome del player
+            PreparedStatement pstmt = null;
+            try {
+                pstmt = MySql.c.prepareStatement(MySql.RESET_ALL_CHESTS);
+                pstmt.setString (1, p.getName());
+                pstmt.execute();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+        }
     }
 
     /************ executing player functions: ************/
@@ -92,11 +130,12 @@ public final class Albatros extends JavaPlugin {
         /* Sezione Handlers & GuiEvents */
         pmg.registerEvents(new BlockPlaceListener(), this);
         pmg.registerEvents(new ItemPlacedListener(), this);
-        //TODO CONNESSIONE AL DB
+        //CONNESSIONE AL DB
         MySql.openConnection();
+        //CREAZIONE DELLE TABELLE SE NON ESISTONO
         MySql.loadDatabase();
-            //TODO CREAZIONE DELLE TABELLE SE NON ESISTONO
-            //TODO SE ESISTONO CARICA playerChests E executingPlayers CON I DATI SUL DB
+        //TODO SE ESISTONO CARICA playerChests E executingPlayers CON I DATI SUL DB
+        MySql.loadFields();
 
         
 

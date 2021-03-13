@@ -23,6 +23,7 @@ import java.util.HashMap;
 public class ItemPlacedListener implements Listener {
     @EventHandler
     public void itemPlaced(InventoryMoveItemEvent e){
+        System.out.println("DENTRO");
     //rileva lo spostamento di items tra inventari
         if(!(e.getInitiator().getHolder() instanceof Player)){return;}
         //se l'inventario di partenza non è di un Player ignora l'evento
@@ -33,16 +34,16 @@ public class ItemPlacedListener implements Listener {
 
         Player player =(Player) e.getInitiator().getHolder();
         Block chest = (Block) e.getDestination().getHolder();
-        HashMap<Player, ArrayList<Block>> pcmap = Albatros.getInstance().getPlayerChestsMap();
+        HashMap<String, ArrayList<Block>> pcmap = Albatros.getInstance().getPlayerChestsMap();
         ItemStack item = e.getItem();
 
-        if(pcmap.containsKey(player)) {
+        if(pcmap.containsKey(player.getName())) {
             /** Il player è salvato nella lista, vuol dire che
              * ha selezionato delle casse migratorie.
              * Cerco se la cassa in cui è stata depositata roba
              * è una delle casse migratorie
              */
-            ArrayList<Block> chestlist = pcmap.get(player);
+            ArrayList<Block> chestlist = pcmap.get(player.getName());
 
 
             for(Block b : chestlist){

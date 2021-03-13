@@ -1,6 +1,9 @@
 package it.overlands.albatros.database;
 
 import it.overlands.albatros.Albatros;
+import org.bukkit.Location;
+import org.bukkit.World;
+import org.bukkit.block.Block;
 
 import java.sql.*;
 import java.util.Properties;
@@ -26,7 +29,7 @@ public class MySql {
     //private final static String DROP_TABLE = "DROP TABLE IF NOT EXISTS animals";
 
 
-    private final static String CREATE_TABLE_CHEST = "CREATE TABLE `CHEST` (\n" +
+    private final static String CREATE_TABLE_CHEST = "CREATE TABLE IF NOT EXISTS `CHEST` (\n" +
             "  `id` int NOT NULL AUTO_INCREMENT,\n" +
             "  `player` varchar(100) NOT NULL,\n" +
             "  `world` varchar(100) NOT NULL,\n" +
@@ -38,7 +41,7 @@ public class MySql {
             "  PRIMARY KEY (`id`)\n" +
             ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;";
 
-    private final static String CREATE_TABLE_ENCHANTMENTS = "CREATE TABLE `ENCHANTMENTS` (\n" +
+    private final static String CREATE_TABLE_ENCHANTMENTS = "CREATE TABLE IF NOT EXISTS `ENCHANTMENTS` (\n" +
             "  `id` int NOT NULL,\n" +
             "  `name` varchar(100) NOT NULL,\n" +
             "  `level` int NOT NULL,\n" +
@@ -46,7 +49,7 @@ public class MySql {
             "   PRIMARY KEY (`id`)\n"+
             ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;";
 
-    private final static String CREATE_TABLE_ITEMSTACK = "CREATE TABLE `ITEMSTACK` (\n" +
+    private final static String CREATE_TABLE_ITEMSTACK = "CREATE TABLE IF NOT EXISTS `ITEMSTACK` (\n" +
             "  `id` int NOT NULL,\n" +
             "  `amount` int NOT NULL,\n" +
             "  `durability` double NOT NULL,\n" +
@@ -57,8 +60,10 @@ public class MySql {
             ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;";
 
 
-    private final static String INSERT = "INSERT INTO animals " + "(name) values (?)";
-    private final static String SELECT = "SELECT * from animals";
+    public final static String ADD_CHEST = "INSERT INTO `CHEST`(`id`, `player`, `world`, `x`, `y`, `z`, `pitch`, `yaw`) VALUES (NULL,?,?,?,?,?,?,?)";
+    public final static String RESET_ALL_CHESTS = "DELETE FROM `CHEST` WHERE `player` = ?";
+
+    private final static String GET_ALL_CHEST = "SELECT * FROM `CHEST`";
     
     public static Connection c = null;
     private static Statement stmt;
@@ -91,16 +96,6 @@ public class MySql {
         return false;
     }
 
-    private static boolean checkTable(String name){
-        DatabaseMetaData dbm = null;
-        try {
-            dbm = c.getMetaData();
-            ResultSet tables = dbm.getTables(null, null, name, null);
-            if (tables.next()) return true;
-        } catch (SQLException e) { e.printStackTrace(); }
-        return false;
-    }
-
 
     public static void loadDatabase() {
         //Statement stmt = c.createStatement();
@@ -117,23 +112,47 @@ public class MySql {
             pstmt.execute();
             Logger.getLogger(MySql.class.getName()).log(Level.INFO, "Database selezionato");
             // cotrolla se ci sono le tabelle e se non ci sono creale
-            if(!checkTable("CHEST")){
-                pstmt = c.prepareStatement(CREATE_TABLE_CHEST);
-                pstmt.execute();
-                Logger.getLogger(MySql.class.getName()).log(Level.INFO, "Tabella CHEST creata con successo");
-            }
-            if(!checkTable("ITEMSTACK")){
-                pstmt = c.prepareStatement(CREATE_TABLE_ITEMSTACK);
-                pstmt.execute();
-                Logger.getLogger(MySql.class.getName()).log(Level.INFO, "Tabella ITEMSTACK creata con successo");
-            }
-            if(!checkTable("ENCHANTMENTS")){
-                pstmt = c.prepareStatement(CREATE_TABLE_ENCHANTMENTS);
-                pstmt.execute();
-                Logger.getLogger(MySql.class.getName()).log(Level.INFO, "Tabella ENCHANTMENTS creata con successo");
-            }
+
+            pstmt = c.prepareStatement(CREATE_TABLE_CHEST);
+            pstmt.execute();
+            Logger.getLogger(MySql.class.getName()).log(Level.INFO, "Tabella CHEST caricata");
+
+
+            pstmt = c.prepareStatement(CREATE_TABLE_ITEMSTACK);
+            pstmt.execute();
+            Logger.getLogger(MySql.class.getName()).log(Level.INFO, "Tabella ITEMSTACK caricata");
+
+
+            pstmt = c.prepareStatement(CREATE_TABLE_ENCHANTMENTS);
+            pstmt.execute();
+            Logger.getLogger(MySql.class.getName()).log(Level.INFO, "Tabella ENCHANTMENTS caricata");
+
         } catch (SQLException e) {
             Logger.getLogger(Albatros.class.getName()).log(Level.SEVERE, null, e);
+        }
+    }
+
+    public static void loadFields(){
+        PreparedStatement pstmt = null;
+        try {
+            pstmt = c.prepareStatement(GET_ALL_CHEST);
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                System.out.println("caricamento dati.....");
+                System.out.println(rs.getString("world"));
+                System.out.println(rs.getDouble("x"));
+                System.out.println(rs.getDouble("y"));
+                System.out.println(rs.getDouble("z"));
+                System.out.println(rs.getFloat("pitch"));
+                System.out.println(rs.getFloat("yaw"));
+
+                /*Location loc = new Location(Albatros.getInstance().getServer().getWorld(rs.getString("world")),rs.getDouble("x"),rs.getDouble("y"),rs.getDouble("z"),rs.getFloat("pitch"),rs.getFloat("yaw"));
+                Block b = loc.getBlock();
+                Albatros.addChest2Player(rs.getString("player"),b);*/
+            }
+            Logger.getLogger(MySql.class.getName()).log(Level.INFO, "Dati recuperati con successo");
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 }

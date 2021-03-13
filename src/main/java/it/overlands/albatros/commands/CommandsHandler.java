@@ -32,14 +32,14 @@ public class CommandsHandler implements CommandExecutor {
                     case _ATTIVACHEST:
                         //inizia la sequenza per piazzare e memorizzare le casse
                         sender.sendMessage("Piazza le chest per registrarle");
-                        Albatros.addExecutingPlayer((Player) sender);
+                        Albatros.addExecutingPlayer(sender);
                         break;
                     case _TERMINA:
                         /* termina la sequenza per piazzare e memorizzare le casse
                          * SE non avviene in modo automatico
                          * (EG vuoi piazzare solo 3 casse su 5 e fare altro)*/
                         sender.sendMessage("registrazione chest terminata!");
-                        Albatros.removeExecutingPlayer((Player)sender);
+                        Albatros.removeExecutingPlayer(sender);
                         break;
                     case _FLUSH:
                         /*funzione che deve scrivere e aggiornare il database */
@@ -54,20 +54,20 @@ public class CommandsHandler implements CommandExecutor {
                     case _RESETTA:
                         // cancella tutte le chest attive di un player;
                         sender.sendMessage("registro delle tue chest resettato!");
-                        Albatros.removeChests2Player((Player) sender);
+                        Albatros.removeChests2Player(sender);
                     break;
                     case _IMPORT:
                         //funzione che legge il database e importa la roba
                         break;
                     case _LISTAPLAYER:
-                        Set<Player> players= Albatros.getPlayerList();
+                        Set<String> players = Albatros.getPlayerList();
                         sender.sendMessage("players registrati: " + players.size());
-                        for(Player p: players){
-                            sender.sendMessage(p.getDisplayName());
+                        for(String p: players){
+                            sender.sendMessage(p);
                         }
                         break;
                         case _LISTACHEST:
-                            int size = Albatros.getSizeChestListofPlayer((Player) sender);
+                            int size = Albatros.getSizeChestListofPlayer(sender);
                             sender.sendMessage("hai piazzato "+size+ " chests");
                             break;
                     default:

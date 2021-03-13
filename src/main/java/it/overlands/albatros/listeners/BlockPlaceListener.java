@@ -22,7 +22,7 @@ public class BlockPlaceListener implements Listener {
 
     // all'evento del blocco piazzato
     public void BlockPlaceEvent(BlockPlaceEvent e) {
-        System.out.println(e.getBlockPlaced().getLocation());
+        //System.out.println(e.getBlockPlaced().getLocation());
 
         //JSONObject json = new JSONObject();
         //json.put("",e.getBlockPlaced().getType())
@@ -35,22 +35,28 @@ public class BlockPlaceListener implements Listener {
         if(!ep.contains(issuer)){return;}
 
         if(placed_block.getType().equals(Material.CHEST)){
-            //ha piazzato una chest
-            int aux = Albatros.addChest2Player(issuer,placed_block);
-            /** piazzo la chest nell'arraylist del player in questione
-             * aux mi ritorna -1 se ho superato il limite, altrimenti il numero di chest
-             * attualmente piazzate.
-             */
+            //se è nel mondo giusto
+            //TODO mettere il nome del mondo giusto
+            if(e.getPlayer().getWorld().getName().equals("world")){
+                //ha piazzato una chest
+                int aux = Albatros.addChest2Player(issuer.getName(),placed_block);
+                /** piazzo la chest nell'arraylist del player in questione
+                 * aux mi ritorna -1 se ho superato il limite, altrimenti il numero di chest
+                 * attualmente piazzate.
+                 */
 
-            int _MAXNUMCHEST = Albatros.get_MAXNUMCHEST();
+                int _MAXNUMCHEST = Albatros.get_MAXNUMCHEST();
 
-            if(aux>0 && aux< _MAXNUMCHEST){
-                String message ="Chest confermata, te ne mancano: " + (_MAXNUMCHEST - aux);
-                issuer.sendMessage(message);
+                if(aux>0 && aux< _MAXNUMCHEST){
+                    String message = "Chest confermata, te ne mancano: " + (_MAXNUMCHEST - aux);
+                    issuer.sendMessage(message);
+                }
+                if (aux == -1){
+                    e.setCancelled(true);
+                    issuer.sendMessage("Limite chest raggiunto operazione terminata");
+                }
             }
-            if (aux == -1){
-                issuer.sendMessage("Limite chest raggiunto operazione terminata");
-            }
+
         }
     }
 }
