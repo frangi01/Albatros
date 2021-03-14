@@ -5,6 +5,8 @@ import it.overlands.albatros.database.MySql;
 import org.apache.commons.lang.ObjectUtils;
 import org.bukkit.block.Block;
 
+import org.bukkit.block.Chest;
+import org.bukkit.block.DoubleChest;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -20,6 +22,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
+import java.util.Set;
 
 
 import static it.overlands.albatros.database.MySql.GET_CHEST;
@@ -32,6 +35,47 @@ public class ItemPlacedListener implements Listener {
      * da un inventario ad un altro
      */
     @EventHandler
+    public void inv(InventoryCloseEvent e){
+        if(!(e.getPlayer() instanceof  Player)){return;}
+        Player player = (Player) e.getPlayer();
+        Inventory inv = e.getInventory();
+
+        //e.getPlayer().sendMessage("evento triggerato, hai chiuso un inventario");
+        if(!inv.getType().equals(InventoryType.CHEST)){
+            player.sendMessage("non hai chiuso una chest...");
+            return;
+        }
+
+
+        if(Albatros.getPlayerList().contains(player.getDisplayName())){
+            ArrayList<Chest> listachests= Albatros.getOnePlayerChestMap(player);
+
+            if(listachests.contains((Chest) inv.getHolder())){
+                player.sendMessage("hai chiuso una cassa registrata!");
+            }
+            else{
+                player.sendMessage("non hai chiuso una cassa registrata...");
+            }
+
+
+        }
+        else{
+            player.sendMessage("non sei nella lista player!");
+
+        }
+
+
+
+    }
+
+
+
+
+
+
+
+
+
     public void inv(InventoryClickEvent e) {
 
         if (!(e.getWhoClicked() instanceof Player)) {
@@ -105,7 +149,7 @@ public class ItemPlacedListener implements Listener {
 
 
 
-            HashMap<String, ArrayList<Block>> pcmap = Albatros.getInstance().getPlayerChestsMap();
+            HashMap<String, ArrayList<Chest>> pcmap = Albatros.getPlayerChestsMap();
             ItemStack item = e.getCurrentItem();
 
 /*

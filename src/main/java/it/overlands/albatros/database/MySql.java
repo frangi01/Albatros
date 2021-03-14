@@ -4,6 +4,7 @@ import it.overlands.albatros.Albatros;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.block.Chest;
 
 import java.sql.*;
 import java.util.Properties;
@@ -151,7 +152,7 @@ public class MySql {
                 System.out.println(rs.getFloat("yaw"));*/
 
                 Location loc = new Location(Albatros.getInstance().getServer().getWorld(rs.getString("world")),rs.getDouble("x"),rs.getDouble("y"),rs.getDouble("z"),rs.getFloat("pitch"),rs.getFloat("yaw"));
-                Block b = loc.getBlock();
+                Chest b = (Chest) loc.getBlock();
                 Albatros.addChest2Player(rs.getString("player"),b);
             }
             Logger.getLogger(MySql.class.getName()).log(Level.INFO, "Dati recuperati con successo");

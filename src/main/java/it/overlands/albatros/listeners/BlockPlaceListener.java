@@ -2,8 +2,10 @@ package it.overlands.albatros.listeners;
 
 
 import it.overlands.albatros.Albatros;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.Chest;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -12,7 +14,10 @@ import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.json.JSONObject;
 
+import javax.swing.*;
 import java.util.ArrayList;
+
+import static java.lang.Math.abs;
 
 public class BlockPlaceListener implements Listener {
 
@@ -28,19 +33,27 @@ public class BlockPlaceListener implements Listener {
         //JSONObject json = new JSONObject();
         //json.put("",e.getBlockPlaced().getType())
 
-        Block placed_block = e.getBlock();
+        Block pb = e.getBlock();
         Player issuer = e.getPlayer();
         ArrayList<Player> ep = Albatros.getExecutingPlayers();
 
         /*se il player che ha piazzato la cassa non ha attivato il comando l'evento è ignorato */
         if(!ep.contains(issuer)){return;}
 
-        if(placed_block.getType().equals(Material.CHEST)){
+        if(pb.getType().equals(Material.CHEST)){
+            Chest placed_block= (Chest) pb;
             //se è nel mondo giusto
             //TODO mettere il nome del mondo giusto
             if(e.getPlayer().getWorld().getName().equals("world")){
                 //ha piazzato una chest
-                int aux = Albatros.addChest2Player(issuer.getName(),placed_block);
+                if(!distanceCheck(placed_block,issuer)){
+                    issuer.sendMessage("Solo casse singole! piazzale ad un blocco di distanza"
+                    +"l'una dall'altra!!");
+                    e.setCancelled(true);
+                    return;
+                }
+
+                int aux = Albatros.addChest2Player(issuer.getDisplayName(),placed_block);
                 /** piazzo la chest nell'arraylist del player in questione
                  * aux mi ritorna -1 se ho superato il limite, altrimenti il numero di chest
                  * attualmente piazzate.
@@ -59,5 +72,19 @@ public class BlockPlaceListener implements Listener {
             }
 
         }
+    }
+
+    private boolean distanceCheck(Chest chest, Player player) {
+        Location loc = chest.getLocation();
+        double nx = abs(loc.getX());
+        double nz = abs(loc.getZ());
+
+        ArrayList<Chest> listablocchi = Albatros.getOnePlayerChestMap(player);
+        if(listablocchi == null) { return true;}
+
+        for(Chest r : listablocchi){
+            //TODO
+        }
+        return true;
     }
 }

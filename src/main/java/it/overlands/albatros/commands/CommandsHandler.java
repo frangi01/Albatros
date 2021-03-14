@@ -18,6 +18,8 @@ public class CommandsHandler implements CommandExecutor {
     private final String _HELP = "help";
     private final String _LISTAPLAYER = "listaplayer";
     private final String _LISTACHEST = "listachest";
+    private final String _RESETTATUTTI = "resettatutti";
+
 
     @Override
     public boolean onCommand(CommandSender s, Command command, String label, String[] args) {
@@ -56,6 +58,11 @@ public class CommandsHandler implements CommandExecutor {
                         sender.sendMessage("registro delle tue chest resettato!");
                         Albatros.removeChests2Player(sender);
                     break;
+                    case _RESETTATUTTI:
+                        // cancella tutte le chest attive di un player;
+                        sender.sendMessage("registro dei player resettato!");
+                        Albatros.resetPlayerChestsMap();
+                        break;
                     case _IMPORT:
                         //funzione che legge il database e importa la roba
                         break;

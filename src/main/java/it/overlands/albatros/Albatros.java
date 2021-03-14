@@ -6,6 +6,7 @@ import it.overlands.albatros.listeners.BlockPlaceListener;
 import it.overlands.albatros.listeners.ItemPlacedListener;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.block.Chest;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
@@ -22,7 +23,7 @@ public final class Albatros extends JavaPlugin {
     private static final int _MAXNUMCHEST = 5;
 
     //playerCheck tiene il conto di quante casse hanno claimato contiene
-    private static HashMap<String, ArrayList<Block>> playerChestsMap = new HashMap<>();
+    private static HashMap<String, ArrayList<Chest>> playerChestsMap = new HashMap<>();
     // player che hanno lanciato il comando e stanno lavorando con le casse
     private static ArrayList<Player> executingPlayers = new ArrayList<>();
 
@@ -44,7 +45,9 @@ public final class Albatros extends JavaPlugin {
     public static Albatros getInstance(){return instance;}
 
     /***************** playerChest functions ******************************/
-    public static HashMap<String, ArrayList<Block>> getPlayerChestsMap(){return playerChestsMap;}
+    public static HashMap<String, ArrayList<Chest>> getPlayerChestsMap(){return playerChestsMap;}
+    public static void resetPlayerChestsMap(){playerChestsMap=new HashMap<>(); return;}
+
     public static Set<String> getPlayerList() {return playerChestsMap.keySet();}
     public  static int getSizeChestListofPlayer(Player p){
         if(playerChestsMap.containsKey(p.getName())){
@@ -52,14 +55,14 @@ public final class Albatros extends JavaPlugin {
         }
         return -1;
     }
-    public static ArrayList<Block> getOnePlayerChestMap(Player p) {
-        if (playerChestsMap.containsKey(p)) {
-            return playerChestsMap.get(p);
+    public static ArrayList<Chest> getOnePlayerChestMap(Player p) {
+        if (playerChestsMap.containsKey(p.getDisplayName())) {
+            return playerChestsMap.get(p.getDisplayName());
         }
         return null;
     }
 
-    public static int addChest2Player(String p,Block chestID){
+    public static int addChest2Player(String p,Chest chestID){
         //aggiunge la chest al player e ritorna il numero di chest attuali,
         // -1 se ha superato il limite
         if(playerChestsMap.containsKey(p)){
@@ -87,7 +90,7 @@ public final class Albatros extends JavaPlugin {
         }
         else{
             //crea un nuovo array di chests e mette il nuovo player nella mappa
-            ArrayList<Block> aux = new ArrayList<>();
+            ArrayList<Chest> aux = new ArrayList<>();
             aux.add(chestID);
             playerChestsMap.put(p,aux);
             return 1;
