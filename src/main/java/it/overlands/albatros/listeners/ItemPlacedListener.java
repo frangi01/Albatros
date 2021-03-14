@@ -37,6 +37,7 @@ public class ItemPlacedListener implements Listener {
         if (!(e.getWhoClicked() instanceof Player)) {
             return;
         }
+
         try{
             Objects.requireNonNull(e.getClickedInventory());
         }
@@ -92,6 +93,11 @@ public class ItemPlacedListener implements Listener {
 
                 break;
         }
+
+        if(e.getClickedInventory().getType() == InventoryType.CHEST){
+            System.out.println("chesta");
+        }
+
         if(e.isShiftClick()){
             player.sendMessage("hai trasferito tutto lo stack premendo shift");
         }
