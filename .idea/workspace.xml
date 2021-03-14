@@ -13,17 +13,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3eb7934e-583a-419e-a032-0c8ccdf2fcf5" name="Default Changelist" comment="Aggiunto listener sulle casse&#10;bisogna finirlo in modo che rimuova la roba dopo aver aggiornato nel database">
-      <change afterPath="$PROJECT_DIR$/src/main/java/it/overlands/albatros/AmbiguousChest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/Albatros_jar/Albatros.jar" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/Albatros_jar/Albatros.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/overlands/albatros/Albatros.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/overlands/albatros/Albatros.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/overlands/albatros/commands/CommandsHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/overlands/albatros/commands/CommandsHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/overlands/albatros/listeners/BlockPlaceListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/overlands/albatros/listeners/BlockPlaceListener.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/it/overlands/albatros/listeners/ItemPlacedListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/overlands/albatros/listeners/ItemPlacedListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/it/overlands/albatros/Albatros.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/it/overlands/albatros/Albatros.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/it/overlands/albatros/commands/CommandsHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/it/overlands/albatros/commands/CommandsHandler.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/it/overlands/albatros/listeners/BlockPlaceListener.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/it/overlands/albatros/listeners/BlockPlaceListener.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/it/overlands/albatros/listeners/ItemPlacedListener.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/it/overlands/albatros/listeners/ItemPlacedListener.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/it/overlands/albatros/database/MySql.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/it/overlands/albatros/database/MySql.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -209,7 +201,7 @@
       <method v="2" />
     </configuration>
   </component>
-  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="false" />
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="SvnConfiguration">
     <configuration />
   </component>
@@ -235,7 +227,14 @@
       <option name="project" value="LOCAL" />
       <updated>1615723640209</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Aggiunto listener sulle casse&#10;bisogna finirlo in modo che rimuova la roba dopo aver aggiornato nel database">
+      <created>1615747819475</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1615747819475</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -299,7 +298,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="diocan" />
-    <option name="LAST_COMMIT_MESSAGE" value="diocan" />
+    <MESSAGE value="Aggiunto listener sulle casse&#10;bisogna finirlo in modo che rimuova la roba dopo aver aggiornato nel database" />
+    <option name="LAST_COMMIT_MESSAGE" value="Aggiunto listener sulle casse&#10;bisogna finirlo in modo che rimuova la roba dopo aver aggiornato nel database" />
   </component>
   <component name="editorHistoryManager">
     <entry file="jar://$MAVEN_REPOSITORY$/org/spigotmc/spigot-api/1.16.5-R0.1-SNAPSHOT/spigot-api-1.16.5-R0.1-20210308.215427-28-sources.jar!/org/bukkit/block/data/BlockData.java">

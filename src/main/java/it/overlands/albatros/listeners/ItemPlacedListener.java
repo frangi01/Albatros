@@ -69,14 +69,31 @@ public class ItemPlacedListener implements Listener {
     }
 
 
+    @EventHandler
+    public void inv(InventoryOpenEvent e) {
+        if(!(e.getPlayer() instanceof  Player)){return;}
+        Player player = (Player) e.getPlayer();
+        Inventory inv = e.getInventory();
+        if(!inv.getType().equals(InventoryType.CHEST)){
+            player.sendMessage("non hai aperto una chest...");
+            return;
+        }
+        if(!Albatros.getPlayerList().contains(player.getDisplayName())){
+            System.out.println("player non presente nella lista dei registrati");
+        }
+
+            //TODO ha aperto la chest, controlla che sia nella lista delle chest recistrate
+
+
+
+    }
 
 
 
 
 
 
-
-    public void inv(InventoryClickEvent e) {
+        public void inv(InventoryClickEvent e) {
 
         if (!(e.getWhoClicked() instanceof Player)) {
             return;
