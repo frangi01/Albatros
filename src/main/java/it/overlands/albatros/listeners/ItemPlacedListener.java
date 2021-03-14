@@ -50,22 +50,63 @@ public class ItemPlacedListener implements Listener {
         if(Albatros.getPlayerList().contains(player.getDisplayName())){
             ArrayList<Chest> listachests= Albatros.getOnePlayerChestMap(player);
 
-            if(listachests.contains((Chest) inv.getHolder())){
+            if(listachests.contains(inv.getHolder())){
                 player.sendMessage("hai chiuso una cassa registrata!");
+                //SALVA CIò CHE C'è DENTRO SUL DB
+                Block chest = (Block) e.getInventory().getHolder();
+                PreparedStatement pstmt = null;
+                try {
+                    pstmt = MySql.c.prepareStatement(GET_CHEST);
+                    pstmt.setDouble(1,chest.getLocation().getBlockX());
+                    pstmt.setDouble(2,chest.getLocation().getBlockY());
+                    pstmt.setDouble(3,chest.getLocation().getBlockZ());
+                    ResultSet rs = pstmt.executeQuery();
+                    int chest_id = 0;
+                    while (rs.next()) {
+                        chest_id = rs.getInt("id");
+                    }
+                    //recupero l'inventario
+                    //per ogni ItemStack devo recuperare AMOUNT - DURABILITY - ENCHANTMENT booelan - TYPE
+                    for (ItemStack i : e.getInventory()) {
+                        //System.out.println("Amount->" + i.getAmount() + "\nDurability->" + i.getDurability() + "\nType->" + i.getType() + "\nEnchant->" + i.getItemMeta().hasEnchants());
+                        pstmt = MySql.c.prepareStatement(MySql.RELOAD_ITEMS);
+                        pstmt.setInt (1, i.getAmount());
+                        pstmt.setShort (2, i.getDurability()); //// ho perso 40min per cercare di capire come cazzo prendere questo valore in 1.16.5 ma non l'ho capito
+                        pstmt.setBoolean (3, i.getItemMeta().hasEnchants());
+                        pstmt.setString (4, i.getType().toString());
+                        pstmt.setInt (5, chest_id);
+                        pstmt.execute();
+
+                        rs = pstmt.getGeneratedKeys();
+                        int inventory_id = 0;
+                        if(rs.next()){
+                            inventory_id = rs.getInt(1);
+                        }
+                        // se ha un enchant
+                        if (i.getItemMeta().hasEnchants()) {
+                            // recupero il map degli enchants
+                            HashMap<Enchantment, Integer> enchantments = (HashMap<Enchantment, Integer>) i.getEnchantments();
+                            // per ogni enchant recupero il nome e il livello e lo carico sul db
+                            for (Enchantment en : enchantments.keySet()) {
+                                pstmt = MySql.c.prepareStatement(MySql.ADD_ENCHANTS);
+                                pstmt.setString (1, en.getKey().toString());
+                                pstmt.setInt (1, i.getEnchantmentLevel(Enchantment.getByKey(en.getKey())));
+                                pstmt.setInt (2, inventory_id);
+                                pstmt.execute();
+                            }
+                        }
+                    }
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
             }
             else{
                 player.sendMessage("non hai chiuso una cassa registrata...");
             }
-
-
         }
         else{
             player.sendMessage("non sei nella lista player!");
-
         }
-
-
-
     }
 
 
@@ -81,10 +122,6 @@ public class ItemPlacedListener implements Listener {
         if(!Albatros.getPlayerList().contains(player.getDisplayName())){
             System.out.println("player non presente nella lista dei registrati");
         }
-
-            //TODO ha aperto la chest, controlla che sia nella lista delle chest recistrate
-
-
 
     }
 

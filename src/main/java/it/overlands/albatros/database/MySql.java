@@ -152,8 +152,10 @@ public class MySql {
                 System.out.println(rs.getFloat("yaw"));*/
 
                 Location loc = new Location(Albatros.getInstance().getServer().getWorld(rs.getString("world")),rs.getDouble("x"),rs.getDouble("y"),rs.getDouble("z"),rs.getFloat("pitch"),rs.getFloat("yaw"));
-                Chest b = (Chest) loc.getBlock();
-                Albatros.addChest2Player(rs.getString("player"),b);
+                Block b = loc.getBlock();
+
+                Chest c = (Chest)b.getLocation().getBlock();
+                Albatros.addChest2Player(rs.getString("player"),c);
             }
             Logger.getLogger(MySql.class.getName()).log(Level.INFO, "Dati recuperati con successo");
         } catch (SQLException e) {
