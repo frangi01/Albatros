@@ -73,11 +73,10 @@ public class ItemPlacedListener implements Listener {
                 player.sendMessage("hai cliccato due volte e raccolto uno stack sul cursore");
                 break;//funge
             /*
-                    non servono sti metodi, funzionano solo nello stesso inventario
-                    cioè solo nell'inventario del player
+                    i place funzionano solo nella gui del player
+
 */
             case "PLACE_ALL":
-
                 //TODO fare il check se ha buttato per terra o nel suo inv e implementare
                 player.sendMessage("hai droppato dal cursore tutto quello che avevi raccolto sul cursore");
                 break;

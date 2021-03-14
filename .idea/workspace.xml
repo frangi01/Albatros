@@ -12,13 +12,9 @@
     <bookmark url="file://$PROJECT_DIR$/src/main/java/it/overlands/albatros/database/MySql.java" line="68" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3eb7934e-583a-419e-a032-0c8ccdf2fcf5" name="Default Changelist" comment="Aggiunto listener sulle casse&#10;bisogna finirlo in modo che rimuova la roba dopo aver aggiornato nel database">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="3eb7934e-583a-419e-a032-0c8ccdf2fcf5" name="Default Changelist" comment="diocan">
       <change beforePath="$PROJECT_DIR$/out/artifacts/Albatros_jar/Albatros.jar" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/Albatros_jar/Albatros.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/overlands/albatros/commands/CommandsHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/overlands/albatros/commands/CommandsHandler.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/it/overlands/albatros/listeners/ItemPlacedListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/overlands/albatros/listeners/ItemPlacedListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/META-INF/Albatros.kotlin_module" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/it/overlands/albatros/commands/CommandsHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/it/overlands/albatros/commands/CommandsHandler.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/it/overlands/albatros/listeners/ItemPlacedListener.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/it/overlands/albatros/listeners/ItemPlacedListener.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -216,6 +212,14 @@
       <option name="presentableId" value="Default" />
       <updated>1615486066030</updated>
     </task>
+    <task id="LOCAL-00001" summary="diocan">
+      <created>1615723235498</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1615723235499</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -262,6 +266,10 @@
       </map>
     </option>
     <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="diocan" />
+    <option name="LAST_COMMIT_MESSAGE" value="diocan" />
   </component>
   <component name="editorHistoryManager">
     <entry file="jar://$MAVEN_REPOSITORY$/org/spigotmc/spigot-api/1.16.5-R0.1-SNAPSHOT/spigot-api-1.16.5-R0.1-20210308.215427-28-sources.jar!/org/bukkit/block/data/BlockData.java">
