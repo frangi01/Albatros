@@ -45,15 +45,14 @@ public class ItemPlacedListener implements Listener {
             player.sendMessage("non hai chiuso una chest...");
             return;
         }
-
+        Chest chest = (Chest) inv.getHolder();
 
         if(Albatros.getPlayerList().contains(player.getDisplayName())){
             ArrayList<Chest> listachests= Albatros.getOnePlayerChestMap(player);
 
-            if(listachests.contains(inv.getHolder())){
+            if(listachests.contains(chest)){
                 player.sendMessage("hai chiuso una cassa registrata!");
                 //SALVA CIò CHE C'è DENTRO SUL DB
-                Block chest = (Block) e.getInventory().getHolder();
                 PreparedStatement pstmt = null;
                 try {
                     pstmt = MySql.c.prepareStatement(GET_CHEST);
@@ -65,10 +64,23 @@ public class ItemPlacedListener implements Listener {
                     while (rs.next()) {
                         chest_id = rs.getInt("id");
                     }
+                    System.out.println("sto per entrare nel loop");
+                    int aux = 0;
                     //recupero l'inventario
                     //per ogni ItemStack devo recuperare AMOUNT - DURABILITY - ENCHANTMENT booelan - TYPE
-                    for (ItemStack i : e.getInventory()) {
+                    for (ItemStack i : chest.getInventory()) {
+                        if(i == null){
+                            aux++;
+                            continue;
+                        }
+                        else {
+                            player.sendMessage("c'è un itemstack alla posizione "+ aux);
+                            aux++;
+                            return;
+                        }
+
                         //System.out.println("Amount->" + i.getAmount() + "\nDurability->" + i.getDurability() + "\nType->" + i.getType() + "\nEnchant->" + i.getItemMeta().hasEnchants());
+                        /*
                         pstmt = MySql.c.prepareStatement(MySql.RELOAD_ITEMS);
                         pstmt.setInt (1, i.getAmount());
                         pstmt.setShort (2, i.getDurability()); //// ho perso 40min per cercare di capire come cazzo prendere questo valore in 1.16.5 ma non l'ho capito
@@ -94,7 +106,7 @@ public class ItemPlacedListener implements Listener {
                                 pstmt.setInt (2, inventory_id);
                                 pstmt.execute();
                             }
-                        }
+                        }*/
                     }
                 } catch (SQLException ex) {
                     ex.printStackTrace();

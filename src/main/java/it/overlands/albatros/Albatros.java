@@ -25,7 +25,7 @@ public final class Albatros extends JavaPlugin {
     //playerCheck tiene il conto di quante casse hanno claimato contiene
     private static HashMap<String, ArrayList<Chest>> playerChestsMap = new HashMap<>();
     // player che hanno lanciato il comando e stanno lavorando con le casse
-    private static ArrayList<Player> executingPlayers = new ArrayList<>();
+    private static ArrayList<String> executingPlayers = new ArrayList<>();
 
     /**
      * PROBLEMI DA CORREGERE
@@ -62,16 +62,16 @@ public final class Albatros extends JavaPlugin {
         return null;
     }
 
-    public static int addChest2Player(String p,Chest chestID){
+    public static int addChest2Player(String p,Chest chest){
         //aggiunge la chest al player e ritorna il numero di chest attuali,
         // -1 se ha superato il limite
         if(playerChestsMap.containsKey(p)){
             //p è già dentro?
             if(playerChestsMap.get(p).size()<_MAXNUMCHEST){
                 //p ha ancora chest da claimare?
-                playerChestsMap.get(p).add(chestID);
+                playerChestsMap.get(p).add(chest);
                 //caricamento dati chest sul db
-                try {
+                /*try {
                     PreparedStatement pstmt = MySql.c.prepareStatement(MySql.ADD_CHEST);
                     pstmt.setString (1, p);
                     pstmt.setString (2, chestID.getLocation().getWorld().getName());
@@ -83,15 +83,15 @@ public final class Albatros extends JavaPlugin {
                     pstmt.execute();
                 } catch (SQLException e) {
                     e.printStackTrace();
-                }
+                }*/
                 return playerChestsMap.get(p).size();
             }
             else return -1;
         }
         else{
             //crea un nuovo array di chests e mette il nuovo player nella mappa
-            ArrayList<Chest> aux = new ArrayList<>();
-            aux.add(chestID);
+            ArrayList<Chest> aux = new ArrayList<Chest>();
+            aux.add(chest);
             playerChestsMap.put(p,aux);
             return 1;
         }
@@ -99,28 +99,28 @@ public final class Albatros extends JavaPlugin {
 
     public static void removeChests2Player(Player p){
         if(playerChestsMap.containsKey(p.getName())){
-            playerChestsMap.put(p.getName(), new ArrayList<>());
+            playerChestsMap.put(p.getName(), new ArrayList<Chest>());
             // cancella tutte le righe della tabella con il nome del player
             PreparedStatement pstmt = null;
-            try {
+            /*try {
                 pstmt = MySql.c.prepareStatement(MySql.RESET_ALL_CHESTS);
                 pstmt.setString (1, p.getName());
                 pstmt.execute();
             } catch (SQLException e) {
                 e.printStackTrace();
-            }
+            }*/
 
         }
     }
 
     /************ executing player functions: ************/
-    public static ArrayList<Player> getExecutingPlayers() {return executingPlayers;}
+    public static ArrayList<String> getExecutingPlayers() {return executingPlayers;}
 
-    public static void addExecutingPlayer(Player player){
+    public static void addExecutingPlayer(String player){
         if(!executingPlayers.contains(player)){executingPlayers.add(player);}
     }
-    public static  void removeExecutingPlayer(Player player){
-        if(!executingPlayers.contains(player)){executingPlayers.remove(player);}
+    public static  void removeExecutingPlayer(String player){
+        if(executingPlayers.contains(player)){executingPlayers.remove(player);}
     }
 
     /*************************************/

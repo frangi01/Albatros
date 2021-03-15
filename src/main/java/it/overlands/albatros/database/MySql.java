@@ -151,11 +151,21 @@ public class MySql {
                 System.out.println(rs.getFloat("pitch"));
                 System.out.println(rs.getFloat("yaw"));*/
 
-                Location loc = new Location(Albatros.getInstance().getServer().getWorld(rs.getString("world")),rs.getDouble("x"),rs.getDouble("y"),rs.getDouble("z"),rs.getFloat("pitch"),rs.getFloat("yaw"));
-                Block b = loc.getBlock();
+                //TODO
+                /**
+                 * il player deve fare gli stessi passaggi nel server vecchio, ovvero avviare il comando e piazzare
+                 * le chest, poi si associeranno una ad una
+                 * in questo modo evitiamo il controllo sulla posizione
+                 * IL database deve memorizzare anche la posizione nell'arraylist, perciò la cassa piazzata per n-esima
+                 * sarà collegata alla cassa piazzata per n-esima nel mondo new
+                 */
 
-                Chest c = (Chest)b.getLocation().getBlock();
-                Albatros.addChest2Player(rs.getString("player"),c);
+
+                //Location loc = new Location(Albatros.getInstance().getServer().getWorld(rs.getString("world")),rs.getDouble("x"),rs.getDouble("y"),rs.getDouble("z"),rs.getFloat("pitch"),rs.getFloat("yaw"));
+                //Block b = loc.getBlock();
+
+                //Block c = b.getLocation().getBlock();
+                //Albatros.addChest2Player(rs.getString("player"),(Chest) c);
             }
             Logger.getLogger(MySql.class.getName()).log(Level.INFO, "Dati recuperati con successo");
         } catch (SQLException e) {

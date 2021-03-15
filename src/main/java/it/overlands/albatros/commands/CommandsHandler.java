@@ -32,14 +32,14 @@ public class CommandsHandler implements CommandExecutor {
                     case _ATTIVACHEST:
                         //inizia la sequenza per piazzare e memorizzare le casse
                         sender.sendMessage("Piazza le chest per registrarle");
-                        Albatros.addExecutingPlayer(sender);
+                        Albatros.addExecutingPlayer(sender.getDisplayName());
                         break;
                     case _TERMINA:
                         /* termina la sequenza per piazzare e memorizzare le casse
                          * SE non avviene in modo automatico
                          * (EG vuoi piazzare solo 3 casse su 5 e fare altro)*/
                         sender.sendMessage("registrazione chest terminata!");
-                        Albatros.removeExecutingPlayer(sender);
+                        Albatros.removeExecutingPlayer(sender.getDisplayName());
                         break;
                     case _FLUSH:
                         /*funzione che deve scrivere e aggiornare il database */
