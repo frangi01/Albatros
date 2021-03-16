@@ -63,13 +63,18 @@ public class MySql {
 
     public final static String ADD_CHEST = "INSERT INTO `CHEST`(`id`, `player`, `world`, `x`, `y`, `z`, `pitch`, `yaw`) VALUES (NULL,?,?,?,?,?,?,?)";
     public final static String ADD_ITEM = "INSERT INTO `ITEMSTACK`(`id`, `amount`, `durability`, `enchantements`, `type`, `chest`) VALUES (NULL,?,?,?,?,?)";
-    public final static String ADD_ENCHANTS = "INSERT INTO `ENCHANTMENTS`(`id`, `name`, `level`, `itemstack`) VALUES (NULL,?,?,?)";
+    public final static String ADD_ENCHANTS = "INSERT INTO `ENCHANTMENTS`(`id`, `name`, `level`, `itemstack`, `shulker`) VALUES (NULL,?,?,?,?)";
     public final static String ADD_SHULKER_ITEM = "INSERT INTO `SHULKER`(`id`, `amount`, `durability`, `enchantements`, `type`, `item`, `chest`) VALUES (NULL,?,?,?,?,?,?)";
     public final static String RESET_ALL_CHESTS = "DELETE FROM `CHEST` WHERE `player` = ?";
     public final static String DEL_ALL_ITEMS = "DELETE FROM `ITEMSTACK` WHERE `chest` = ?";
 
     private final static String GET_ALL_CHESTS = "SELECT * FROM `CHEST`";
     public final static String GET_CHEST = "SELECT `id` FROM `CHEST` WHERE `x` = ? AND `y` = ? AND `z` = ?";
+
+    public final static String GET_ALL_ITEMSTACK = "SELECT * FROM `ITEMSTACK` WHERE `chest`=?";
+    public final static String GET_ALL_SHULKER = "SELECT * FROM `SHULKER` WHERE `chest`= ? AND `item`= ?";
+    public final static String GET_ALL_ENCHANTMENTS_FROM_ITEMSTACK = "SELECT * FROM `ENCHANTMENTS` WHERE `itemstack` = ? AND `shulker` = -1";
+    public final static String GET_ALL_ENCHANTMENTS_FROM_SHULKER = "SELECT * FROM `ENCHANTMENTS` WHERE `shulker` = ? AND `itemstack` = -1";
 
     
     public static Connection c = null;
@@ -85,6 +90,7 @@ public class MySql {
             properties.setProperty("user", USER);
             properties.setProperty("password", PASSWORD);
             properties.setProperty("useSSL", "false");
+            properties.setProperty("autoReconnect", "true");
 
             c = DriverManager.getConnection(URL,properties);
         }catch(SQLException ex){
