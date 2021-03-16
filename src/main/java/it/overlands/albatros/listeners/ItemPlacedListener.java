@@ -3,10 +3,12 @@ package it.overlands.albatros.listeners;
 import it.overlands.albatros.Albatros;
 import it.overlands.albatros.database.MySql;
 import org.apache.commons.lang.ObjectUtils;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 
 import org.bukkit.block.Chest;
 import org.bukkit.block.DoubleChest;
+import org.bukkit.block.ShulkerBox;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -19,13 +21,12 @@ import org.bukkit.inventory.ItemStack;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Objects;
-import java.util.Set;
+import java.sql.Statement;
+import java.util.*;
 
 
 import static it.overlands.albatros.database.MySql.GET_CHEST;
+import static org.bukkit.Material.*;
 
 
 public class ItemPlacedListener implements Listener {
@@ -65,19 +66,88 @@ public class ItemPlacedListener implements Listener {
                         chest_id = rs.getInt("id");
                     }
                     System.out.println("sto per entrare nel loop");
-                    int aux = 0;
+                    //int aux = 0;
                     //recupero l'inventario
                     //per ogni ItemStack devo recuperare AMOUNT - DURABILITY - ENCHANTMENT booelan - TYPE
+
+                    pstmt = MySql.c.prepareStatement(MySql.DEL_ALL_ITEMS);
+                    pstmt.setInt (1, chest_id);
+                    pstmt.execute();
+
                     for (ItemStack i : chest.getInventory()) {
-                        if(i == null){
-                            aux++;
-                            continue;
+                        if(i != null){
+                            pstmt = MySql.c.prepareStatement(MySql.ADD_ITEM,Statement.RETURN_GENERATED_KEYS);
+                            pstmt.setInt (1, i.getAmount());
+                            pstmt.setShort (2, i.getDurability()); // ho perso 40min per cercare di capire come cazzo prendere questo valore in 1.16.5 ma non l'ho capito
+                            pstmt.setBoolean (3, i.getItemMeta().hasEnchants());
+                            pstmt.setString (4, i.getType().toString());
+                            pstmt.setInt (5, chest_id);
+                            pstmt.execute();
+
+                            rs = pstmt.getGeneratedKeys();
+                            int inventory_id = 0;
+                            if(rs.next()){
+                                inventory_id = rs.getInt(1);
+                            }
+                            // se ha un enchant
+                            if (i.getItemMeta().hasEnchants()) {
+                                // recupero il map degli enchants
+                                Map<Enchantment, Integer> enchantments = i.getEnchantments();
+                                // per ogni enchant recupero il nome e il livello e lo carico sul db
+                                for (Enchantment en : enchantments.keySet()) {
+                                    pstmt = MySql.c.prepareStatement(MySql.ADD_ENCHANTS);
+                                    pstmt.setString (1, en.getKey().toString());
+                                    pstmt.setInt (2, i.getEnchantmentLevel(Enchantment.getByKey(en.getKey())));
+                                    pstmt.setInt (3, inventory_id);
+                                    pstmt.execute();
+                                }
+                            }
+                            // se è una shulker
+                            if (checkShulker(i.getType())){
+                                //TODO QUESTO CAST è ROTTO
+                                ShulkerBox s = (ShulkerBox) i;
+                                for(ItemStack si : s.getInventory()){
+                                    if(i != null) {
+                                        pstmt = MySql.c.prepareStatement(MySql.ADD_SHULKER_ITEM,Statement.RETURN_GENERATED_KEYS);
+                                        pstmt.setInt (1, si.getAmount());
+                                        pstmt.setShort (2, si.getDurability()); // ho perso 40min per cercare di capire come cazzo prendere questo valore in 1.16.5 ma non l'ho capito
+                                        pstmt.setBoolean (3, si.getItemMeta().hasEnchants());
+                                        pstmt.setString (4, si.getType().toString());
+                                        pstmt.setInt (5, inventory_id);
+                                        pstmt.setInt (6, chest_id);
+                                        pstmt.execute();
+                                        //TODO FINIRE GLI ENCHANT NELLA SHULKER
+                                        /*rs = pstmt.getGeneratedKeys();
+                                        int inventory_id = 0;
+                                        if(rs.next()){
+                                            inventory_id = rs.getInt(1);
+                                        }
+                                        // se ha un enchant
+                                        if (i.getItemMeta().hasEnchants()) {
+                                            // recupero il map degli enchants
+                                            Map<Enchantment, Integer> enchantments = i.getEnchantments();
+                                            // per ogni enchant recupero il nome e il livello e lo carico sul db
+                                            for (Enchantment en : enchantments.keySet()) {
+                                                pstmt = MySql.c.prepareStatement(MySql.ADD_ENCHANTS);
+                                                pstmt.setString (1, en.getKey().toString());
+                                                pstmt.setInt (2, i.getEnchantmentLevel(Enchantment.getByKey(en.getKey())));
+                                                pstmt.setInt (3, inventory_id);
+                                                pstmt.execute();
+                                            }
+                                        }
+                                        */
+
+                                    }
+                                }
+                            }
+                            //aux++;
+                            //continue;
                         }
-                        else {
+                        /*else {
                             player.sendMessage("c'è un itemstack alla posizione "+ aux);
                             aux++;
                             return;
-                        }
+                        }*/
 
                         //System.out.println("Amount->" + i.getAmount() + "\nDurability->" + i.getDurability() + "\nType->" + i.getType() + "\nEnchant->" + i.getItemMeta().hasEnchants());
                         /*
@@ -291,5 +361,46 @@ public class ItemPlacedListener implements Listener {
                     }
                 }
             }*/
+    }
+
+    public boolean checkShulker(Material m){
+        switch (m) {
+            case SHULKER_BOX:
+                return true;
+            case WHITE_SHULKER_BOX:
+                return true;
+            case ORANGE_SHULKER_BOX:
+                return true;
+            case MAGENTA_SHULKER_BOX:
+                return true;
+            case LIGHT_BLUE_SHULKER_BOX:
+                return true;
+            case YELLOW_SHULKER_BOX:
+                return true;
+            case LIME_SHULKER_BOX:
+                return true;
+            case PINK_SHULKER_BOX:
+                return true;
+            case GRAY_SHULKER_BOX:
+                return true;
+            case LIGHT_GRAY_SHULKER_BOX:
+                return true;
+            case CYAN_SHULKER_BOX:
+                return true;
+            case PURPLE_SHULKER_BOX:
+                return true;
+            case BLUE_SHULKER_BOX:
+                return true;
+            case BROWN_SHULKER_BOX:
+                return true;
+            case GREEN_SHULKER_BOX:
+                return true;
+            case RED_SHULKER_BOX:
+                return true;
+            case BLACK_SHULKER_BOX:
+                return true;
+            default:
+                return false;
+        }
     }
 }

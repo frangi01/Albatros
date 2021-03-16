@@ -43,7 +43,7 @@ public class MySql {
             ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;";
 
     private final static String CREATE_TABLE_ENCHANTMENTS = "CREATE TABLE IF NOT EXISTS `ENCHANTMENTS` (\n" +
-            "  `id` int NOT NULL,\n" +
+            "  `id` int NOT NULL AUTO_INCREMENT,\n" +
             "  `name` varchar(100) NOT NULL,\n" +
             "  `level` int NOT NULL,\n" +
             "  `itemstack` int NOT NULL,\n" +
@@ -51,7 +51,7 @@ public class MySql {
             ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;";
 
     private final static String CREATE_TABLE_ITEMSTACK = "CREATE TABLE IF NOT EXISTS `ITEMSTACK` (\n" +
-            "  `id` int NOT NULL,\n" +
+            "  `id` int NOT NULL AUTO_INCREMENT,\n" +
             "  `amount` int NOT NULL,\n" +
             "  `durability` double NOT NULL,\n" +
             "  `enchantements` tinyint(1) NOT NULL,\n" +
@@ -62,9 +62,11 @@ public class MySql {
 
 
     public final static String ADD_CHEST = "INSERT INTO `CHEST`(`id`, `player`, `world`, `x`, `y`, `z`, `pitch`, `yaw`) VALUES (NULL,?,?,?,?,?,?,?)";
-    public final static String RELOAD_ITEMS = "INSERT INTO `ITEMSTACK`(`id`, `amount`, `durability`, `enchantements`, `type`, `chest`) VALUES (NULL,?,?,?,?,?)";
+    public final static String ADD_ITEM = "INSERT INTO `ITEMSTACK`(`id`, `amount`, `durability`, `enchantements`, `type`, `chest`) VALUES (NULL,?,?,?,?,?)";
     public final static String ADD_ENCHANTS = "INSERT INTO `ENCHANTMENTS`(`id`, `name`, `level`, `itemstack`) VALUES (NULL,?,?,?)";
+    public final static String ADD_SHULKER_ITEM = "INSERT INTO `SHULKER`(`id`, `amount`, `durability`, `enchantements`, `type`, `item`, `chest`) VALUES (NULL,?,?,?,?,?,?)";
     public final static String RESET_ALL_CHESTS = "DELETE FROM `CHEST` WHERE `player` = ?";
+    public final static String DEL_ALL_ITEMS = "DELETE FROM `ITEMSTACK` WHERE `chest` = ?";
 
     private final static String GET_ALL_CHESTS = "SELECT * FROM `CHEST`";
     public final static String GET_CHEST = "SELECT `id` FROM `CHEST` WHERE `x` = ? AND `y` = ? AND `z` = ?";
@@ -162,10 +164,10 @@ public class MySql {
 
 
                 //Location loc = new Location(Albatros.getInstance().getServer().getWorld(rs.getString("world")),rs.getDouble("x"),rs.getDouble("y"),rs.getDouble("z"),rs.getFloat("pitch"),rs.getFloat("yaw"));
-                //Block b = loc.getBlock();
+                //Chest c = (Chest) loc.getBlock().getState();
 
                 //Block c = b.getLocation().getBlock();
-                //Albatros.addChest2Player(rs.getString("player"),(Chest) c);
+                //Albatros.addChest2Player(rs.getString("player"),c);
             }
             Logger.getLogger(MySql.class.getName()).log(Level.INFO, "Dati recuperati con successo");
         } catch (SQLException e) {

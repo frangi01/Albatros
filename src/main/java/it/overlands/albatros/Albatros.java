@@ -71,45 +71,59 @@ public final class Albatros extends JavaPlugin {
                 //p ha ancora chest da claimare?
                 playerChestsMap.get(p).add(chest);
                 //caricamento dati chest sul db
-                /*try {
+                try {
                     PreparedStatement pstmt = MySql.c.prepareStatement(MySql.ADD_CHEST);
                     pstmt.setString (1, p);
-                    pstmt.setString (2, chestID.getLocation().getWorld().getName());
-                    pstmt.setDouble (3, chestID.getLocation().getX());
-                    pstmt.setDouble (4, chestID.getLocation().getY());
-                    pstmt.setDouble (5, chestID.getLocation().getZ());
-                    pstmt.setFloat (6, chestID.getLocation().getPitch());
-                    pstmt.setFloat (7, chestID.getLocation().getYaw());
+                    pstmt.setString (2, chest.getLocation().getWorld().getName());
+                    pstmt.setDouble (3, chest.getLocation().getX());
+                    pstmt.setDouble (4, chest.getLocation().getY());
+                    pstmt.setDouble (5, chest.getLocation().getZ());
+                    pstmt.setFloat (6, chest.getLocation().getPitch());
+                    pstmt.setFloat (7, chest.getLocation().getYaw());
                     pstmt.execute();
                 } catch (SQLException e) {
                     e.printStackTrace();
-                }*/
+                }
                 return playerChestsMap.get(p).size();
             }
             else return -1;
+
         }
         else{
             //crea un nuovo array di chests e mette il nuovo player nella mappa
-            ArrayList<Chest> aux = new ArrayList<Chest>();
+            ArrayList<Chest> aux = new ArrayList<>();
             aux.add(chest);
             playerChestsMap.put(p,aux);
+            try {
+                PreparedStatement pstmt = MySql.c.prepareStatement(MySql.ADD_CHEST);
+                pstmt.setString (1, p);
+                pstmt.setString (2, chest.getLocation().getWorld().getName());
+                pstmt.setDouble (3, chest.getLocation().getX());
+                pstmt.setDouble (4, chest.getLocation().getY());
+                pstmt.setDouble (5, chest.getLocation().getZ());
+                pstmt.setFloat (6, chest.getLocation().getPitch());
+                pstmt.setFloat (7, chest.getLocation().getYaw());
+                pstmt.execute();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
             return 1;
         }
+
     }
 
     public static void removeChests2Player(Player p){
         if(playerChestsMap.containsKey(p.getName())){
-            playerChestsMap.put(p.getName(), new ArrayList<Chest>());
+            playerChestsMap.put(p.getName(), new ArrayList<>());
             // cancella tutte le righe della tabella con il nome del player
             PreparedStatement pstmt = null;
-            /*try {
+            try {
                 pstmt = MySql.c.prepareStatement(MySql.RESET_ALL_CHESTS);
                 pstmt.setString (1, p.getName());
                 pstmt.execute();
             } catch (SQLException e) {
                 e.printStackTrace();
-            }*/
-
+            }
         }
     }
 
