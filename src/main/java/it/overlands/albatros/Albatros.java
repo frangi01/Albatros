@@ -4,10 +4,7 @@ import it.overlands.albatros.commands.CommandsHandler;
 import it.overlands.albatros.database.MySql;
 import it.overlands.albatros.listeners.BlockPlaceListener;
 import it.overlands.albatros.listeners.ItemPlacedListener;
-import org.bukkit.World;
-import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -55,9 +52,9 @@ public final class Albatros extends JavaPlugin {
         }
         return -1;
     }
-    public static ArrayList<Chest> getOnePlayerChestMap(Player p) {
-        if (playerChestsMap.containsKey(p.getDisplayName())) {
-            return playerChestsMap.get(p.getDisplayName());
+    public static ArrayList<Chest> getOnePlayerChestMap(String player) {
+        if (playerChestsMap.containsKey(player)) {
+            return playerChestsMap.get(player);
         }
         return null;
     }

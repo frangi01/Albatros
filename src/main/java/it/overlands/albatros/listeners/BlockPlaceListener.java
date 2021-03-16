@@ -82,7 +82,7 @@ public class BlockPlaceListener implements Listener {
         double nx = abs(loc.getX());
         double nz = abs(loc.getZ());
 
-        ArrayList<Chest> listablocchi = Albatros.getOnePlayerChestMap(player);
+        ArrayList<Chest> listablocchi = Albatros.getOnePlayerChestMap(player.getDisplayName());
         if(listablocchi == null) { return true;}
 
         for(Chest r : listablocchi){
