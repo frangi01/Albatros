@@ -188,7 +188,6 @@ public class ItemPlacedListener implements Listener {
             player.sendMessage("Cassa non registrata!");
             return;
         }
-
         try {
             pstmt = MySql.c.prepareStatement(GET_CHEST);//SELECT `id` FROM `CHEST` WHERE `x` = ? AND `y` = ? AND `z` = ?
             pstmt.setDouble(1,chest.getLocation().getX());
