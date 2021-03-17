@@ -69,7 +69,6 @@ public class ItemPlacedListener implements Listener {
                     while (rs.next()) {
                         chest_id = rs.getInt("id");
                     }
-                    System.out.println("sto per entrare nel loop");
                     //int aux = 0;
                     //recupero l'inventario
                     //per ogni ItemStack devo recuperare AMOUNT - DURABILITY - ENCHANTMENT booelan - TYPE
@@ -185,6 +184,11 @@ public class ItemPlacedListener implements Listener {
         Chest chest = (Chest) inv.getHolder();
         //da id_chest dalla posizione del blocco
         PreparedStatement pstmt = null;
+        if(!Albatros.getOnePlayerChestMap(player.getDisplayName()).contains(chest)){
+            player.sendMessage("Cassa non registrata!");
+            return;
+        }
+
         try {
             pstmt = MySql.c.prepareStatement(GET_CHEST);//SELECT `id` FROM `CHEST` WHERE `x` = ? AND `y` = ? AND `z` = ?
             pstmt.setDouble(1,chest.getLocation().getX());
@@ -195,6 +199,7 @@ public class ItemPlacedListener implements Listener {
             while (rs.next()) {
                 id_chest = rs.getInt("id");
             }
+            player.sendMessage("");
             //recupero itemstack con il id_chest
             pstmt = MySql.c.prepareStatement(GET_ALL_ITEMSTACK);//SELECT `id` FROM `CHEST` WHERE `x` = ? AND `y` = ? AND `z` = ?
             pstmt.setInt(1,id_chest);
@@ -208,6 +213,8 @@ public class ItemPlacedListener implements Listener {
                 boolean enchantements = rs.getBoolean("enchantements");
                 String type = rs.getString("type");
                 //TODO crea il nuovo Itemstack
+                int damage = Material.getMaterial(type).getMaxDurability()-durability;
+                ItemStack new_is = new ItemStack(Material.getMaterial(type),amount,(short) damage);
 
                 //per ogni item se enchantments è vero allora recupera l'enchantmet dell'item in quella chest
                 if(enchantements){
@@ -219,11 +226,13 @@ public class ItemPlacedListener implements Listener {
                         String name_enchant = rs2.getString("name");
                         int level = rs2.getInt("level");
                         //TODO inserisci l'enchant all'itemstack
+                        new_is.addEnchantment(Enchantment.getByName(name_enchant),level);
                     }
 
                 }
                 //TODO inserisci dentro la chest questo itemstack
-
+                player.getInventory().addItem(new_is);
+                //chest.getInventory().addItem(new_is);
             }
 
         } catch (SQLException ex) {

@@ -10,14 +10,12 @@ import java.util.Set;
 
 public class CommandsHandler implements CommandExecutor {
     //commands
-    private final String _ATTIVACHEST = "registrachest";
-    private final String _FLUSH = "flush";
+    private final String _ATTIVACHEST = "registra";
     private final String _RESETTA = "resetta";
-    private final String _IMPORT = "import";
     private final String _TERMINA = "termina";
-    private final String _HELP = "help";
-    private final String _LISTAPLAYER = "listaplayer";
-    private final String _LISTACHEST = "listachest";
+    private final String _HELP = "aiuto";
+    private final String _LISTAPLAYER = "listaplayers";
+    private final String _LISTACHESTS = "listachests";
     private final String _RESETTATUTTI = "resettatutti";
 
 
@@ -41,12 +39,9 @@ public class CommandsHandler implements CommandExecutor {
                         sender.sendMessage("registrazione chest terminata!");
                         Albatros.removeExecutingPlayer(sender.getDisplayName());
                         break;
-                    case _FLUSH:
-                        /*funzione che deve scrivere e aggiornare il database */
-                        break;
                     case _HELP:
                         //funzione di help
-                        String message ="\\albatros registrachest --> inizia la sequenza per piazzare e memorizzare le casse\n"+
+                        String message ="\\albatros registra --> inizia la sequenza per piazzare e memorizzare le casse\n"+
                                 "\\albatros termina --> termina la sequenza, le casse attualmente memorizzare rimarranno attive\n"+
                                 "\\albatros resetta --> cancella tutte le chest memorizzante\n"+
                                 "\\albatros listachest --> numero chest piazzate\n"+
@@ -63,9 +58,6 @@ public class CommandsHandler implements CommandExecutor {
                         sender.sendMessage("registro dei player resettato!");
                         Albatros.resetPlayerChestsMap();
                         break;
-                    case _IMPORT:
-                        //funzione che legge il database e importa la roba
-                        break;
                     case _LISTAPLAYER:
                         Set<String> players = Albatros.getPlayerList();
                         sender.sendMessage("players registrati: " + players.size());
@@ -73,12 +65,18 @@ public class CommandsHandler implements CommandExecutor {
                             sender.sendMessage(p);
                         }
                         break;
-                        case _LISTACHEST:
+                        case _LISTACHESTS:
                             int size = Albatros.getSizeChestListofPlayer(sender);
-                            sender.sendMessage("hai piazzato "+size+ " chests");
-                            break;
+                            if(size == -1 || size == 0){
+                                sender.sendMessage("Non hai registrato chests!");
+                                break;
+                            }
+                            else {
+                                sender.sendMessage("hai piazzato " + size + " chests");
+                                break;
+                            }
                     default:
-                        sender.sendMessage("comando errato, usa \"/albatros help\" per la lista comandi");
+                        sender.sendMessage("comando errato, usa \"/albatros aiuto\" per la lista comandi");
                         break;
                 }
 
