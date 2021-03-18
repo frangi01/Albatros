@@ -98,6 +98,17 @@ public class MySql {
         }
     }
 
+    public static void reloadConnction()
+    {
+        try {
+            if(c.isClosed()){
+                openConnection();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     private static boolean checkDatabase(){
         /* recupera tutti database e torna vero se trova nella lista il DBNAME */
         ResultSet rs = null;
