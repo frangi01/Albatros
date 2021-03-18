@@ -61,7 +61,7 @@ public class MySql {
             ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;";
 
 
-    public final static String ADD_CHEST = "INSERT INTO `CHEST`(`id`, `player`, `world`, `x`, `y`, `z`, `pitch`, `yaw`) VALUES (NULL,?,?,?,?,?,?,?)";
+    public final static String ADD_CHEST = "INSERT INTO `CHEST`(`id`, `player`, `world`, `x`, `y`, `z`, `pitch`, `yaw`,`counter`) VALUES (NULL,?,?,?,?,?,?,?,?)";
     public final static String ADD_ITEM = "INSERT INTO `ITEMSTACK`(`id`, `amount`, `durability`, `enchantements`, `type`, `chest`) VALUES (NULL,?,?,?,?,?)";
     public final static String ADD_ENCHANTS = "INSERT INTO `ENCHANTMENTS`(`id`, `name`, `level`, `itemstack`, `shulker`) VALUES (NULL,?,?,?,?)";
     public final static String ADD_SHULKER_ITEM = "INSERT INTO `SHULKER`(`id`, `amount`, `durability`, `enchantements`, `type`, `item`, `chest`) VALUES (NULL,?,?,?,?,?,?)";
@@ -69,10 +69,14 @@ public class MySql {
     public final static String DEL_ALL_ITEMS = "DELETE FROM `ITEMSTACK` WHERE `chest` = ?";
 
     private final static String GET_ALL_CHESTS = "SELECT * FROM `CHEST`";
-    public final static String GET_CHEST = "SELECT `id` FROM `CHEST` WHERE `x` = ? AND `y` = ? AND `z` = ?";
+    //public final static String GET_CHEST = "SELECT `id` FROM `CHEST` WHERE `x` = ? AND `y` = ? AND `z` = ?";
+    //public final static String GET_CHEST_BY_WNAME = "SELECT `id` FROM `CHEST` WHERE `world` = ? AND `id` IN (SELECT MIN(`id`) FROM `CHEST` WHERE `player`= ?)";
+    public final static String GET_COUNTER_CHEST = "SELECT `counter` FROM `CHEST` WHERE `player` = ? AND `world` = ? AND `x` = ? AND `y` = ? AND `z` = ?";
+    public final static String GET_ID_CHEST = "SELECT `id` FROM `CHEST` WHERE `player` = ? AND `world` = ? AND `counter` = ?";
+    //public final static String GET_ID_CONNECTED_CHEST = "SELECT `id` FROM `CHEST` WHERE `player` = ? AND `world` = ? AND `counter` = ?";
 
     public final static String GET_ALL_ITEMSTACK = "SELECT * FROM `ITEMSTACK` WHERE `chest`=?";
-    public final static String GET_ALL_SHULKER = "SELECT * FROM `SHULKER` WHERE `chest`= ? AND `item`= ?";
+    public final static String GET_ALL_SHULKER_ITEMS = "SELECT * FROM `SHULKER` WHERE `item` = ? AND `chest` = ?";
     public final static String GET_ALL_ENCHANTMENTS_FROM_ITEMSTACK = "SELECT * FROM `ENCHANTMENTS` WHERE `itemstack` = ? AND `shulker` = -1";
     public final static String GET_ALL_ENCHANTMENTS_FROM_SHULKER = "SELECT * FROM `ENCHANTMENTS` WHERE `shulker` = ? AND `itemstack` = -1";
 

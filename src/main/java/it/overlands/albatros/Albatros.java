@@ -24,22 +24,11 @@ public final class Albatros extends JavaPlugin {
     // player che hanno lanciato il comando e stanno lavorando con le casse
     private static ArrayList<String> executingPlayers = new ArrayList<>();
 
-    /**
-     * PROBLEMI DA CORREGERE
-     * 1) nel map se io piazzo 5 chest me ne inserisce 4
-     *
-     *
-     * ATTENZIONE
-     * playerChestsMap da ora contiene il nome<String> e non il <Player> perchè al riavvio del plugin non si può recuperare il <Player> dal nome se questo è offline
-     *
-     * **/
-
-
-
-
-
     public static int get_MAXNUMCHEST() {return _MAXNUMCHEST;}
     public static Albatros getInstance(){return instance;}
+
+    public static final String oldWorld = "world";
+    public static final String newWorld = "world2";
 
     /***************** playerChest functions ******************************/
     public static HashMap<String, ArrayList<Chest>> getPlayerChestsMap(){return playerChestsMap;}
@@ -77,6 +66,7 @@ public final class Albatros extends JavaPlugin {
                     pstmt.setDouble (5, chest.getLocation().getZ());
                     pstmt.setFloat (6, chest.getLocation().getPitch());
                     pstmt.setFloat (7, chest.getLocation().getYaw());
+                    pstmt.setInt(8,playerChestsMap.get(p).size());
                     pstmt.execute();
                 } catch (SQLException e) {
                     e.printStackTrace();
@@ -100,6 +90,7 @@ public final class Albatros extends JavaPlugin {
                 pstmt.setDouble (5, chest.getLocation().getZ());
                 pstmt.setFloat (6, chest.getLocation().getPitch());
                 pstmt.setFloat (7, chest.getLocation().getYaw());
+                pstmt.setInt (8, 1);
                 pstmt.execute();
             } catch (SQLException e) {
                 e.printStackTrace();

@@ -60,21 +60,30 @@ public class ItemPlacedListener implements Listener {
                 //SALVA CIò CHE C'è DENTRO SUL DB
                 PreparedStatement pstmt = null;
                 try {
-                    pstmt = MySql.c.prepareStatement(GET_CHEST);
-                    pstmt.setDouble(1,chest.getLocation().getBlockX());
-                    pstmt.setDouble(2,chest.getLocation().getBlockY());
-                    pstmt.setDouble(3,chest.getLocation().getBlockZ());
+                    pstmt = MySql.c.prepareStatement(GET_COUNTER_CHEST);//SELECT `counter` FROM `CHEST` WHERE `player` = ? AND `world` = ? AND `x` = ? AND `y` = ? AND `z` = ?
+                    pstmt.setString(1,player.getName());
+                    pstmt.setString(2,e.getPlayer().getWorld().getName());
+                    pstmt.setDouble(3,chest.getX());
+                    pstmt.setDouble(4,chest.getY());
+                    pstmt.setDouble(5,chest.getZ());
                     ResultSet rs = pstmt.executeQuery();
-                    int chest_id = 0;
-                    while (rs.next()) {
-                        chest_id = rs.getInt("id");
-                    }
-                    //int aux = 0;
+                    int counter_chest = -1;
+                    while (rs.next()) { counter_chest = rs.getInt("counter"); }
+
+                    // recupero l'id della chest
+                    pstmt = MySql.c.prepareStatement(GET_ID_CHEST);//SELECT `id` FROM `CHEST` WHERE `player` = ? AND `world` = ? AND `counter` = ?
+                    pstmt.setString(1,player.getName());
+                    pstmt.setString(2,Albatros.oldWorld);
+                    pstmt.setInt(3,counter_chest);
+                    rs = pstmt.executeQuery();
+                    int id_chest = -1;
+                    while (rs.next()) { id_chest = rs.getInt("id"); }
+
                     //recupero l'inventario
                     //per ogni ItemStack devo recuperare AMOUNT - DURABILITY - ENCHANTMENT booelan - TYPE
 
                     pstmt = MySql.c.prepareStatement(MySql.DEL_ALL_ITEMS);
-                    pstmt.setInt (1, chest_id);
+                    pstmt.setInt (1, id_chest);
                     pstmt.execute();
 
                     for (ItemStack i : chest.getInventory()) {
@@ -90,7 +99,7 @@ public class ItemPlacedListener implements Listener {
                         //pstmt.setShort(2, i.getDurability()); // ho perso 40min per cercare di capire come cazzo prendere questo valore in 1.16.5 ma non l'ho capito
                         pstmt.setBoolean(3, i.getItemMeta().hasEnchants());
                         pstmt.setString(4, i.getType().toString());
-                        pstmt.setInt(5, chest_id);
+                        pstmt.setInt(5, id_chest);
                         pstmt.execute();
 
                         rs = pstmt.getGeneratedKeys();
@@ -131,7 +140,7 @@ public class ItemPlacedListener implements Listener {
                                     pstmt.setBoolean (3, is.getItemMeta().hasEnchants());
                                     pstmt.setString (4, is.getType().toString());
                                     pstmt.setInt (5, inventory_id);
-                                    pstmt.setInt (6, chest_id);
+                                    pstmt.setInt (6, id_chest);
                                     pstmt.execute();
                                     player.sendMessage("la shulker ha qualcosa dentro!");
 
@@ -196,17 +205,29 @@ public class ItemPlacedListener implements Listener {
         }
 
         try {
-            pstmt = MySql.c.prepareStatement(GET_CHEST);//SELECT `id` FROM `CHEST` WHERE `x` = ? AND `y` = ? AND `z` = ?
-            pstmt.setDouble(1,chest.getLocation().getX());
-            pstmt.setDouble(2,chest.getLocation().getY());
-            pstmt.setDouble(3,chest.getLocation().getZ());
+            pstmt = MySql.c.prepareStatement(GET_COUNTER_CHEST);//SELECT `counter` FROM `CHEST` WHERE `player` = ? AND `world` = ? AND `x` = ? AND `y` = ? AND `z` = ?
+            pstmt.setString(1,player.getName());
+            pstmt.setString(2,e.getPlayer().getWorld().getName());
+            pstmt.setDouble(3,chest.getX());
+            pstmt.setDouble(4,chest.getY());
+            pstmt.setDouble(5,chest.getZ());
             ResultSet rs = pstmt.executeQuery();
+            int counter_chest = -1;
+            while (rs.next()) { counter_chest = rs.getInt("counter"); }
+
+            //reset chest inventory
+            chest.getInventory().clear();
+
+            // recupero l'id della chest
+            pstmt = MySql.c.prepareStatement(GET_ID_CHEST);//SELECT `id` FROM `CHEST` WHERE `player` = ? AND `world` = ? AND `counter` = ?
+            pstmt.setString(1,player.getName());
+            pstmt.setString(2,Albatros.oldWorld);
+            pstmt.setInt(3,counter_chest);
+            rs = pstmt.executeQuery();
             int id_chest = -1;
-            while (rs.next()) {
-                id_chest = rs.getInt("id");
-            }
-            player.sendMessage("");
-            //recupero itemstack con il id_chest
+            while (rs.next()) { id_chest = rs.getInt("id"); }
+
+            //recupero tutti i dati e li inserisco nella chest
             pstmt = MySql.c.prepareStatement(GET_ALL_ITEMSTACK);//SELECT `id` FROM `CHEST` WHERE `x` = ? AND `y` = ? AND `z` = ?
             pstmt.setInt(1,id_chest);
             rs = pstmt.executeQuery();
@@ -218,8 +239,8 @@ public class ItemPlacedListener implements Listener {
                 int durability = rs.getInt("durability");
                 boolean enchantements = rs.getBoolean("enchantements");
                 String type = rs.getString("type");
-                //TODO crea il nuovo Itemstack
                 int damage = Material.getMaterial(type).getMaxDurability()-durability;
+                // crea il nuovo Itemstack
                 ItemStack new_is = new ItemStack(Material.getMaterial(type),amount,(short) damage);
 
                 //per ogni item se enchantments è vero allora recupera l'enchantmet dell'item in quella chest
@@ -231,19 +252,59 @@ public class ItemPlacedListener implements Listener {
                     while (rs2.next()) {
                         String name_enchant = rs2.getString("name");
                         int level = rs2.getInt("level");
-                        //TODO inserisci l'enchant all'itemstack
+                        //inserisci l'enchant all'itemstack
                         new_is.addEnchantment(Enchantment.getByName(name_enchant),level);
                     }
 
                 }
-                //TODO inserisci dentro la chest questo itemstack
-                player.getInventory().addItem(new_is);
-                //chest.getInventory().addItem(new_is);
-            }
+                // se è una shulker
+                if (new_is.getItemMeta() instanceof BlockStateMeta) {
+                    BlockStateMeta im = (BlockStateMeta) new_is.getItemMeta();
+                    if (im.getBlockState() instanceof ShulkerBox){
+                        ShulkerBox shulker = (ShulkerBox)im.getBlockState();
 
+                        pstmt = MySql.c.prepareStatement(GET_ALL_SHULKER_ITEMS);//SELECT * FROM `SHULKER` WHERE `item` = ? AND `chest` = ?
+                        pstmt.setInt(1,id_item);
+                        pstmt.setInt(2,id_chest);
+                        ResultSet rs2 = pstmt.executeQuery();
+                        // per ogni itemstack salvato nella shulker
+                        while (rs2.next()) {
+                            id_item = rs.getInt("id");
+                            amount = rs.getInt("amount");
+                            durability = rs.getInt("durability");
+                            enchantements = rs.getBoolean("enchantements");
+                            type = rs.getString("type");
+                            damage = Material.getMaterial(type).getMaxDurability()-durability;
+                            // crea il nuovo Itemstack
+                            ItemStack new_is_shulker = new ItemStack(Material.getMaterial(type),amount,(short) damage);
+                            if(enchantements){
+                                pstmt = MySql.c.prepareStatement(GET_ALL_ENCHANTMENTS_FROM_SHULKER);//SELECT `id` FROM `CHEST` WHERE `x` = ? AND `y` = ? AND `z` = ?
+                                pstmt.setInt(1,id_item);
+                                ResultSet rs3 = pstmt.executeQuery();
+                                // per ogni enchantments
+                                while (rs3.next()) {
+                                    String name_enchant = rs2.getString("name");
+                                    int level = rs2.getInt("level");
+                                    //inserisci l'enchant all'itemstack
+                                    new_is_shulker.addEnchantment(Enchantment.getByName(name_enchant),level);
+                                }
+                            }
+                            shulker.getInventory().addItem(new_is_shulker);
+                        }
+                        //TODO aggiustare sta cosa
+                        chest.getInventory().addItem((ItemStack) shulker);
+                    }
+                }else{
+                    //inserisci dentro la chest questo itemstack
+                    //player.getInventory().addItem(new_is);
+                    chest.getInventory().addItem(new_is);
+                }
+            }
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
+
+
 
         if(!Albatros.getPlayerList().contains(player.getDisplayName())){
             player.sendMessage("player non presente nella lista dei registrati");
