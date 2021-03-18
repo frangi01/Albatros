@@ -184,10 +184,17 @@ public class ItemPlacedListener implements Listener {
         Chest chest = (Chest) inv.getHolder();
         //da id_chest dalla posizione del blocco
         PreparedStatement pstmt = null;
-        if(!Albatros.getOnePlayerChestMap(player.getDisplayName()).contains(chest)){
+        try {
+            if (!Objects.requireNonNull(Albatros.getOnePlayerChestMap(player.getDisplayName())).contains(chest)) {
+                player.sendMessage("Cassa non registrata!");
+                return;
+            }
+        }
+        catch (NullPointerException n){
             player.sendMessage("Cassa non registrata!");
             return;
         }
+
         try {
             pstmt = MySql.c.prepareStatement(GET_CHEST);//SELECT `id` FROM `CHEST` WHERE `x` = ? AND `y` = ? AND `z` = ?
             pstmt.setDouble(1,chest.getLocation().getX());
