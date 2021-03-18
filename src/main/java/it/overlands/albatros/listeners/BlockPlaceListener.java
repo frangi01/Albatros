@@ -42,7 +42,7 @@ public class BlockPlaceListener implements Listener {
             //se è nel mondo giusto
             Chest placed_block = (Chest) pb.getState();
             //TODO mettere il nome del mondo giusto
-            if(e.getPlayer().getWorld().getName().equals("world")){
+            //if(e.getPlayer().getWorld().getName().equals("world")){
                 //ha piazzato una chest
                 if(!distanceCheck(issuer,placed_block)){
                     issuer.sendMessage("Solo casse singole! piazzale ad un blocco di distanza"
@@ -73,7 +73,7 @@ public class BlockPlaceListener implements Listener {
                     issuer.sendMessage("Limite chest raggiunto operazione terminata");
                     Albatros.removeExecutingPlayer(issuer.getDisplayName());
                 }
-            }
+            //}
         }
     }
 
