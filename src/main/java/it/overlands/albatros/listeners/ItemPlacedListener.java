@@ -211,7 +211,7 @@ public class ItemPlacedListener implements Listener {
             System.out.println(player.getDisplayName()+", registrato ha cliccato su una cassa non registrata");
             return;
         }
-        System.out.println(player.getDisplayName()+", registrato ha cliccato su una cassa");
+        System.out.println(player.getDisplayName()+" è registrato e ha cliccato su una cassa registrata");
 
 
         //da id_chest dalla posizione del blocco
@@ -262,7 +262,7 @@ public class ItemPlacedListener implements Listener {
 
                 /************** se è una shulker **********************/
                 if (type.contains("SHULKER")) {
-                    System.out.println(" la chest aperta da "+ player.getDisplayName()+" contiene una shulker");
+                    System.out.println("OPENSHULKER la chest aperta da "+ player.getDisplayName()+" contiene una shulker");
 
                     //creo un itemstack di shulker
                     ItemStack shulker_is = new ItemStack(Material.getMaterial(type));
@@ -283,16 +283,17 @@ public class ItemPlacedListener implements Listener {
                         String stype = rs2.getString("type");
                         //int sdamage = sdurability - Objects.requireNonNull(getMaterial(type)).getMaxDurability() ;
 
-                        System.out.println(stype);
+
+                        System.out.println("\n"+stype+ "con sdurability: " + sdurability);
+
                         if(Material.getMaterial(type) ==null){
                             System.out.println("ITEMSTACK NELLA SHULKER NON RICONOSCIUTO!");
                             continue;
                         }
-
                         ItemStack is = new ItemStack(Material.getMaterial(stype),samount);
                         if(is.getItemMeta() instanceof org.bukkit.inventory.meta.Damageable) {
                             org.bukkit.inventory.meta.Damageable d = (org.bukkit.inventory.meta.Damageable) is.getItemMeta();
-                            d.setDamage(sdurability);
+                            d.setDamage(is.getType().getMaxDurability()-sdurability);
                             is.setItemMeta((ItemMeta) d);
                         }
 
