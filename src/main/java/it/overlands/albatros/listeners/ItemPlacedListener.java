@@ -167,6 +167,7 @@ public class ItemPlacedListener implements Listener {
                                             pstmt.setInt(3, -1);
                                             pstmt.setInt(4,shulker_id);
                                             pstmt.execute();
+                                            System.out.println("con "+en.getKey().toString() + is.getEnchantmentLevel(Enchantment.getByKey(en.getKey())));
                                         }
                                     }
                                 }
@@ -272,14 +273,14 @@ public class ItemPlacedListener implements Listener {
                     pstmt.setInt(1, id_item);
                     pstmt.setInt(2, id_chest);
                     ResultSet rs2 = pstmt.executeQuery();
-                    System.out.println("La shulker nella chest contiene: ");
+                    System.out.println("OPEN: La shulker nella chest contiene: ");
                     // per ogni itemstack salvato nella shulker
                     while (rs2.next()) {
-                        int sid_item = rs.getInt("id");
-                        int samount = rs.getInt("amount");
-                        int sdurability = rs.getInt("durability");
-                        boolean senchantements = rs.getBoolean("enchantements");
-                        String stype = rs.getString("type");
+                        int sid_item = rs2.getInt("id");
+                        int samount = rs2.getInt("amount");
+                        int sdurability = rs2.getInt("durability");
+                        boolean senchantements = rs2.getBoolean("enchantements");
+                        String stype = rs2.getString("type");
                         int sdamage = Objects.requireNonNull(getMaterial(type)).getMaxDurability() - durability;
 
                         System.out.println(stype);
@@ -291,15 +292,15 @@ public class ItemPlacedListener implements Listener {
                         ItemStack is = new ItemStack(Material.getMaterial(stype),samount,(short) sdamage);
                         //itemstack dell'oggetto nella shulker.
 
-                        if (enchantements) {
+                        if (senchantements) {
                             player.sendMessage(stype +" ha i seguenti incantamenti: ");
                             pstmt = c.prepareStatement(GET_ALL_ENCHANTMENTS_FROM_SHULKER);//SELECT `id` FROM `CHEST` WHERE `x` = ? AND `y` = ? AND `z` = ?
                             pstmt.setInt(1, id_item);
                             ResultSet rs3 = pstmt.executeQuery();
                             // per ogni enchantments
                             while (rs3.next()) {
-                                String name_enchant = rs2.getString("name");
-                                int level = rs2.getInt("level");
+                                String name_enchant = rs3.getString("name");
+                                int level = rs3.getInt("level");
 
                                 System.out.println(name_enchant);
 
@@ -311,6 +312,7 @@ public class ItemPlacedListener implements Listener {
                                 }
                                 im.addEnchant(Enchantment.getByKey(key),level,false);
                                 is.setItemMeta(im);
+                                System.out.println(name_enchant);
                             }
                         }
                         shulker.getInventory().addItem(is);

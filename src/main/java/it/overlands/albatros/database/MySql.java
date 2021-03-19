@@ -72,6 +72,11 @@ public class MySql {
     //public final static String GET_CHEST = "SELECT `id` FROM `CHEST` WHERE `x` = ? AND `y` = ? AND `z` = ?";
     //public final static String GET_CHEST_BY_WNAME = "SELECT `id` FROM `CHEST` WHERE `world` = ? AND `id` IN (SELECT MIN(`id`) FROM `CHEST` WHERE `player`= ?)";
     public final static String GET_COUNTER_CHEST = "SELECT `counter` FROM `CHEST` WHERE `player` = ? AND `world` = ? AND `x` = ? AND `y` = ? AND `z` = ?";
+
+    //editato da nonick
+    public final static String GET_COUNTER_SHULKER = "SELECT `counter` FROM `SHULKER` WHERE `item` = ? AND `chest` = ?";
+
+
     public final static String GET_ID_CHEST = "SELECT `id` FROM `CHEST` WHERE `player` = ? AND `world` = ? AND `counter` = ?";
     //public final static String GET_ID_CONNECTED_CHEST = "SELECT `id` FROM `CHEST` WHERE `player` = ? AND `world` = ? AND `counter` = ?";
 
