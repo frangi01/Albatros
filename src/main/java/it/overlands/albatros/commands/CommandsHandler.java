@@ -18,7 +18,6 @@ public class CommandsHandler implements CommandExecutor {
     private final String _LISTACHESTS = "listachests";
     private final String _RESETTATUTTI = "resettatutti";
 
-
     @Override
     public boolean onCommand(CommandSender s, Command command, String label, String[] args) {
         if(s instanceof Player) {

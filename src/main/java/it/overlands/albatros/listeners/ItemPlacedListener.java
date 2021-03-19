@@ -138,7 +138,7 @@ public class ItemPlacedListener implements Listener {
                                     if(is==null){continue;}
                                     pstmt = MySql.c.prepareStatement(MySql.ADD_SHULKER_ITEM,Statement.RETURN_GENERATED_KEYS);
                                     pstmt.setInt (1, is.getAmount());
-                                    if(is.getItemMeta() instanceof  Damageable) {
+                                    if(is.getItemMeta() instanceof  org.bukkit.inventory.meta.Damageable) {
                                         org.bukkit.inventory.meta.Damageable d = (org.bukkit.inventory.meta.Damageable) is.getItemMeta();
                                         pstmt.setInt(2, is.getType().getMaxDurability()-d.getDamage()); // ho perso 40min per cercare di capire come cazzo prendere questo valore in 1.16.5 ma non l'ho capito
                                     } else{
@@ -210,7 +210,7 @@ public class ItemPlacedListener implements Listener {
         if(!Albatros.getOnePlayerChestMap(player.getDisplayName()).contains(chest)){
             System.out.println(player.getDisplayName()+", registrato ha cliccato su una cassa non registrata");
             return;
-        };
+        }
         System.out.println(player.getDisplayName()+", registrato ha cliccato su una cassa");
 
 
@@ -255,7 +255,7 @@ public class ItemPlacedListener implements Listener {
                 String type = rs.getString("type");
                 int damage = getMaterial(type).getMaxDurability() - durability;
 
-                if(Material.getMaterial(type) ==null){
+                if(Material.getMaterial(type) == null){
                     System.out.println("ITEMSTACK NELLA CHEST NON RICONOSCIUTO!");
                     return;
                 }
@@ -281,7 +281,7 @@ public class ItemPlacedListener implements Listener {
                         int sdurability = rs2.getInt("durability");
                         boolean senchantements = rs2.getBoolean("enchantements");
                         String stype = rs2.getString("type");
-                        int sdamage = Objects.requireNonNull(getMaterial(type)).getMaxDurability() - durability;
+                        //int sdamage = sdurability - Objects.requireNonNull(getMaterial(type)).getMaxDurability() ;
 
                         System.out.println(stype);
                         if(Material.getMaterial(type) ==null){
@@ -289,13 +289,20 @@ public class ItemPlacedListener implements Listener {
                             continue;
                         }
 
-                        ItemStack is = new ItemStack(Material.getMaterial(stype),samount,(short) sdamage);
+                        ItemStack is = new ItemStack(Material.getMaterial(stype),samount);
+                        if(is.getItemMeta() instanceof org.bukkit.inventory.meta.Damageable) {
+                            org.bukkit.inventory.meta.Damageable d = (org.bukkit.inventory.meta.Damageable) is.getItemMeta();
+                            d.setDamage(sdurability);
+                            is.setItemMeta((ItemMeta) d);
+                        }
+
+                        //.out.println("AAAAAAAAAAAAAAAAAAAAAAA "+sdamage);
                         //itemstack dell'oggetto nella shulker.
 
                         if (senchantements) {
                             player.sendMessage(stype +" ha i seguenti incantamenti: ");
                             pstmt = c.prepareStatement(GET_ALL_ENCHANTMENTS_FROM_SHULKER);//SELECT `id` FROM `CHEST` WHERE `x` = ? AND `y` = ? AND `z` = ?
-                            pstmt.setInt(1, id_item);
+                            pstmt.setInt(1, sid_item);
                             ResultSet rs3 = pstmt.executeQuery();
                             // per ogni enchantments
                             while (rs3.next()) {
