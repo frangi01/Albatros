@@ -5,6 +5,7 @@ import it.overlands.albatros.database.MySql;
 import org.apache.commons.lang.ObjectUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
 
 import org.bukkit.block.Chest;
@@ -21,6 +22,7 @@ import org.bukkit.event.inventory.*;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BlockStateMeta;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -31,6 +33,7 @@ import java.util.*;
 
 import static it.overlands.albatros.database.MySql.*;
 import static org.bukkit.Material.*;
+import static org.bukkit.Registry.MATERIAL;
 
 
 public class ItemPlacedListener implements Listener {
@@ -45,39 +48,41 @@ public class ItemPlacedListener implements Listener {
         Player player = (Player) e.getPlayer();
         Inventory inv = e.getInventory();
 
-        //e.getPlayer().sendMessage("evento triggerato, hai chiuso un inventario");
         if(!inv.getType().equals(InventoryType.CHEST)){
-            player.sendMessage("non hai chiuso una chest...");
             return;
         }
         Chest chest = (Chest) inv.getHolder();
 
         if(Albatros.getPlayerList().contains(player.getDisplayName())){
             ArrayList<Chest> listachests= Albatros.getOnePlayerChestMap(player.getDisplayName());
+    try{
+        listachests.contains(chest);
+    }catch (NullPointerException ex){
+        return;
+    }
 
-            if(listachests.contains(chest)){
-                player.sendMessage("hai chiuso una cassa registrata!");
-                //SALVA CIò CHE C'è DENTRO SUL DB
-                PreparedStatement pstmt = null;
-                try {
-                    pstmt = MySql.c.prepareStatement(GET_COUNTER_CHEST);//SELECT `counter` FROM `CHEST` WHERE `player` = ? AND `world` = ? AND `x` = ? AND `y` = ? AND `z` = ?
-                    pstmt.setString(1,player.getName());
-                    pstmt.setString(2,e.getPlayer().getWorld().getName());
-                    pstmt.setDouble(3,chest.getX());
-                    pstmt.setDouble(4,chest.getY());
-                    pstmt.setDouble(5,chest.getZ());
-                    ResultSet rs = pstmt.executeQuery();
-                    int counter_chest = -1;
-                    while (rs.next()) { counter_chest = rs.getInt("counter"); }
-
-                    // recupero l'id della chest
-                    pstmt = MySql.c.prepareStatement(GET_ID_CHEST);//SELECT `id` FROM `CHEST` WHERE `player` = ? AND `world` = ? AND `counter` = ?
-                    pstmt.setString(1,player.getName());
-                    pstmt.setString(2,Albatros.oldWorld);
-                    pstmt.setInt(3,counter_chest);
-                    rs = pstmt.executeQuery();
-                    int id_chest = -1;
-                    while (rs.next()) { id_chest = rs.getInt("id"); }
+    if(listachests.contains(chest)){
+        System.out.println(player.getDisplayName() + " ha chiuso una cassa recistrata");
+        //SALVA CIò CHE C'è DENTRO SUL DB
+        PreparedStatement pstmt = null;
+        try {
+            pstmt = MySql.c.prepareStatement(GET_COUNTER_CHEST);//SELECT `counter` FROM `CHEST` WHERE `player` = ? AND `world` = ? AND `x` = ? AND `y` = ? AND `z` = ?
+            pstmt.setString(1,player.getName());
+            pstmt.setString(2,e.getPlayer().getWorld().getName());
+            pstmt.setDouble(3,chest.getX());
+            pstmt.setDouble(4,chest.getY());
+            pstmt.setDouble(5,chest.getZ());
+            ResultSet rs = pstmt.executeQuery();
+            int counter_chest = -1;
+            while (rs.next()) { counter_chest = rs.getInt("counter"); }
+                // recupero l'id della chest
+                pstmt = MySql.c.prepareStatement(GET_ID_CHEST);//SELECT `id` FROM `CHEST` WHERE `player` = ? AND `world` = ? AND `counter` = ?
+                pstmt.setString(1,player.getName());
+                pstmt.setString(2,Albatros.oldWorld);
+                pstmt.setInt(3,counter_chest);
+                rs = pstmt.executeQuery();
+                int id_chest = -1;
+                while (rs.next()) { id_chest = rs.getInt("id"); }
 
                     //recupero l'inventario
                     //per ogni ItemStack devo recuperare AMOUNT - DURABILITY - ENCHANTMENT booelan - TYPE
@@ -90,11 +95,12 @@ public class ItemPlacedListener implements Listener {
                         if (i == null) { continue;                        }
                         pstmt = MySql.c.prepareStatement(MySql.ADD_ITEM, Statement.RETURN_GENERATED_KEYS);
                         pstmt.setInt(1, i.getAmount());
-                        if(i.getItemMeta() instanceof  Damageable) {
+                        if(i.getItemMeta() instanceof org.bukkit.inventory.meta.Damageable) {
                             org.bukkit.inventory.meta.Damageable d = (org.bukkit.inventory.meta.Damageable) i.getItemMeta();
-                            pstmt.setInt(2, i.getType().getMaxDurability()-d.getDamage()); // ho perso 40min per cercare di capire come cazzo prendere questo valore in 1.16.5 ma non l'ho capito
+                            pstmt.setInt(2, i.getType().getMaxDurability() - d.getDamage()); // ho perso 40min per cercare di capire come cazzo prendere questo valore in 1.16.5 ma non l'ho capito
                         }else{
                             pstmt.setInt(2, -1); // ho perso 40min per cercare di capire come cazzo prendere questo valore in 1.16.5 ma non l'ho capito
+                            System.out.println("Oggetto non danneggiabile");
                         }
                         //pstmt.setShort(2, i.getDurability()); // ho perso 40min per cercare di capire come cazzo prendere questo valore in 1.16.5 ma non l'ho capito
                         pstmt.setBoolean(3, i.getItemMeta().hasEnchants());
@@ -114,7 +120,7 @@ public class ItemPlacedListener implements Listener {
                             // per ogni enchant recupero il nome e il livello e lo carico sul db
                             for (Enchantment en : enchantments.keySet()) {
                                 pstmt = MySql.c.prepareStatement(MySql.ADD_ENCHANTS);
-                                pstmt.setString(1, en.getKey().toString());
+                                pstmt.setString(1, en.getKey().getKey().replace("minecraft:",""));
                                 pstmt.setInt(2, i.getEnchantmentLevel(Enchantment.getByKey(en.getKey())));
                                 pstmt.setInt(3, inventory_id);
                                 pstmt.setInt(4,-1);
@@ -125,8 +131,9 @@ public class ItemPlacedListener implements Listener {
                         if (i.getItemMeta() instanceof BlockStateMeta) {
                             BlockStateMeta im = (BlockStateMeta) i.getItemMeta();
                             if (im.getBlockState() instanceof ShulkerBox) {
-                                player.sendMessage("è una shulker!");
+                                System.out.println(player.getDisplayName() +" ha chiuso una chest con dentro una shulker!");
                                 ShulkerBox shulker = (ShulkerBox) im.getBlockState();
+                                System.out.println(player.getDisplayName()+" ha chiuso una chest con una shulker che contiene: ");
                                 for(ItemStack is : shulker.getInventory()){
                                     if(is==null){continue;}
                                     pstmt = MySql.c.prepareStatement(MySql.ADD_SHULKER_ITEM,Statement.RETURN_GENERATED_KEYS);
@@ -142,20 +149,20 @@ public class ItemPlacedListener implements Listener {
                                     pstmt.setInt (5, inventory_id);
                                     pstmt.setInt (6, id_chest);
                                     pstmt.execute();
-                                    player.sendMessage("la shulker ha qualcosa dentro!");
 
                                     rs = pstmt.getGeneratedKeys();
                                     int shulker_id = 0;
                                     if (rs.next()) {
                                         shulker_id = rs.getInt(1);
                                     }
+                                    System.out.println(is.getType());
                                     if (is.getItemMeta().hasEnchants()) {
                                         // recupero il map degli enchants
                                         Map<Enchantment, Integer> enchantments = is.getEnchantments();
                                         // per ogni enchant recupero il nome e il livello e lo carico sul db
                                         for (Enchantment en : enchantments.keySet()) {
                                             pstmt = MySql.c.prepareStatement(MySql.ADD_ENCHANTS);
-                                            pstmt.setString(1, en.getKey().toString());
+                                            pstmt.setString(1, en.getKey().getKey().replace("minecraft:",""));
                                             pstmt.setInt(2, is.getEnchantmentLevel(Enchantment.getByKey(en.getKey())));
                                             pstmt.setInt(3, -1);
                                             pstmt.setInt(4,shulker_id);
@@ -185,27 +192,33 @@ public class ItemPlacedListener implements Listener {
         if(!(e.getPlayer() instanceof  Player)){ return; }
         Player player = (Player) e.getPlayer();
         Inventory inv = e.getInventory();
-
         if(!inv.getType().equals(InventoryType.CHEST)){
             player.sendMessage("non hai aperto una chest...");
             return;
         }
-        Chest chest = (Chest) inv.getHolder();
-        //da id_chest dalla posizione del blocco
-        PreparedStatement pstmt = null;
-        try {
-            if (!Objects.requireNonNull(Albatros.getOnePlayerChestMap(player.getDisplayName())).contains(chest)) {
-                player.sendMessage("Cassa non registrata!");
-                return;
-            }
-        }
-        catch (NullPointerException n){
-            player.sendMessage("Cassa non registrata!");
+
+        if(!Albatros.getPlayerList().contains(player.getDisplayName())){
+            System.out.println(player.getDisplayName()+" non registrato nella listaplayer!");
             return;
         }
 
+
+        Chest chest = (Chest) inv.getHolder();
+
+        if(Albatros.getOnePlayerChestMap(player.getDisplayName())==null){return;}
+        if(!Albatros.getOnePlayerChestMap(player.getDisplayName()).contains(chest)){
+            System.out.println(player.getDisplayName()+", registrato ha cliccato su una cassa non registrata");
+            return;
+        };
+        System.out.println(player.getDisplayName()+", registrato ha cliccato su una cassa");
+
+
+        //da id_chest dalla posizione del blocco
+        PreparedStatement pstmt = null;
+
+
         try {
-            pstmt = MySql.c.prepareStatement(GET_COUNTER_CHEST);//SELECT `counter` FROM `CHEST` WHERE `player` = ? AND `world` = ? AND `x` = ? AND `y` = ? AND `z` = ?
+            pstmt = c.prepareStatement(GET_COUNTER_CHEST);//SELECT `counter` FROM `CHEST` WHERE `player` = ? AND `world` = ? AND `x` = ? AND `y` = ? AND `z` = ?
             pstmt.setString(1,player.getName());
             pstmt.setString(2,e.getPlayer().getWorld().getName());
             pstmt.setDouble(3,chest.getX());
@@ -219,7 +232,7 @@ public class ItemPlacedListener implements Listener {
             chest.getInventory().clear();
 
             // recupero l'id della chest
-            pstmt = MySql.c.prepareStatement(GET_ID_CHEST);//SELECT `id` FROM `CHEST` WHERE `player` = ? AND `world` = ? AND `counter` = ?
+            pstmt = c.prepareStatement(GET_ID_CHEST);//SELECT `id` FROM `CHEST` WHERE `player` = ? AND `world` = ? AND `counter` = ?
             pstmt.setString(1,player.getName());
             pstmt.setString(2,Albatros.oldWorld);
             pstmt.setInt(3,counter_chest);
@@ -228,90 +241,121 @@ public class ItemPlacedListener implements Listener {
             while (rs.next()) { id_chest = rs.getInt("id"); }
 
             //recupero tutti i dati e li inserisco nella chest
-            pstmt = MySql.c.prepareStatement(GET_ALL_ITEMSTACK);//SELECT `id` FROM `CHEST` WHERE `x` = ? AND `y` = ? AND `z` = ?
+            pstmt = c.prepareStatement(GET_ALL_ITEMSTACK);//SELECT `id` FROM `CHEST` WHERE `x` = ? AND `y` = ? AND `z` = ?
             pstmt.setInt(1,id_chest);
             rs = pstmt.executeQuery();
 
-            // per ogni itemstack
+            /** per ogni itemstack****/
             while (rs.next()) {
                 int id_item = rs.getInt("id");
                 int amount = rs.getInt("amount");
                 int durability = rs.getInt("durability");
                 boolean enchantements = rs.getBoolean("enchantements");
                 String type = rs.getString("type");
-                int damage = Material.getMaterial(type).getMaxDurability()-durability;
-                // crea il nuovo Itemstack
-                ItemStack new_is = new ItemStack(Material.getMaterial(type),amount,(short) damage);
+                int damage = getMaterial(type).getMaxDurability() - durability;
 
-                //per ogni item se enchantments è vero allora recupera l'enchantmet dell'item in quella chest
-                if(enchantements){
-                    pstmt = MySql.c.prepareStatement(GET_ALL_ENCHANTMENTS_FROM_ITEMSTACK);//SELECT `id` FROM `CHEST` WHERE `x` = ? AND `y` = ? AND `z` = ?
-                    pstmt.setInt(1,id_item);
-                    ResultSet rs2 = pstmt.executeQuery();
-                    // per ogni enchantments
-                    while (rs2.next()) {
-                        String name_enchant = rs2.getString("name");
-                        int level = rs2.getInt("level");
-                        //inserisci l'enchant all'itemstack
-                        new_is.addEnchantment(Enchantment.getByName(name_enchant),level);
-                    }
-
+                if(Material.getMaterial(type) ==null){
+                    System.out.println("ITEMSTACK NELLA CHEST NON RICONOSCIUTO!");
+                    return;
                 }
-                // se è una shulker
-                if (new_is.getItemMeta() instanceof BlockStateMeta) {
-                    BlockStateMeta im = (BlockStateMeta) new_is.getItemMeta();
-                    if (im.getBlockState() instanceof ShulkerBox){
-                        ShulkerBox shulker = (ShulkerBox)im.getBlockState();
 
-                        pstmt = MySql.c.prepareStatement(GET_ALL_SHULKER_ITEMS);//SELECT * FROM `SHULKER` WHERE `item` = ? AND `chest` = ?
-                        pstmt.setInt(1,id_item);
-                        pstmt.setInt(2,id_chest);
-                        ResultSet rs2 = pstmt.executeQuery();
-                        // per ogni itemstack salvato nella shulker
-                        while (rs2.next()) {
-                            id_item = rs.getInt("id");
-                            amount = rs.getInt("amount");
-                            durability = rs.getInt("durability");
-                            enchantements = rs.getBoolean("enchantements");
-                            type = rs.getString("type");
-                            damage = Material.getMaterial(type).getMaxDurability()-durability;
-                            // crea il nuovo Itemstack
-                            ItemStack new_is_shulker = new ItemStack(Material.getMaterial(type),amount,(short) damage);
-                            if(enchantements){
-                                pstmt = MySql.c.prepareStatement(GET_ALL_ENCHANTMENTS_FROM_SHULKER);//SELECT `id` FROM `CHEST` WHERE `x` = ? AND `y` = ? AND `z` = ?
-                                pstmt.setInt(1,id_item);
-                                ResultSet rs3 = pstmt.executeQuery();
-                                // per ogni enchantments
-                                while (rs3.next()) {
-                                    String name_enchant = rs2.getString("name");
-                                    int level = rs2.getInt("level");
-                                    //inserisci l'enchant all'itemstack
-                                    new_is_shulker.addEnchantment(Enchantment.getByName(name_enchant),level);
-                                }
-                            }
-                            shulker.getInventory().addItem(new_is_shulker);
+                /************** se è una shulker **********************/
+                if (type.contains("SHULKER")) {
+                    System.out.println(" la chest aperta da "+ player.getDisplayName()+" contiene una shulker");
+
+                    //creo un itemstack di shulker
+                    ItemStack shulker_is = new ItemStack(Material.getMaterial(type));
+                    BlockStateMeta bsm = (BlockStateMeta) shulker_is.getItemMeta();
+                    ShulkerBox shulker = (ShulkerBox) bsm.getBlockState();
+
+                    pstmt = c.prepareStatement(GET_ALL_SHULKER_ITEMS);//SELECT * FROM `SHULKER` WHERE `item` = ? AND `chest` = ?
+                    pstmt.setInt(1, id_item);
+                    pstmt.setInt(2, id_chest);
+                    ResultSet rs2 = pstmt.executeQuery();
+                    System.out.println("La shulker nella chest contiene: ");
+                    // per ogni itemstack salvato nella shulker
+                    while (rs2.next()) {
+                        int sid_item = rs.getInt("id");
+                        int samount = rs.getInt("amount");
+                        int sdurability = rs.getInt("durability");
+                        boolean senchantements = rs.getBoolean("enchantements");
+                        String stype = rs.getString("type");
+                        int sdamage = Objects.requireNonNull(getMaterial(type)).getMaxDurability() - durability;
+
+                        System.out.println(stype);
+                        if(Material.getMaterial(type) ==null){
+                            System.out.println("ITEMSTACK NELLA SHULKER NON RICONOSCIUTO!");
+                            continue;
                         }
-                        //TODO aggiustare sta cosa
-                        chest.getInventory().addItem((ItemStack) shulker);
+
+                        ItemStack is = new ItemStack(Material.getMaterial(stype),samount,(short) sdamage);
+                        //itemstack dell'oggetto nella shulker.
+
+                        if (enchantements) {
+                            player.sendMessage(stype +" ha i seguenti incantamenti: ");
+                            pstmt = c.prepareStatement(GET_ALL_ENCHANTMENTS_FROM_SHULKER);//SELECT `id` FROM `CHEST` WHERE `x` = ? AND `y` = ? AND `z` = ?
+                            pstmt.setInt(1, id_item);
+                            ResultSet rs3 = pstmt.executeQuery();
+                            // per ogni enchantments
+                            while (rs3.next()) {
+                                String name_enchant = rs2.getString("name");
+                                int level = rs2.getInt("level");
+
+                                System.out.println(name_enchant);
+
+                                //inserisci l'enchant all'itemstack
+                                ItemMeta im = is.getItemMeta();
+                                NamespacedKey key = NamespacedKey.minecraft(name_enchant);
+                                if(Enchantment.getByKey(key)==null){
+                                    System.out.println("ENCHANT"+ name_enchant +" NON TROVATO!");continue;
+                                }
+                                im.addEnchant(Enchantment.getByKey(key),level,false);
+                                is.setItemMeta(im);
+                            }
+                        }
+                        shulker.getInventory().addItem(is);
                     }
-                }else{
-                    //inserisci dentro la chest questo itemstack
-                    //player.getInventory().addItem(new_is);
-                    chest.getInventory().addItem(new_is);
+                    bsm.setBlockState(shulker);
+                    shulker.update();
+                    shulker_is.setItemMeta(bsm);
+                    chest.getInventory().addItem(shulker_is);
+                } else {
+                    /** NON é UNA SHULKER *****/
+                   System.out.println("La chest contiene: "+Material.getMaterial(type));
+                    // crea il nuovo Itemstack
+                    ItemStack itemStack = new ItemStack(Material.getMaterial(type), amount, (short) damage);
+
+                    //se ha enchantments allora recupera l'enchantmet dell'item in quella chest
+                    if (enchantements) {
+                        pstmt = MySql.c.prepareStatement(GET_ALL_ENCHANTMENTS_FROM_ITEMSTACK);//SELECT `id` FROM `CHEST` WHERE `x` = ? AND `y` = ? AND `z` = ?
+                        pstmt.setInt(1, id_item);
+                        ResultSet rs2 = pstmt.executeQuery();
+                        System.out.println(type +" ha i seguenti incantamenti: ");
+
+                        // per ogni enchantments
+                        while (rs2.next()) {
+                            String name_enchant = rs2.getString("name");
+                            player.sendMessage(name_enchant);
+                            int level = rs2.getInt("level");
+
+                            System.out.println(name_enchant);
+
+                            //inserisci l'enchant all'itemstack
+                            ItemMeta im = itemStack.getItemMeta();
+                            NamespacedKey key = NamespacedKey.minecraft(name_enchant.toLowerCase(Locale.ROOT));
+                            if(Enchantment.getByKey(key)==null){
+                               System.out.println("ENCHANT"+ name_enchant +" NON TROVATO!");continue;
+                            }
+                            im.addEnchant(Enchantment.getByKey(key),level,true);
+                            itemStack.setItemMeta(im);
+                        }
+                    }
+                    chest.getInventory().addItem(itemStack);
                 }
             }
+
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
-
-
-
-        if(!Albatros.getPlayerList().contains(player.getDisplayName())){
-            player.sendMessage("player non presente nella lista dei registrati");
-        }
-        if(!Albatros.getOnePlayerChestMap(player.getDisplayName()).contains(chest)){
-            player.sendMessage("chest non registrata!");
-        }
-        //l'utente c'è, la chest pure, scarichiamo dal DB!
     }
 }

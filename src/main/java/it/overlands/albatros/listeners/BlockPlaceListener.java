@@ -51,6 +51,7 @@ public class BlockPlaceListener implements Listener {
                     return;
                 }
 
+                System.out.println("Player: " +issuer.getDisplayName()+ " ha tentato di piazzare una chest");
                 int aux = Albatros.addChest2Player(issuer.getDisplayName(),placed_block);
                 /** piazzo la chest nell'arraylist del player in questione
                  * aux mi ritorna -1 se ho superato il limite, altrimenti il numero di chest
