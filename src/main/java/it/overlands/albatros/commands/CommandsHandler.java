@@ -10,7 +10,7 @@ import java.util.Set;
 
 public class CommandsHandler implements CommandExecutor {
     //commands
-    private final String _ATTIVACHEST = "registra";
+    private final String _REGISTRA = "registra";
     private final String _RESETTA = "resetta";
     private final String _TERMINA = "termina";
     private final String _HELP = "aiuto";
@@ -26,15 +26,32 @@ public class CommandsHandler implements CommandExecutor {
             else {
                 String cmdargs = args[0];
                 switch (cmdargs.toLowerCase()) {
-                    case _ATTIVACHEST:
+                    case _REGISTRA:
                         //inizia la sequenza per piazzare e memorizzare le casse
-                        sender.sendMessage("Piazza le chest per registrarle");
-                        Albatros.addExecutingPlayer(sender.getDisplayName());
+                        if(Albatros.getExecutingPlayers().contains(sender.getDisplayName())){
+                            //comando già attivo
+                            sender.sendMessage("Comando già attivo: piazza le casse o scrivi \"/albatros termina\" per completare la procedura");
+                        }else {
+                            //comando non attivo
+                            try {
+                                if (Albatros.getOnePlayerChestMap(sender.getDisplayName()).size() == Albatros.get_MAXNUMCHEST()) {
+                                    //max numero chest raggiunto
+                                    sender.sendMessage("Numero massimo di chest raggiunto: usa \"/albatros resetta\"" +
+                                            " per ricominciare a registrare");
+                                    break;
+                                }
+                            }catch (NullPointerException ex){
+                                //prima volta che usa /albatros registra, non fare nulla
+                            }
+                                sender.sendMessage("Piazza le chest per registrarle");
+                                Albatros.addExecutingPlayer(sender.getDisplayName());
+                        }
                         break;
                     case _TERMINA:
-                        /* termina la sequenza per piazzare e memorizzare le casse
+                        /** termina la sequenza per piazzare e memorizzare le casse
                          * SE non avviene in modo automatico
-                         * (EG vuoi piazzare solo 3 casse su 5 e fare altro)*/
+                         * (EG vuoi piazzare solo 3 casse su 5 e fare altro)**/
+
                         sender.sendMessage("registrazione chest terminata!");
                         Albatros.removeExecutingPlayer(sender.getDisplayName());
                         break;
@@ -43,19 +60,19 @@ public class CommandsHandler implements CommandExecutor {
                         String message ="\\albatros registra --> inizia la sequenza per piazzare e memorizzare le casse\n"+
                                 "\\albatros termina --> termina la sequenza, le casse attualmente memorizzare rimarranno attive\n"+
                                 "\\albatros resetta --> cancella tutte le chest memorizzante\n"+
-                                "\\albatros listachest --> numero chest piazzate\n"+
-                                "\\albatro listaplayer --> nomi player registrati al comando";
+                                "\\albatros listachests --> numero chest piazzate\n"+
+                                "\\albatro listaplayers --> nomi player registrati al comando";
                         sender.sendMessage(message);
                         break;
                     case _RESETTA:
                         // cancella tutte le chest attive di un player;
-                        sender.sendMessage("registro delle tue chest resettato!");
                         Albatros.removeChests2Player(sender);
-                    break;
+                        sender.sendMessage("registro delle tue chest resettato!");
+                        break;
                     case _RESETTATUTTI:
                         // cancella tutte le chest attive di un player;
-                        sender.sendMessage("registro dei player resettato!");
                         Albatros.resetPlayerChestsMap();
+                        sender.sendMessage("registro dei player resettato!");
                         break;
                     case _LISTAPLAYER:
                         Set<String> players = Albatros.getPlayerList();

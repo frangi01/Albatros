@@ -35,12 +35,25 @@ public final class Albatros extends JavaPlugin {
     public static void resetPlayerChestsMap(){playerChestsMap=new HashMap<>(); return;}
 
     public static Set<String> getPlayerList() {return playerChestsMap.keySet();}
+
     public  static int getSizeChestListofPlayer(Player p){
         if(playerChestsMap.containsKey(p.getName())){
             return playerChestsMap.get(p.getName()).size();
         }
         return -1;
     }
+    public  static boolean searchChest(Chest chest){
+        for(String player : playerChestsMap.keySet()){
+            ArrayList<Chest> cl = playerChestsMap.get(player)
+            for(Chest c : cl){
+
+            }
+
+        }
+
+        return playerChestsMap.
+    }
+
     public static ArrayList<Chest> getOnePlayerChestMap(String player) {
         if (playerChestsMap.containsKey(player)) {
             return playerChestsMap.get(player);

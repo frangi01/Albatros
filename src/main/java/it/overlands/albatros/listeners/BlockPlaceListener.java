@@ -5,7 +5,9 @@ import it.overlands.albatros.Albatros;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.block.Chest;
+import org.bukkit.block.data.Directional;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -34,6 +36,8 @@ public class BlockPlaceListener implements Listener {
         Block pb = e.getBlock();
         Player issuer = e.getPlayer();
         ArrayList<String> ep = Albatros.getExecutingPlayers();
+
+
 
         /*se il player che ha piazzato la cassa non ha attivato il comando l'evento è ignorato */
         if(!ep.contains(issuer.getDisplayName())){return;}
@@ -78,17 +82,55 @@ public class BlockPlaceListener implements Listener {
         }
     }
 
-    private boolean distanceCheck(Player player, Chest block) {
-        Location loc = block.getLocation();
+    private boolean distanceCheck(Player player, Chest chest) {
+        Location loc = chest.getLocation();
+        BlockFace b;
         double nx = abs(loc.getX());
         double nz = abs(loc.getZ());
 
-        ArrayList<Chest> listablocchi = Albatros.getOnePlayerChestMap(player.getDisplayName());
-        if(listablocchi == null) { return true;}
+        ArrayList<Chest> listachests = Albatros.getOnePlayerChestMap(player.getDisplayName());
+        if(listachests == null) { return true;}
 
-        for(Chest r : listablocchi){
-            //TODO
+        double ox;
+        double oz;
+        double xdist;
+        double zdist;
+      /*
+        if(listachests!=null) {
+            if (listachests.size() >= 1) {
+                Chest r = listachests.get(0);
+                b = chest.getBlock().getFace(r.getBlock());
+                player.sendMessage("face: " + b.toString());
+            }
+        }*/
+
+        for(Chest r : listachests){
+            b  = chest.getBlock().getFace(r.getBlock());
+            ox = r.getX();
+            oz = r.getZ();
+            xdist = abs(abs(ox)-abs(nx));
+            zdist = abs(abs(oz)-abs(nz));
+            if(b==null){
+                player.sendMessage("abbastanza lontano");
+                return true;
+            }
+            player.sendMessage(" ox: "+ox + "; nx: " + nx);
+            player.sendMessage(" oz: "+oz + "; nz: " + nz);
+
+            player.sendMessage(" xdist: " + xdist + "; zdist: " + zdist);
+            player.sendMessage("facing: " + b.toString());
+            if(b.toString().equals(BlockFace.SOUTH.toString()) || b.toString().equals(BlockFace.NORTH.toString())){
+                player.sendMessage("NOrd o SUD if");
+                //check on x axis
+                if(xdist<2){return  false;}
+            }
+            else if(b== BlockFace.EAST || b == BlockFace.WEST ){
+                //check on z axis
+                player.sendMessage("Est o West if");
+                if(zdist <2 ){return  false;}
+            }
         }
         return true;
+
     }
 }
