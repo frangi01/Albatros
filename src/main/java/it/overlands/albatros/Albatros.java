@@ -42,17 +42,7 @@ public final class Albatros extends JavaPlugin {
         }
         return -1;
     }
-    public  static boolean searchChest(Chest chest){
-        for(String player : playerChestsMap.keySet()){
-            ArrayList<Chest> cl = playerChestsMap.get(player)
-            for(Chest c : cl){
 
-            }
-
-        }
-
-        return playerChestsMap.
-    }
 
     public static ArrayList<Chest> getOnePlayerChestMap(String player) {
         if (playerChestsMap.containsKey(player)) {

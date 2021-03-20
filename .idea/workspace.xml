@@ -12,13 +12,13 @@
     <bookmark url="file://$PROJECT_DIR$/src/main/java/it/overlands/albatros/database/MySql.java" line="69" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3eb7934e-583a-419e-a032-0c8ccdf2fcf5" name="Default Changelist" comment="Da fare:&#10;&#10;-modificare il createtable&#10;&#10;-check della distanza casse&#10;&#10;-blocco uso mondo nuovo a vecchio&#10;&#10;-blocco rilancio registra&#10;&#10;-delete dei campi collegati quando si aggiorna il contenuto delle chest&#10;&#10;&#10;- rimozioni dei vari println e correzione dei messaggi">
+    <list default="true" id="3eb7934e-583a-419e-a032-0c8ccdf2fcf5" name="Default Changelist" comment="Da fare:&#10;&#10;-modificare il createtable&#10;&#10;&#10;-blocco uso mondo nuovo a vecchio&#10;&#10;-blocco rilancio registra&#10;&#10;-delete dei campi collegati quando si aggiorna il contenuto delle chest&#10;&#10;&#10;- rimozioni dei vari println e correzione dei messaggi">
+      <change afterPath="$PROJECT_DIR$/src/main/java/it/overlands/albatros/listeners/BlockClickedListener.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/artifacts/Albatros_jar/Albatros.jar" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/Albatros_jar/Albatros.jar" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/it/overlands/albatros/Albatros.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/overlands/albatros/Albatros.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/overlands/albatros/commands/CommandsHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/overlands/albatros/commands/CommandsHandler.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/it/overlands/albatros/listeners/BlockPlaceListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/overlands/albatros/listeners/BlockPlaceListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/it/overlands/albatros/commands/CommandsHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/it/overlands/albatros/commands/CommandsHandler.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/it/overlands/albatros/Albatros.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/it/overlands/albatros/Albatros.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/it/overlands/albatros/listeners/BlockPlaceListener.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/it/overlands/albatros/listeners/BlockPlaceListener.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -256,7 +256,14 @@
       <option name="project" value="LOCAL" />
       <updated>1616193505447</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Da fare:&#10;&#10;-modificare il createtable&#10;&#10;&#10;-blocco uso mondo nuovo a vecchio&#10;&#10;-blocco rilancio registra&#10;&#10;-delete dei campi collegati quando si aggiorna il contenuto delle chest&#10;&#10;&#10;- rimozioni dei vari println e correzione dei messaggi">
+      <created>1616253417555</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1616253417557</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -322,7 +329,8 @@
     <MESSAGE value="Aggiunto listener sulle casse&#10;bisogna finirlo in modo che rimuova la roba dopo aver aggiornato nel database" />
     <MESSAGE value="le shulker si annidano tra loro&#10;&#10;ultimo bug... si trova in ItemPlacedListener dalla riga 262" />
     <MESSAGE value="Da fare:&#10;&#10;-modificare il createtable&#10;&#10;-check della distanza casse&#10;&#10;-blocco uso mondo nuovo a vecchio&#10;&#10;-blocco rilancio registra&#10;&#10;-delete dei campi collegati quando si aggiorna il contenuto delle chest&#10;&#10;&#10;- rimozioni dei vari println e correzione dei messaggi" />
-    <option name="LAST_COMMIT_MESSAGE" value="Da fare:&#10;&#10;-modificare il createtable&#10;&#10;-check della distanza casse&#10;&#10;-blocco uso mondo nuovo a vecchio&#10;&#10;-blocco rilancio registra&#10;&#10;-delete dei campi collegati quando si aggiorna il contenuto delle chest&#10;&#10;&#10;- rimozioni dei vari println e correzione dei messaggi" />
+    <MESSAGE value="Da fare:&#10;&#10;-modificare il createtable&#10;&#10;&#10;-blocco uso mondo nuovo a vecchio&#10;&#10;-blocco rilancio registra&#10;&#10;-delete dei campi collegati quando si aggiorna il contenuto delle chest&#10;&#10;&#10;- rimozioni dei vari println e correzione dei messaggi" />
+    <option name="LAST_COMMIT_MESSAGE" value="Da fare:&#10;&#10;-modificare il createtable&#10;&#10;&#10;-blocco uso mondo nuovo a vecchio&#10;&#10;-blocco rilancio registra&#10;&#10;-delete dei campi collegati quando si aggiorna il contenuto delle chest&#10;&#10;&#10;- rimozioni dei vari println e correzione dei messaggi" />
   </component>
   <component name="editorHistoryManager">
     <entry file="jar://$MAVEN_REPOSITORY$/org/spigotmc/spigot-api/1.16.5-R0.1-SNAPSHOT/spigot-api-1.16.5-R0.1-20210308.215427-28-sources.jar!/org/bukkit/block/data/BlockData.java">

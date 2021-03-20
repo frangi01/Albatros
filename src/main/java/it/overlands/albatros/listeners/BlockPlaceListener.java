@@ -4,6 +4,7 @@ package it.overlands.albatros.listeners;
 import it.overlands.albatros.Albatros;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Chest;
@@ -19,6 +20,7 @@ import javax.swing.*;
 import java.util.ArrayList;
 
 import static java.lang.Math.abs;
+import static org.bukkit.block.data.type.Chest.Type.SINGLE;
 
 public class BlockPlaceListener implements Listener {
 
@@ -37,8 +39,6 @@ public class BlockPlaceListener implements Listener {
         Player issuer = e.getPlayer();
         ArrayList<String> ep = Albatros.getExecutingPlayers();
 
-
-
         /*se il player che ha piazzato la cassa non ha attivato il comando l'evento è ignorato */
         if(!ep.contains(issuer.getDisplayName())){return;}
 
@@ -48,12 +48,16 @@ public class BlockPlaceListener implements Listener {
             //TODO mettere il nome del mondo giusto
             //if(e.getPlayer().getWorld().getName().equals("world")){
                 //ha piazzato una chest
+
                 if(!distanceCheck(issuer,placed_block)){
+                    placed_block.setType(Material.CHEST);
                     issuer.sendMessage("Solo casse singole! piazzale ad un blocco di distanza"
                     +"l'una dall'altra!!");
                     e.setCancelled(true);
                     return;
                 }
+
+
 
                 System.out.println("Player: " +issuer.getDisplayName()+ " ha tentato di piazzare una chest");
                 int aux = Albatros.addChest2Player(issuer.getDisplayName(),placed_block);
@@ -87,6 +91,7 @@ public class BlockPlaceListener implements Listener {
         BlockFace b;
         double nx = abs(loc.getX());
         double nz = abs(loc.getZ());
+        double ny = abs(loc.getY());
 
         ArrayList<Chest> listachests = Albatros.getOnePlayerChestMap(player.getDisplayName());
         if(listachests == null) { return true;}
@@ -103,7 +108,9 @@ public class BlockPlaceListener implements Listener {
                 player.sendMessage("face: " + b.toString());
             }
         }*/
+        b  = chest.getBlock().getFace(chest.getBlock());
 
+/*
         for(Chest r : listachests){
             b  = chest.getBlock().getFace(r.getBlock());
             ox = r.getX();
@@ -128,6 +135,42 @@ public class BlockPlaceListener implements Listener {
                 //check on z axis
                 player.sendMessage("Est o West if");
                 if(zdist <2 ){return  false;}
+            }
+        }*/
+        //check dei dintorni
+        /**
+         * blockxp: blocco x+1
+         * blockxm: blocco x-1
+         * blockzp: blocco x+1
+         * blockzm: blocco x-1
+         */
+
+        Block blockxp = player.getWorld().getBlockAt((int)nx+1,(int)ny,(int) nz);
+        Block blockxm = player.getWorld().getBlockAt((int)nx-1,(int)ny,(int) nz);
+        Block blockzp = player.getWorld().getBlockAt((int)nx,(int)ny,(int) nz+1);
+        Block blockzm = player.getWorld().getBlockAt((int)nx+1,(int)ny,(int) nz-1);
+        if(blockxp!=null){
+            if(blockxp.getType().equals(Material.CHEST)){
+                //vicino ad una chest
+                return false;
+            }
+        }
+        if(blockxm!=null){
+            if(blockxm.getType().equals(Material.CHEST)){
+                //vicino ad una chest
+                return false;
+            }
+        }
+        if(blockzp!=null){
+            if(blockzp.getType().equals(Material.CHEST)){
+                //vicino ad una chest
+                return false;
+            }
+        }
+        if(blockzm!=null){
+            if(blockzm.getType().equals(Material.CHEST)){
+                //vicino ad una chest
+                return false;
             }
         }
         return true;
