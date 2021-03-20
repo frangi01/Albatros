@@ -39,7 +39,8 @@ public class MySql {
             "  `z` double NOT NULL,\n" +
             "  `pitch` double NOT NULL,\n" +
             "  `yaw` double NOT NULL,\n" +
-            "  PRIMARY KEY (`id`)\n" +
+            "  `counter` int NOT NULL,\n" +
+            "   PRIMARY KEY (`id`)" +
             ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;";
 
     private final static String CREATE_TABLE_ENCHANTMENTS = "CREATE TABLE IF NOT EXISTS `ENCHANTMENTS` (\n" +
@@ -47,17 +48,29 @@ public class MySql {
             "  `name` varchar(100) NOT NULL,\n" +
             "  `level` int NOT NULL,\n" +
             "  `itemstack` int NOT NULL,\n" +
-            "   PRIMARY KEY (`id`)\n"+
+            "  `shulker` int NOT NULL," +
+            "   PRIMARY KEY (`id`)\n" +
             ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;";
 
     private final static String CREATE_TABLE_ITEMSTACK = "CREATE TABLE IF NOT EXISTS `ITEMSTACK` (\n" +
             "  `id` int NOT NULL AUTO_INCREMENT,\n" +
             "  `amount` int NOT NULL,\n" +
-            "  `durability` double NOT NULL,\n" +
-            "  `enchantements` tinyint(1) NOT NULL,\n" +
+            "  `durability` int NOT NULL,\n" +
+            "  `enchantements` tinyint(1) NOT NULL DEFAULT '0',\n" +
             "  `type` varchar(100) NOT NULL,\n" +
-            "  `chest` int NOT NULL,\n" +
-            "   PRIMARY KEY (`id`)\n"+
+            "  `chest` int NOT NULL," +
+            "   PRIMARY KEY (`id`)\n" +
+            ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;";
+
+    private final static String CREATE_TABLE_SHULKER = "CREATE TABLE IF OT EXISTS `SHULKER` (\n" +
+            "  `id` int NOT NULL AUTO_INCREMENT,\n" +
+            "  `amount` int NOT NULL,\n" +
+            "  `durability` int NOT NULL,\n" +
+            "  `enchantements` tinyint(1) NOT NULL DEFAULT '0',\n" +
+            "  `type` varchar(100) NOT NULL,\n" +
+            "  `item` int NOT NULL,\n" +
+            "  `chest` int NOT NULL," +
+            "   PRIMARY KEY (`id`)\n" +
             ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;";
 
 
@@ -156,6 +169,10 @@ public class MySql {
             pstmt = c.prepareStatement(CREATE_TABLE_ITEMSTACK);
             pstmt.execute();
             Logger.getLogger(MySql.class.getName()).log(Level.INFO, "Tabella ITEMSTACK caricata");
+
+            pstmt = c.prepareStatement(CREATE_TABLE_SHULKER);
+            pstmt.execute();
+            Logger.getLogger(MySql.class.getName()).log(Level.INFO, "Tabella SHULKER caricata");
 
 
             pstmt = c.prepareStatement(CREATE_TABLE_ENCHANTMENTS);
