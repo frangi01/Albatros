@@ -62,7 +62,6 @@ public class ItemPlacedListener implements Listener {
         }
 
         if(listachests.contains(chest)){
-            System.out.println(player.getDisplayName() + " ha chiuso una cassa recistrata");
             //SALVA CIò CHE C'è DENTRO SUL DB
             PreparedStatement pstmt = null;
             try {
@@ -102,9 +101,7 @@ public class ItemPlacedListener implements Listener {
                                 pstmt.setInt(2, i.getType().getMaxDurability() - d.getDamage()); // ho perso 40min per cercare di capire come cazzo prendere questo valore in 1.16.5 ma non l'ho capito
                             }else{
                                 pstmt.setInt(2, -1); // ho perso 40min per cercare di capire come cazzo prendere questo valore in 1.16.5 ma non l'ho capito
-                                System.out.println("Oggetto non danneggiabile");
                             }
-                            //pstmt.setShort(2, i.getDurability()); // ho perso 40min per cercare di capire come cazzo prendere questo valore in 1.16.5 ma non l'ho capito
                             pstmt.setBoolean(3, i.getItemMeta().hasEnchants());
                             pstmt.setString(4, i.getType().toString());
                             pstmt.setInt(5, id_chest);
@@ -133,9 +130,7 @@ public class ItemPlacedListener implements Listener {
                             if (i.getItemMeta() instanceof BlockStateMeta) {
                                 BlockStateMeta im = (BlockStateMeta) i.getItemMeta();
                                 if (im.getBlockState() instanceof ShulkerBox) {
-                                    System.out.println(player.getDisplayName() +" ha chiuso una chest con dentro una shulker!");
                                     ShulkerBox shulker = (ShulkerBox) im.getBlockState();
-                                    System.out.println(player.getDisplayName()+" ha chiuso una chest con una shulker che contiene: ");
                                     for(ItemStack is : shulker.getInventory()){
                                         if(is==null){continue;}
                                         pstmt = MySql.c.prepareStatement(MySql.ADD_SHULKER_ITEM,Statement.RETURN_GENERATED_KEYS);
@@ -169,7 +164,6 @@ public class ItemPlacedListener implements Listener {
                                                 pstmt.setInt(3, -1);
                                                 pstmt.setInt(4,shulker_id);
                                                 pstmt.execute();
-                                                System.out.println("con "+en.getKey().toString() + is.getEnchantmentLevel(Enchantment.getByKey(en.getKey())));
                                             }
                                         }
                                     }
@@ -180,12 +174,6 @@ public class ItemPlacedListener implements Listener {
                         ex.printStackTrace();
                     }
             }
-            else{
-                player.sendMessage("non hai chiuso una cassa registrata...");
-            }
-        }
-        else{
-            player.sendMessage("non sei nella lista player!");
         }
     }
 
@@ -196,12 +184,10 @@ public class ItemPlacedListener implements Listener {
         Player player = (Player) e.getPlayer();
         Inventory inv = e.getInventory();
         if(!inv.getType().equals(InventoryType.CHEST)){
-            player.sendMessage("non hai aperto una chest...");
             return;
         }
 
         if(!Albatros.getPlayerList().contains(player.getDisplayName())){
-            System.out.println(player.getDisplayName()+" non registrato nella listaplayer!");
             return;
         }
 
@@ -209,11 +195,7 @@ public class ItemPlacedListener implements Listener {
         Chest chest = (Chest) inv.getHolder();
 
         if(Albatros.getOnePlayerChestMap(player.getDisplayName())==null){return;}
-        if(!Albatros.getOnePlayerChestMap(player.getDisplayName()).contains(chest)){
-            System.out.println(player.getDisplayName()+", registrato ha cliccato su una cassa non registrata");
-            return;
-        }
-        System.out.println(player.getDisplayName()+" è registrato e ha cliccato su una cassa registrata");
+        if(!Albatros.getOnePlayerChestMap(player.getDisplayName()).contains(chest)){ return;     }
 
 
         //da id_chest dalla posizione del blocco
@@ -257,15 +239,10 @@ public class ItemPlacedListener implements Listener {
                 String type = rs.getString("type");
                 int damage = getMaterial(type).getMaxDurability() - durability;
 
-                if(Material.getMaterial(type) == null){
-                    System.out.println("ITEMSTACK NELLA CHEST NON RICONOSCIUTO!");
-                    return;
-                }
+                if(Material.getMaterial(type) == null){ return;}
 
                 /************** se è una shulker **********************/
                 if (type.contains("SHULKER")) {
-                    System.out.println("OPENSHULKER la chest aperta da "+ player.getDisplayName()+" contiene una shulker");
-
                     //creo un itemstack di shulker
                     ItemStack shulker_is = new ItemStack(Material.getMaterial(type));
                     BlockStateMeta bsm = (BlockStateMeta) shulker_is.getItemMeta();
@@ -275,7 +252,6 @@ public class ItemPlacedListener implements Listener {
                     pstmt.setInt(1, id_item);
                     pstmt.setInt(2, id_chest);
                     ResultSet rs2 = pstmt.executeQuery();
-                    System.out.println("OPEN: La shulker nella chest contiene: ");
                     // per ogni itemstack salvato nella shulker
                     while (rs2.next()) {
                         int sid_item = rs2.getInt("id");
@@ -283,13 +259,9 @@ public class ItemPlacedListener implements Listener {
                         int sdurability = rs2.getInt("durability");
                         boolean senchantements = rs2.getBoolean("enchantements");
                         String stype = rs2.getString("type");
-                        //int sdamage = sdurability - Objects.requireNonNull(getMaterial(type)).getMaxDurability() ;
-
-
-                        System.out.println("\n"+stype+ "con sdurability: " + sdurability);
 
                         if(Material.getMaterial(type) ==null){
-                            System.out.println("ITEMSTACK NELLA SHULKER NON RICONOSCIUTO!");
+                            //ITEMSTACK NELLA SHULKER NON RICONOSCIUTO!
                             continue;
                         }
                         ItemStack is = new ItemStack(Material.getMaterial(stype),samount);
@@ -303,7 +275,6 @@ public class ItemPlacedListener implements Listener {
                         //itemstack dell'oggetto nella shulker.
 
                         if (senchantements) {
-                            player.sendMessage(stype +" ha i seguenti incantamenti: ");
                             pstmt = c.prepareStatement(GET_ALL_ENCHANTMENTS_FROM_SHULKER);//SELECT `id` FROM `CHEST` WHERE `x` = ? AND `y` = ? AND `z` = ?
                             pstmt.setInt(1, sid_item);
                             ResultSet rs3 = pstmt.executeQuery();
@@ -312,14 +283,12 @@ public class ItemPlacedListener implements Listener {
                                 String name_enchant = rs3.getString("name");
                                 int level = rs3.getInt("level");
 
-                                System.out.println(name_enchant);
-
                                 //inserisci l'enchant all'itemstack
                                 ItemMeta im = is.getItemMeta();
                                 NamespacedKey key = NamespacedKey.minecraft(name_enchant);
-                                if(Enchantment.getByKey(key)==null){
-                                    System.out.println("ENCHANT"+ name_enchant +" NON TROVATO!");continue;
-                                }
+
+                                if(Enchantment.getByKey(key)==null){continue;}
+
                                 im.addEnchant(Enchantment.getByKey(key),level,false);
                                 is.setItemMeta(im);
                                 System.out.println(name_enchant);
@@ -333,7 +302,6 @@ public class ItemPlacedListener implements Listener {
                     chest.getInventory().addItem(shulker_is);
                 } else {
                     /** NON é UNA SHULKER *****/
-                   System.out.println("La chest contiene: "+Material.getMaterial(type));
                     // crea il nuovo Itemstack
                     ItemStack itemStack = new ItemStack(Material.getMaterial(type), amount, (short) damage);
 
@@ -342,22 +310,18 @@ public class ItemPlacedListener implements Listener {
                         pstmt = MySql.c.prepareStatement(GET_ALL_ENCHANTMENTS_FROM_ITEMSTACK);//SELECT `id` FROM `CHEST` WHERE `x` = ? AND `y` = ? AND `z` = ?
                         pstmt.setInt(1, id_item);
                         ResultSet rs2 = pstmt.executeQuery();
-                        System.out.println(type +" ha i seguenti incantamenti: ");
 
                         // per ogni enchantments
                         while (rs2.next()) {
                             String name_enchant = rs2.getString("name");
-                            player.sendMessage(name_enchant);
                             int level = rs2.getInt("level");
-
-                            System.out.println(name_enchant);
 
                             //inserisci l'enchant all'itemstack
                             ItemMeta im = itemStack.getItemMeta();
                             NamespacedKey key = NamespacedKey.minecraft(name_enchant.toLowerCase(Locale.ROOT));
-                            if(Enchantment.getByKey(key)==null){
-                               System.out.println("ENCHANT"+ name_enchant +" NON TROVATO!");continue;
-                            }
+
+                            if(Enchantment.getByKey(key)==null){ continue;}
+
                             im.addEnchant(Enchantment.getByKey(key),level,true);
                             itemStack.setItemMeta(im);
                         }
