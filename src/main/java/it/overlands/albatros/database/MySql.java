@@ -67,6 +67,8 @@ public class MySql {
     public final static String ADD_SHULKER_ITEM = "INSERT INTO `SHULKER`(`id`, `amount`, `durability`, `enchantements`, `type`, `item`, `chest`) VALUES (NULL,?,?,?,?,?,?)";
     public final static String RESET_ALL_CHESTS = "DELETE FROM `CHEST` WHERE `player` = ?";
     public final static String DEL_ALL_ITEMS = "DELETE FROM `ITEMSTACK` WHERE `chest` = ?";
+    public final static String DEL_ALL_SHULKER = "DELETE FROM `SHULKER` WHERE `chest` = ?";
+    public final static String DEL_ALL_ECHATMENTS = "SELECT * FROM `ENCHANTMENTS` WHERE `itemstack` = ? OR `shulker` = ?";
 
     private final static String GET_ALL_CHESTS = "SELECT * FROM `CHEST`";
     //public final static String GET_CHEST = "SELECT `id` FROM `CHEST` WHERE `x` = ? AND `y` = ? AND `z` = ?";

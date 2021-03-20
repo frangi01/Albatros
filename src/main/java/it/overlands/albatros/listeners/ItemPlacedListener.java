@@ -54,129 +54,131 @@ public class ItemPlacedListener implements Listener {
         Chest chest = (Chest) inv.getHolder();
 
         if(Albatros.getPlayerList().contains(player.getDisplayName())){
-            ArrayList<Chest> listachests= Albatros.getOnePlayerChestMap(player.getDisplayName());
-    try{
-        listachests.contains(chest);
-    }catch (NullPointerException ex){
-        return;
-    }
+            ArrayList<Chest> listachests = Albatros.getOnePlayerChestMap(player.getDisplayName());
+        try{
+            listachests.contains(chest);
+        }catch (NullPointerException ex){
+            return;
+        }
 
-    if(listachests.contains(chest)){
-        System.out.println(player.getDisplayName() + " ha chiuso una cassa recistrata");
-        //SALVA CIò CHE C'è DENTRO SUL DB
-        PreparedStatement pstmt = null;
-        try {
-            pstmt = MySql.c.prepareStatement(GET_COUNTER_CHEST);//SELECT `counter` FROM `CHEST` WHERE `player` = ? AND `world` = ? AND `x` = ? AND `y` = ? AND `z` = ?
-            pstmt.setString(1,player.getName());
-            pstmt.setString(2,e.getPlayer().getWorld().getName());
-            pstmt.setDouble(3,chest.getX());
-            pstmt.setDouble(4,chest.getY());
-            pstmt.setDouble(5,chest.getZ());
-            ResultSet rs = pstmt.executeQuery();
-            int counter_chest = -1;
-            while (rs.next()) { counter_chest = rs.getInt("counter"); }
-                // recupero l'id della chest
-                pstmt = MySql.c.prepareStatement(GET_ID_CHEST);//SELECT `id` FROM `CHEST` WHERE `player` = ? AND `world` = ? AND `counter` = ?
+        if(listachests.contains(chest)){
+            System.out.println(player.getDisplayName() + " ha chiuso una cassa recistrata");
+            //SALVA CIò CHE C'è DENTRO SUL DB
+            PreparedStatement pstmt = null;
+            try {
+                pstmt = MySql.c.prepareStatement(GET_COUNTER_CHEST);//SELECT `counter` FROM `CHEST` WHERE `player` = ? AND `world` = ? AND `x` = ? AND `y` = ? AND `z` = ?
                 pstmt.setString(1,player.getName());
-                pstmt.setString(2,Albatros.oldWorld);
-                pstmt.setInt(3,counter_chest);
-                rs = pstmt.executeQuery();
-                int id_chest = -1;
-                while (rs.next()) { id_chest = rs.getInt("id"); }
+                pstmt.setString(2,e.getPlayer().getWorld().getName());
+                pstmt.setDouble(3,chest.getX());
+                pstmt.setDouble(4,chest.getY());
+                pstmt.setDouble(5,chest.getZ());
+                ResultSet rs = pstmt.executeQuery();
+                int counter_chest = -1;
+                while (rs.next()) { counter_chest = rs.getInt("counter"); }
+                    // recupero l'id della chest
+                    pstmt = MySql.c.prepareStatement(GET_ID_CHEST);//SELECT `id` FROM `CHEST` WHERE `player` = ? AND `world` = ? AND `counter` = ?
+                    pstmt.setString(1,player.getName());
+                    pstmt.setString(2,Albatros.oldWorld);
+                    pstmt.setInt(3,counter_chest);
+                    rs = pstmt.executeQuery();
+                    int id_chest = -1;
+                    while (rs.next()) { id_chest = rs.getInt("id"); }
 
-                    //recupero l'inventario
-                    //per ogni ItemStack devo recuperare AMOUNT - DURABILITY - ENCHANTMENT booelan - TYPE
-
-                    pstmt = MySql.c.prepareStatement(MySql.DEL_ALL_ITEMS);
-                    pstmt.setInt (1, id_chest);
-                    pstmt.execute();
-
-                    for (ItemStack i : chest.getInventory()) {
-                        if (i == null) { continue;                        }
-                        pstmt = MySql.c.prepareStatement(MySql.ADD_ITEM, Statement.RETURN_GENERATED_KEYS);
-                        pstmt.setInt(1, i.getAmount());
-                        if(i.getItemMeta() instanceof org.bukkit.inventory.meta.Damageable) {
-                            org.bukkit.inventory.meta.Damageable d = (org.bukkit.inventory.meta.Damageable) i.getItemMeta();
-                            pstmt.setInt(2, i.getType().getMaxDurability() - d.getDamage()); // ho perso 40min per cercare di capire come cazzo prendere questo valore in 1.16.5 ma non l'ho capito
-                        }else{
-                            pstmt.setInt(2, -1); // ho perso 40min per cercare di capire come cazzo prendere questo valore in 1.16.5 ma non l'ho capito
-                            System.out.println("Oggetto non danneggiabile");
-                        }
-                        //pstmt.setShort(2, i.getDurability()); // ho perso 40min per cercare di capire come cazzo prendere questo valore in 1.16.5 ma non l'ho capito
-                        pstmt.setBoolean(3, i.getItemMeta().hasEnchants());
-                        pstmt.setString(4, i.getType().toString());
-                        pstmt.setInt(5, id_chest);
+                        //recupero l'inventario
+                        //per ogni ItemStack devo recuperare AMOUNT - DURABILITY - ENCHANTMENT booelan - TYPE
+                        // cancello tutto ciò che sta nella tabella ITESTACK
+                        pstmt = MySql.c.prepareStatement(MySql.DEL_ALL_ITEMS);
+                        pstmt.setInt (1, id_chest);
                         pstmt.execute();
+                        //TODO cancello tutto ciò che sta ella tabella SHULKER
+                        //TODO cancello tutto ciò che sta ella tabella ENCHANTENTS
 
-                        rs = pstmt.getGeneratedKeys();
-                        int inventory_id = 0;
-                        if (rs.next()) {
-                            inventory_id = rs.getInt(1);
-                        }
-                        // se ha un enchant
-                        if (i.getItemMeta().hasEnchants()) {
-                            // recupero il map degli enchants
-                            Map<Enchantment, Integer> enchantments = i.getEnchantments();
-                            // per ogni enchant recupero il nome e il livello e lo carico sul db
-                            for (Enchantment en : enchantments.keySet()) {
-                                pstmt = MySql.c.prepareStatement(MySql.ADD_ENCHANTS);
-                                pstmt.setString(1, en.getKey().getKey().replace("minecraft:",""));
-                                pstmt.setInt(2, i.getEnchantmentLevel(Enchantment.getByKey(en.getKey())));
-                                pstmt.setInt(3, inventory_id);
-                                pstmt.setInt(4,-1);
-                                pstmt.execute();
+                        for (ItemStack i : chest.getInventory()) {
+                            if (i == null) { continue;                        }
+                            pstmt = MySql.c.prepareStatement(MySql.ADD_ITEM, Statement.RETURN_GENERATED_KEYS);
+                            pstmt.setInt(1, i.getAmount());
+                            if(i.getItemMeta() instanceof org.bukkit.inventory.meta.Damageable) {
+                                org.bukkit.inventory.meta.Damageable d = (org.bukkit.inventory.meta.Damageable) i.getItemMeta();
+                                pstmt.setInt(2, i.getType().getMaxDurability() - d.getDamage()); // ho perso 40min per cercare di capire come cazzo prendere questo valore in 1.16.5 ma non l'ho capito
+                            }else{
+                                pstmt.setInt(2, -1); // ho perso 40min per cercare di capire come cazzo prendere questo valore in 1.16.5 ma non l'ho capito
+                                System.out.println("Oggetto non danneggiabile");
                             }
-                        }
-                        // se è una shulker
-                        if (i.getItemMeta() instanceof BlockStateMeta) {
-                            BlockStateMeta im = (BlockStateMeta) i.getItemMeta();
-                            if (im.getBlockState() instanceof ShulkerBox) {
-                                System.out.println(player.getDisplayName() +" ha chiuso una chest con dentro una shulker!");
-                                ShulkerBox shulker = (ShulkerBox) im.getBlockState();
-                                System.out.println(player.getDisplayName()+" ha chiuso una chest con una shulker che contiene: ");
-                                for(ItemStack is : shulker.getInventory()){
-                                    if(is==null){continue;}
-                                    pstmt = MySql.c.prepareStatement(MySql.ADD_SHULKER_ITEM,Statement.RETURN_GENERATED_KEYS);
-                                    pstmt.setInt (1, is.getAmount());
-                                    if(is.getItemMeta() instanceof  org.bukkit.inventory.meta.Damageable) {
-                                        org.bukkit.inventory.meta.Damageable d = (org.bukkit.inventory.meta.Damageable) is.getItemMeta();
-                                        pstmt.setInt(2, is.getType().getMaxDurability()-d.getDamage()); // ho perso 40min per cercare di capire come cazzo prendere questo valore in 1.16.5 ma non l'ho capito
-                                    } else{
-                                        pstmt.setInt(2, -1); // ho perso 40min per cercare di capire come cazzo prendere questo valore in 1.16.5 ma non l'ho capito
-                                    }
-                                    pstmt.setBoolean (3, is.getItemMeta().hasEnchants());
-                                    pstmt.setString (4, is.getType().toString());
-                                    pstmt.setInt (5, inventory_id);
-                                    pstmt.setInt (6, id_chest);
-                                    pstmt.execute();
+                            //pstmt.setShort(2, i.getDurability()); // ho perso 40min per cercare di capire come cazzo prendere questo valore in 1.16.5 ma non l'ho capito
+                            pstmt.setBoolean(3, i.getItemMeta().hasEnchants());
+                            pstmt.setString(4, i.getType().toString());
+                            pstmt.setInt(5, id_chest);
+                            pstmt.execute();
 
-                                    rs = pstmt.getGeneratedKeys();
-                                    int shulker_id = 0;
-                                    if (rs.next()) {
-                                        shulker_id = rs.getInt(1);
-                                    }
-                                    System.out.println(is.getType());
-                                    if (is.getItemMeta().hasEnchants()) {
-                                        // recupero il map degli enchants
-                                        Map<Enchantment, Integer> enchantments = is.getEnchantments();
-                                        // per ogni enchant recupero il nome e il livello e lo carico sul db
-                                        for (Enchantment en : enchantments.keySet()) {
-                                            pstmt = MySql.c.prepareStatement(MySql.ADD_ENCHANTS);
-                                            pstmt.setString(1, en.getKey().getKey().replace("minecraft:",""));
-                                            pstmt.setInt(2, is.getEnchantmentLevel(Enchantment.getByKey(en.getKey())));
-                                            pstmt.setInt(3, -1);
-                                            pstmt.setInt(4,shulker_id);
-                                            pstmt.execute();
-                                            System.out.println("con "+en.getKey().toString() + is.getEnchantmentLevel(Enchantment.getByKey(en.getKey())));
+                            rs = pstmt.getGeneratedKeys();
+                            int inventory_id = 0;
+                            if (rs.next()) {
+                                inventory_id = rs.getInt(1);
+                            }
+                            // se ha un enchant
+                            if (i.getItemMeta().hasEnchants()) {
+                                // recupero il map degli enchants
+                                Map<Enchantment, Integer> enchantments = i.getEnchantments();
+                                // per ogni enchant recupero il nome e il livello e lo carico sul db
+                                for (Enchantment en : enchantments.keySet()) {
+                                    pstmt = MySql.c.prepareStatement(MySql.ADD_ENCHANTS);
+                                    pstmt.setString(1, en.getKey().getKey().replace("minecraft:",""));
+                                    pstmt.setInt(2, i.getEnchantmentLevel(Enchantment.getByKey(en.getKey())));
+                                    pstmt.setInt(3, inventory_id);
+                                    pstmt.setInt(4,-1);
+                                    pstmt.execute();
+                                }
+                            }
+                            // se è una shulker
+                            if (i.getItemMeta() instanceof BlockStateMeta) {
+                                BlockStateMeta im = (BlockStateMeta) i.getItemMeta();
+                                if (im.getBlockState() instanceof ShulkerBox) {
+                                    System.out.println(player.getDisplayName() +" ha chiuso una chest con dentro una shulker!");
+                                    ShulkerBox shulker = (ShulkerBox) im.getBlockState();
+                                    System.out.println(player.getDisplayName()+" ha chiuso una chest con una shulker che contiene: ");
+                                    for(ItemStack is : shulker.getInventory()){
+                                        if(is==null){continue;}
+                                        pstmt = MySql.c.prepareStatement(MySql.ADD_SHULKER_ITEM,Statement.RETURN_GENERATED_KEYS);
+                                        pstmt.setInt (1, is.getAmount());
+                                        if(is.getItemMeta() instanceof  org.bukkit.inventory.meta.Damageable) {
+                                            org.bukkit.inventory.meta.Damageable d = (org.bukkit.inventory.meta.Damageable) is.getItemMeta();
+                                            pstmt.setInt(2, is.getType().getMaxDurability()-d.getDamage()); // ho perso 40min per cercare di capire come cazzo prendere questo valore in 1.16.5 ma non l'ho capito
+                                        } else{
+                                            pstmt.setInt(2, -1); // ho perso 40min per cercare di capire come cazzo prendere questo valore in 1.16.5 ma non l'ho capito
+                                        }
+                                        pstmt.setBoolean (3, is.getItemMeta().hasEnchants());
+                                        pstmt.setString (4, is.getType().toString());
+                                        pstmt.setInt (5, inventory_id);
+                                        pstmt.setInt (6, id_chest);
+                                        pstmt.execute();
+
+                                        rs = pstmt.getGeneratedKeys();
+                                        int shulker_id = 0;
+                                        if (rs.next()) {
+                                            shulker_id = rs.getInt(1);
+                                        }
+                                        System.out.println(is.getType());
+                                        if (is.getItemMeta().hasEnchants()) {
+                                            // recupero il map degli enchants
+                                            Map<Enchantment, Integer> enchantments = is.getEnchantments();
+                                            // per ogni enchant recupero il nome e il livello e lo carico sul db
+                                            for (Enchantment en : enchantments.keySet()) {
+                                                pstmt = MySql.c.prepareStatement(MySql.ADD_ENCHANTS);
+                                                pstmt.setString(1, en.getKey().getKey().replace("minecraft:",""));
+                                                pstmt.setInt(2, is.getEnchantmentLevel(Enchantment.getByKey(en.getKey())));
+                                                pstmt.setInt(3, -1);
+                                                pstmt.setInt(4,shulker_id);
+                                                pstmt.execute();
+                                                System.out.println("con "+en.getKey().toString() + is.getEnchantmentLevel(Enchantment.getByKey(en.getKey())));
+                                            }
                                         }
                                     }
                                 }
                             }
                         }
+                    } catch (SQLException ex) {
+                        ex.printStackTrace();
                     }
-                } catch (SQLException ex) {
-                    ex.printStackTrace();
-                }
             }
             else{
                 player.sendMessage("non hai chiuso una cassa registrata...");

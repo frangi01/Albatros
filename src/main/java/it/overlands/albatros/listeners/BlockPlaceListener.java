@@ -88,55 +88,10 @@ public class BlockPlaceListener implements Listener {
 
     private boolean distanceCheck(Player player, Chest chest) {
         Location loc = chest.getLocation();
-        BlockFace b;
         double nx = abs(loc.getX());
         double nz = abs(loc.getZ());
         double ny = abs(loc.getY());
 
-        ArrayList<Chest> listachests = Albatros.getOnePlayerChestMap(player.getDisplayName());
-        if(listachests == null) { return true;}
-
-        double ox;
-        double oz;
-        double xdist;
-        double zdist;
-      /*
-        if(listachests!=null) {
-            if (listachests.size() >= 1) {
-                Chest r = listachests.get(0);
-                b = chest.getBlock().getFace(r.getBlock());
-                player.sendMessage("face: " + b.toString());
-            }
-        }*/
-        b  = chest.getBlock().getFace(chest.getBlock());
-
-/*
-        for(Chest r : listachests){
-            b  = chest.getBlock().getFace(r.getBlock());
-            ox = r.getX();
-            oz = r.getZ();
-            xdist = abs(abs(ox)-abs(nx));
-            zdist = abs(abs(oz)-abs(nz));
-            if(b==null){
-                player.sendMessage("abbastanza lontano");
-                return true;
-            }
-            player.sendMessage(" ox: "+ox + "; nx: " + nx);
-            player.sendMessage(" oz: "+oz + "; nz: " + nz);
-
-            player.sendMessage(" xdist: " + xdist + "; zdist: " + zdist);
-            player.sendMessage("facing: " + b.toString());
-            if(b.toString().equals(BlockFace.SOUTH.toString()) || b.toString().equals(BlockFace.NORTH.toString())){
-                player.sendMessage("NOrd o SUD if");
-                //check on x axis
-                if(xdist<2){return  false;}
-            }
-            else if(b== BlockFace.EAST || b == BlockFace.WEST ){
-                //check on z axis
-                player.sendMessage("Est o West if");
-                if(zdist <2 ){return  false;}
-            }
-        }*/
         //check dei dintorni
         /**
          * blockxp: blocco x+1
@@ -174,6 +129,5 @@ public class BlockPlaceListener implements Listener {
             }
         }
         return true;
-
     }
 }
