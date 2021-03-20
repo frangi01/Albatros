@@ -82,16 +82,12 @@ public class ItemPlacedListener implements Listener {
                     rs = pstmt.executeQuery();
                     int id_chest = -1;
                     while (rs.next()) { id_chest = rs.getInt("id"); }
-
                         //recupero l'inventario
                         //per ogni ItemStack devo recuperare AMOUNT - DURABILITY - ENCHANTMENT booelan - TYPE
                         // cancello tutto ciò che sta nella tabella ITESTACK
                         pstmt = MySql.c.prepareStatement(MySql.DEL_ALL_ITEMS);
                         pstmt.setInt (1, id_chest);
                         pstmt.execute();
-                        //TODO cancello tutto ciò che sta ella tabella SHULKER
-                        //TODO cancello tutto ciò che sta ella tabella ENCHANTENTS
-
                         for (ItemStack i : chest.getInventory()) {
                             if (i == null) { continue;                        }
                             pstmt = MySql.c.prepareStatement(MySql.ADD_ITEM, Statement.RETURN_GENERATED_KEYS);
@@ -114,6 +110,11 @@ public class ItemPlacedListener implements Listener {
                             }
                             // se ha un enchant
                             if (i.getItemMeta().hasEnchants()) {
+                                //cancello tutto ciò che sta nella tabella ENCHANTENTS
+                                pstmt = MySql.c.prepareStatement(DEL_ALL_ECHATMENTS);
+                                pstmt.setInt (1, inventory_id);
+                                pstmt.setInt (2, inventory_id);
+                                pstmt.execute();
                                 // recupero il map degli enchants
                                 Map<Enchantment, Integer> enchantments = i.getEnchantments();
                                 // per ogni enchant recupero il nome e il livello e lo carico sul db
@@ -128,6 +129,11 @@ public class ItemPlacedListener implements Listener {
                             }
                             // se è una shulker
                             if (i.getItemMeta() instanceof BlockStateMeta) {
+                                //cancello tutto ciò che sta nella tabella SHULKER
+                                pstmt = MySql.c.prepareStatement(DEL_ALL_SHULKER);
+                                pstmt.setInt (1, id_chest);
+                                pstmt.execute();
+
                                 BlockStateMeta im = (BlockStateMeta) i.getItemMeta();
                                 if (im.getBlockState() instanceof ShulkerBox) {
                                     ShulkerBox shulker = (ShulkerBox) im.getBlockState();
@@ -152,8 +158,14 @@ public class ItemPlacedListener implements Listener {
                                         if (rs.next()) {
                                             shulker_id = rs.getInt(1);
                                         }
-                                        System.out.println(is.getType());
+                                        //System.out.println(is.getType());
                                         if (is.getItemMeta().hasEnchants()) {
+                                            //cancello tutto ciò che sta nella tabella ENCHANTENTS
+                                            pstmt = MySql.c.prepareStatement(DEL_ALL_ECHATMENTS);
+                                            pstmt.setInt (1, shulker_id);
+                                            pstmt.setInt (2, shulker_id);
+                                            pstmt.execute();
+
                                             // recupero il map degli enchants
                                             Map<Enchantment, Integer> enchantments = is.getEnchantments();
                                             // per ogni enchant recupero il nome e il livello e lo carico sul db
