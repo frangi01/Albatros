@@ -145,7 +145,7 @@ public final class Albatros extends JavaPlugin {
         //CREAZIONE DELLE TABELLE SE NON ESISTONO
         MySql.loadDatabase();
         //carica playerChests con i dati sul db
-        MySql.loadFields();
+        //MySql.loadFields();
 
 
     }

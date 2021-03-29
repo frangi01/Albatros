@@ -6,17 +6,16 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.Set;
 
 public class CommandsHandler implements CommandExecutor {
     //commands
     private final String _REGISTRA = "registra";
-    private final String _RESETTA = "resetta";
+    //private final String _RESETTA = "resetta";
     private final String _TERMINA = "termina";
     private final String _HELP = "aiuto";
-    private final String _LISTAPLAYER = "listaplayers";
-    private final String _LISTACHESTS = "listachests";
-    private final String _RESETTATUTTI = "resettatutti";
+    //private final String _LISTAPLAYER = "listaplayers";
+    //private final String _LISTACHESTS = "listachests";
+    //private final String _RESETTATUTTI = "resettatutti";
 
     @Override
     public boolean onCommand(CommandSender s, Command command, String label, String[] args) {
@@ -64,7 +63,7 @@ public class CommandsHandler implements CommandExecutor {
                                 "\\albatro listaplayers --> nomi player registrati al comando";
                         sender.sendMessage(message);
                         break;
-                    case _RESETTA:
+                   /* case _RESETTA:
                         // cancella tutte le chest attive di un player;
                         Albatros.removeChests2Player(sender);
                         sender.sendMessage("registro delle tue chests resettato!");
@@ -90,7 +89,7 @@ public class CommandsHandler implements CommandExecutor {
                             else {
                                 sender.sendMessage("hai piazzato " + size + " chests");
                                 break;
-                            }
+                            }*/
                     default:
                         sender.sendMessage("comando errato, usa \"/albatros aiuto\" per la lista comandi");
                         break;

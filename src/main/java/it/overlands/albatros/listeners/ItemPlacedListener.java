@@ -52,9 +52,9 @@ public class ItemPlacedListener implements Listener {
             return;
         }
         // se non viene aperta una chest
-        /*if(!e.getPlayer().getInventory().getType().name().equalsIgnoreCase("chest")){
+        if(!e.getPlayer().getInventory().getType().name().equalsIgnoreCase("chest")){
             return;
-        }*/
+        }
         Chest chest = (Chest) inv.getHolder();
 
         if(Albatros.getPlayerList().contains(player.getDisplayName())){
@@ -287,7 +287,6 @@ public class ItemPlacedListener implements Listener {
                             is.setItemMeta((ItemMeta) d);
                         }
 
-                        //.out.println("AAAAAAAAAAAAAAAAAAAAAAA "+sdamage);
                         //itemstack dell'oggetto nella shulker.
 
                         if (senchantements) {
