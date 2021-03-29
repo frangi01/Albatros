@@ -62,7 +62,7 @@ public class MySql {
             "   PRIMARY KEY (`id`)\n" +
             ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;";
 
-    private final static String CREATE_TABLE_SHULKER = "CREATE TABLE IF OT EXISTS `SHULKER` (\n" +
+    private final static String CREATE_TABLE_SHULKER = "CREATE TABLE IF NOT EXISTS `SHULKER` (\n" +
             "  `id` int NOT NULL AUTO_INCREMENT,\n" +
             "  `amount` int NOT NULL,\n" +
             "  `durability` int NOT NULL,\n" +

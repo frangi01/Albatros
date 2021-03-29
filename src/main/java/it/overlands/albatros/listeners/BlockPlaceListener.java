@@ -84,6 +84,7 @@ public class BlockPlaceListener implements Listener {
     }
 
     private boolean distanceCheck(Player player, Chest chest) {
+        System.out.println("a"+player.getWorld().getName());
         Location loc = chest.getLocation();
         double nx = abs(loc.getX());
         double nz = abs(loc.getZ());
@@ -100,8 +101,12 @@ public class BlockPlaceListener implements Listener {
         Block blockxp = player.getWorld().getBlockAt((int)nx+1,(int)ny,(int) nz);
         Block blockxm = player.getWorld().getBlockAt((int)nx-1,(int)ny,(int) nz);
         Block blockzp = player.getWorld().getBlockAt((int)nx,(int)ny,(int) nz+1);
-        Block blockzm = player.getWorld().getBlockAt((int)nx+1,(int)ny,(int) nz-1);
+        Block blockzm = player.getWorld().getBlockAt((int)nx,(int)ny,(int) nz-1);
+
+        System.out.println(blockxm.getType().toString()+"\n"+blockxp.getType().toString()+"\n"+blockzm.getType().toString()+"\n"+blockzp.getType().toString());
+
         if(blockxp!=null){
+            System.out.println("non è un blocco null");
             if(blockxp.getType().equals(Material.CHEST)){
                 //vicino ad una chest
                 return false;

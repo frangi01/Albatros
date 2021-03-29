@@ -51,6 +51,10 @@ public class ItemPlacedListener implements Listener {
         if(!inv.getType().equals(InventoryType.CHEST)){
             return;
         }
+        // se non viene aperta una chest
+        /*if(!e.getPlayer().getInventory().getType().name().equalsIgnoreCase("chest")){
+            return;
+        }*/
         Chest chest = (Chest) inv.getHolder();
 
         if(Albatros.getPlayerList().contains(player.getDisplayName())){

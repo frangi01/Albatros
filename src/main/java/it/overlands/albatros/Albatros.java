@@ -27,8 +27,8 @@ public final class Albatros extends JavaPlugin {
     public static int get_MAXNUMCHEST() {return _MAXNUMCHEST;}
     public static Albatros getInstance(){return instance;}
 
-    public static final String oldWorld = "world";
-    public static final String newWorld = "world2";
+    public static final String oldWorld = "magazzino";
+    public static final String newWorld = "world";
 
     /***************** playerChest functions ******************************/
     public static HashMap<String, ArrayList<Chest>> getPlayerChestsMap(){return playerChestsMap;}
