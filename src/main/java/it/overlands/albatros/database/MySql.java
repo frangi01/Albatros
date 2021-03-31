@@ -10,8 +10,8 @@ import java.util.logging.Logger;
 public class MySql {
     private static String URL = "jdbc:mysql://localhost:3306/";
 
-    private final static String USER = "root";
-    private final static String PASSWORD = "@6W9{Xb8";
+    private final static String USER = "";
+    private final static String PASSWORD = "";
     
     
     private final static String DBNAME = "Albatros";
@@ -31,7 +31,7 @@ public class MySql {
             "  `yaw` double NOT NULL,\n" +
             "  `counter` int NOT NULL,\n" +
             "   PRIMARY KEY (`id`)" +
-            ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;";
+            ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;";
 
     private final static String CREATE_TABLE_ENCHANTMENTS = "CREATE TABLE IF NOT EXISTS `ENCHANTMENTS` (\n" +
             "  `id` int NOT NULL AUTO_INCREMENT,\n" +
@@ -40,7 +40,7 @@ public class MySql {
             "  `itemstack` int NOT NULL,\n" +
             "  `shulker` int NOT NULL," +
             "   PRIMARY KEY (`id`)\n" +
-            ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;";
+            ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;";
 
     private final static String CREATE_TABLE_ITEMSTACK = "CREATE TABLE IF NOT EXISTS `ITEMSTACK` (\n" +
             "  `id` int NOT NULL AUTO_INCREMENT,\n" +
@@ -50,7 +50,7 @@ public class MySql {
             "  `type` varchar(100) NOT NULL,\n" +
             "  `chest` int NOT NULL," +
             "   PRIMARY KEY (`id`)\n" +
-            ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;";
+            ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;";
 
     private final static String CREATE_TABLE_SHULKER = "CREATE TABLE IF NOT EXISTS `SHULKER` (\n" +
             "  `id` int NOT NULL AUTO_INCREMENT,\n" +
@@ -61,7 +61,7 @@ public class MySql {
             "  `item` int NOT NULL,\n" +
             "  `chest` int NOT NULL," +
             "   PRIMARY KEY (`id`)\n" +
-            ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;";
+            ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;";
 
 
     public final static String ADD_CHEST = "INSERT INTO `CHEST`(`id`, `player`, `world`, `x`, `y`, `z`, `pitch`, `yaw`,`counter`) VALUES (NULL,?,?,?,?,?,?,?,?)";
