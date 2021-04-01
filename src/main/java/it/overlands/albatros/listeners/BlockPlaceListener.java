@@ -4,14 +4,23 @@ package it.overlands.albatros.listeners;
 import it.overlands.albatros.Albatros;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.block.Chest;
+import org.bukkit.block.data.Directional;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.inventory.InventoryMoveItemEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.json.JSONObject;
+import javax.swing.*;
 import java.util.ArrayList;
 
+import static java.lang.Math.abs;
+import static org.bukkit.block.data.type.Chest.Type.SINGLE;
 
 public class BlockPlaceListener implements Listener {
 
@@ -22,56 +31,64 @@ public class BlockPlaceListener implements Listener {
     // all'evento del blocco piazzato
     @EventHandler
     public void BlockPlaceEvent(BlockPlaceEvent e) {
+        //System.out.println(e.getBlockPlaced().getLocation());
+        //JSONObject json = new JSONObject();
+        //json.put("",e.getBlockPlaced().getType())
+
         Block pb = e.getBlock();
         Player issuer = e.getPlayer();
         ArrayList<String> ep = Albatros.getExecutingPlayers();
 
-        /*se il player che ha piazzato la cassa non ha attivato il comando l'evento è ignorato*/
-        if(!ep.contains(issuer.getName())){return;}
+        /*se il player che ha piazzato la cassa non ha attivato il comando l'evento è ignorato */
+        if(!ep.contains(issuer.getDisplayName())){return;}
 
         if(pb.getType().equals(Material.CHEST)){
             //se è nel mondo giusto
             Chest placed_block = (Chest) pb.getState();
-            //ha piazzato una chest
+            //TODO mettere il nome del mondo giusto
+            //if(e.getPlayer().getWorld().getName().equals("world")){
+                //ha piazzato una chest
 
-            if(!distanceCheck(issuer,placed_block)){
-                placed_block.setType(Material.CHEST);
-                issuer.sendMessage("Solo casse singole! piazzale ad un blocco di distanza"
-                +"l'una dall'altra!!");
-                e.setCancelled(true);
-                return;
-            }
+                if(!distanceCheck(issuer,placed_block)){
+                    placed_block.setType(Material.CHEST);
+                    issuer.sendMessage("Solo casse singole! piazzale ad un blocco di distanza"
+                    +"l'una dall'altra!!");
+                    e.setCancelled(true);
+                    return;
+                }
 
-            int aux = Albatros.addChest2Player(issuer.getName(),placed_block);
-            /** piazzo la chest nell'arraylist del player in questione
-             * aux mi ritorna -1 se ho superato il limite, altrimenti il numero di chest
-             * attualmente piazzate.
-             */
+                int aux = Albatros.addChest2Player(issuer.getDisplayName(),placed_block);
+                /** piazzo la chest nell'arraylist del player in questione
+                 * aux mi ritorna -1 se ho superato il limite, altrimenti il numero di chest
+                 * attualmente piazzate.
+                 */
 
-            int _MAXNUMCHEST = Albatros.get_MAXNUMCHEST();
+                int _MAXNUMCHEST = Albatros.get_MAXNUMCHEST();
 
-            if(aux>0 && aux< _MAXNUMCHEST){
-                String message = "Chest confermata, te ne mancano: " + (_MAXNUMCHEST - aux);
-                issuer.sendMessage(message);
-            }
-            else if(aux == _MAXNUMCHEST){
-                String message = "Chest confermata, hai finito!";
-                issuer.sendMessage(message);
-                Albatros.removeExecutingPlayer(issuer.getName());
-            }
-            if (aux == -1){
-                e.setCancelled(true);
-                issuer.sendMessage("Limite chest raggiunto operazione terminata");
-                Albatros.removeExecutingPlayer(issuer.getName());
-            }
+                if(aux>0 && aux< _MAXNUMCHEST){
+                    String message = "Chest confermata, te ne mancano: " + (_MAXNUMCHEST - aux);
+                    issuer.sendMessage(message);
+                }
+                else if(aux == _MAXNUMCHEST){
+                    String message = "Chest confermata, hai finito!";
+                    issuer.sendMessage(message);
+                    Albatros.removeExecutingPlayer(issuer.getDisplayName());
+                }
+                if (aux == -1){
+                    e.setCancelled(true);
+                    issuer.sendMessage("Limite chest raggiunto operazione terminata");
+                    Albatros.removeExecutingPlayer(issuer.getDisplayName());
+                }
+            //}
         }
     }
 
     private boolean distanceCheck(Player player, Chest chest) {
+        System.out.println("a"+player.getWorld().getName());
         Location loc = chest.getLocation();
-        double nx = loc.getX();
-        double nz = loc.getZ();
-        double ny = loc.getY();
+        double nx = abs(loc.getX());
+        double nz = abs(loc.getZ());
+        double ny = abs(loc.getY());
 
         //check dei dintorni
         /**
@@ -86,7 +103,10 @@ public class BlockPlaceListener implements Listener {
         Block blockzp = player.getWorld().getBlockAt((int)nx,(int)ny,(int) nz+1);
         Block blockzm = player.getWorld().getBlockAt((int)nx,(int)ny,(int) nz-1);
 
+        System.out.println(blockxm.getType().toString()+"\n"+blockxp.getType().toString()+"\n"+blockzm.getType().toString()+"\n"+blockzp.getType().toString());
+
         if(blockxp!=null){
+            System.out.println("non è un blocco null");
             if(blockxp.getType().equals(Material.CHEST)){
                 //vicino ad una chest
                 return false;

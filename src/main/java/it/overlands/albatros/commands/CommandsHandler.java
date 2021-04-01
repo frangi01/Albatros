@@ -58,9 +58,7 @@ public class CommandsHandler implements CommandExecutor {
                         //funzione di help
                         String message ="\\albatros registra --> inizia la sequenza per piazzare e memorizzare le casse\n"+
                                 "\\albatros termina --> termina la sequenza, le casse attualmente memorizzare rimarranno attive\n"+
-                                "\\albatros resetta --> cancella tutte le chest memorizzante\n"+
-                                "\\albatros listachests --> numero chest piazzate\n"+
-                                "\\albatro listaplayers --> nomi player registrati al comando";
+                                "\\albatros listachests --> numero chest piazzate\n";
                         sender.sendMessage(message);
                         break;
                    /* case _RESETTA:
