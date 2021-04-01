@@ -88,9 +88,9 @@ public class BlockPlaceListener implements Listener {
     private boolean distanceCheck(Player player, Chest chest) {
         System.out.println("a"+player.getWorld().getName());
         Location loc = chest.getLocation();
-        double nx = abs(loc.getX());
-        double nz = abs(loc.getZ());
-        double ny = abs(loc.getY());
+        double nx = loc.getX();
+        double nz = loc.getZ();
+        double ny = loc.getY();
 
         //check dei dintorni
         /**
