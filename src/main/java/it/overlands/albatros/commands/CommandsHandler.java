@@ -27,9 +27,8 @@ public class CommandsHandler implements CommandExecutor {
                 switch (cmdargs.toLowerCase()) {
                     case _REGISTRA:
                         // togli il  nick
-                        sender.performCommand("nick off");
+                        Albatros.getInstance().getServer().dispatchCommand(Albatros.getInstance().getServer().getConsoleSender(),"nick off "+sender.getName());
                         //inizia la sequenza per piazzare e memorizzare le casse
-                        if(Albatros.getExecutingPlayers().contains(sender.getName())){
                         if(Albatros.getExecutingPlayers().contains(sender.getName())){
                             //comando già attivo
                             sender.sendMessage("Comando già attivo: piazza le chests o scrivi \"/albatros termina\" per completare la procedura");

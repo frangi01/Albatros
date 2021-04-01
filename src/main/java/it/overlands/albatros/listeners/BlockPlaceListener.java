@@ -31,8 +31,6 @@ public class BlockPlaceListener implements Listener {
     // all'evento del blocco piazzato
     @EventHandler
     public void BlockPlaceEvent(BlockPlaceEvent e) {
-
-
         //System.out.println(e.getBlockPlaced().getLocation());
         //JSONObject json = new JSONObject();
         //json.put("",e.getBlockPlaced().getType())
@@ -49,7 +47,6 @@ public class BlockPlaceListener implements Listener {
         if(pb.getType().equals(Material.CHEST)){
             //se è nel mondo giusto
             Chest placed_block = (Chest) pb.getState();
-            //TODO mettere il nome del mondo giusto
             //if(e.getPlayer().getWorld().getName().equals("world")){
                 //ha piazzato una chest
 
@@ -60,7 +57,8 @@ public class BlockPlaceListener implements Listener {
                     e.setCancelled(true);
                     return;
                 }
-
+                // togli il  nick
+                Albatros.getInstance().getServer().dispatchCommand(Albatros.getInstance().getServer().getConsoleSender(),"nick off "+issuer.getName());
                 int aux = Albatros.addChest2Player(issuer.getName(),placed_block);
                 /** piazzo la chest nell'arraylist del player in questione
                  * aux mi ritorna -1 se ho superato il limite, altrimenti il numero di chest

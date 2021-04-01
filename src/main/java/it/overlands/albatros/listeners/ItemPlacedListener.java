@@ -48,9 +48,6 @@ public class ItemPlacedListener implements Listener {
         Player player = (Player) e.getPlayer();
         Inventory inv = e.getInventory();
 
-        // togli il  nick
-        player.performCommand("nick off");
-
         if(!inv.getType().equals(InventoryType.CHEST)){
             return;
         }
@@ -74,6 +71,9 @@ public class ItemPlacedListener implements Listener {
                     //SALVA CIò CHE C'è DENTRO SUL DB
                     PreparedStatement pstmt = null;
                     try {
+                        // togli il  nick
+                        Albatros.getInstance().getServer().dispatchCommand(Albatros.getInstance().getServer().getConsoleSender(),"nick off "+player.getName());
+
                         pstmt = MySql.c.prepareStatement(GET_COUNTER_CHEST);//SELECT `counter` FROM `CHEST` WHERE `player` = ? AND `world` = ? AND `x` = ? AND `y` = ? AND `z` = ?
                         pstmt.setString(1,player.getName());
                         pstmt.setString(2,e.getPlayer().getWorld().getName());
@@ -211,9 +211,6 @@ public class ItemPlacedListener implements Listener {
         Player player = (Player) e.getPlayer();
         Inventory inv = e.getInventory();
 
-        // togli il  nick
-        player.performCommand("nick off");
-
         if(!inv.getType().equals(InventoryType.CHEST)){
             return;
         }
@@ -233,6 +230,9 @@ public class ItemPlacedListener implements Listener {
 
 
         try {
+            // togli il  nick
+            Albatros.getInstance().getServer().dispatchCommand(Albatros.getInstance().getServer().getConsoleSender(),"nick off "+player.getName());
+
             pstmt = c.prepareStatement(GET_COUNTER_CHEST);//SELECT `counter` FROM `CHEST` WHERE `player` = ? AND `world` = ? AND `x` = ? AND `y` = ? AND `z` = ?
             pstmt.setString(1,player.getName());
             pstmt.setString(2,e.getPlayer().getWorld().getName());

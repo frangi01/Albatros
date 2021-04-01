@@ -14,11 +14,6 @@
   <component name="ChangeListManager">
     <list default="true" id="3eb7934e-583a-419e-a032-0c8ccdf2fcf5" name="Default Changelist" comment="Da fare:&#10;&#10;-modificare il createtable&#10;&#10;&#10;-blocco uso mondo nuovo a vecchio&#10;&#10;-blocco rilancio registra&#10;&#10;-delete dei campi collegati quando si aggiorna il contenuto delle chest&#10;&#10;&#10;- rimozioni dei vari println e correzione dei messaggi">
       <change beforePath="$PROJECT_DIR$/src/main/java/it/overlands/albatros/commands/CommandsHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/overlands/albatros/commands/CommandsHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/overlands/albatros/listeners/BlockPlaceListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/overlands/albatros/listeners/BlockPlaceListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/overlands/albatros/listeners/ItemPlacedListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/overlands/albatros/listeners/ItemPlacedListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/it/overlands/albatros/commands/CommandsHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/it/overlands/albatros/commands/CommandsHandler.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/it/overlands/albatros/listeners/BlockPlaceListener.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/it/overlands/albatros/listeners/BlockPlaceListener.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/it/overlands/albatros/listeners/ItemPlacedListener.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/it/overlands/albatros/listeners/ItemPlacedListener.class" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -60,8 +55,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/it/overlands/albatros/listeners/ItemPlacedListener.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="40">
-              <caret line="269" column="54" lean-forward="true" selection-start-line="269" selection-start-column="54" selection-end-line="269" selection-end-column="54" />
+            <state relative-caret-position="215">
+              <caret line="243" column="71" selection-start-line="243" selection-start-column="71" selection-end-line="243" selection-end-column="71" />
             </state>
           </provider>
         </entry>
@@ -69,11 +64,20 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/it/overlands/albatros/commands/CommandsHandler.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="290">
-              <caret line="26" column="48" lean-forward="true" selection-start-line="26" selection-start-column="48" selection-end-line="26" selection-end-column="48" />
+            <state relative-caret-position="308">
+              <caret line="29" column="75" lean-forward="true" selection-start-line="29" selection-start-column="75" selection-end-line="29" selection-end-column="75" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="jar://$MAVEN_REPOSITORY$/org/spigotmc/spigot-api/1.16.5-R0.1-SNAPSHOT/spigot-api-1.16.5-R0.1-20210319.221438-35-sources.jar!/org/bukkit/Server.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="170">
+              <caret line="581" column="40" selection-start-line="581" selection-start-column="34" selection-end-line="581" selection-end-column="40" />
             </state>
           </provider>
         </entry>
@@ -342,6 +346,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="2576" height="1056" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.13791732" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -352,7 +357,7 @@
       <window_info id="Team" order="6" side_tool="true" />
       <window_info id="Favorites" order="7" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info active="true" anchor="bottom" id="Find" order="1" visible="true" weight="0.32936078" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32936078" />
       <window_info anchor="bottom" id="Run" order="2" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
@@ -361,7 +366,7 @@
       <window_info anchor="bottom" id="Version Control" order="7" />
       <window_info anchor="bottom" id="Terminal" order="8" />
       <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
-      <window_info anchor="bottom" id="Messages" order="10" weight="0.33706608" />
+      <window_info active="true" anchor="bottom" id="Messages" order="10" visible="true" weight="0.33694476" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -528,15 +533,22 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/it/overlands/albatros/listeners/ItemPlacedListener.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="40">
-          <caret line="269" column="54" lean-forward="true" selection-start-line="269" selection-start-column="54" selection-end-line="269" selection-end-column="54" />
+        <state relative-caret-position="215">
+          <caret line="243" column="71" selection-start-line="243" selection-start-column="71" selection-end-line="243" selection-end-column="71" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/spigotmc/spigot-api/1.16.5-R0.1-SNAPSHOT/spigot-api-1.16.5-R0.1-20210319.221438-35-sources.jar!/org/bukkit/Server.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="581" column="40" selection-start-line="581" selection-start-column="34" selection-end-line="581" selection-end-column="40" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/it/overlands/albatros/commands/CommandsHandler.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="290">
-          <caret line="26" column="48" lean-forward="true" selection-start-line="26" selection-start-column="48" selection-end-line="26" selection-end-column="48" />
+        <state relative-caret-position="308">
+          <caret line="29" column="75" lean-forward="true" selection-start-line="29" selection-start-column="75" selection-end-line="29" selection-end-column="75" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
