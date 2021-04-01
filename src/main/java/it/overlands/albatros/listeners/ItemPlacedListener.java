@@ -52,40 +52,42 @@ public class ItemPlacedListener implements Listener {
             return;
         }
         // se non viene aperta una chest
-        if(!e.getPlayer().getInventory().getType().name().equalsIgnoreCase("chest")){
+        /*if(!e.getPlayer().getInventory().getType().name().equalsIgnoreCase("chest")){
             return;
         }
-        Chest chest = (Chest) inv.getHolder();
+        System.out.println("a");*/
 
-        if(Albatros.getPlayerList().contains(player.getDisplayName())){
-            ArrayList<Chest> listachests = Albatros.getOnePlayerChestMap(player.getDisplayName());
         try{
-            listachests.contains(chest);
-        }catch (NullPointerException ex){
-            return;
-        }
+            Chest chest = (Chest) inv.getHolder();
+            if(Albatros.getPlayerList().contains(player.getName())){
+                ArrayList<Chest> listachests = Albatros.getOnePlayerChestMap(player.getName());
+                try{
+                    listachests.contains(chest);
+                }catch (NullPointerException ex){
+                    return;
+                }
 
-        if(listachests.contains(chest)){
-            //SALVA CIò CHE C'è DENTRO SUL DB
-            PreparedStatement pstmt = null;
-            try {
-                pstmt = MySql.c.prepareStatement(GET_COUNTER_CHEST);//SELECT `counter` FROM `CHEST` WHERE `player` = ? AND `world` = ? AND `x` = ? AND `y` = ? AND `z` = ?
-                pstmt.setString(1,player.getName());
-                pstmt.setString(2,e.getPlayer().getWorld().getName());
-                pstmt.setDouble(3,chest.getX());
-                pstmt.setDouble(4,chest.getY());
-                pstmt.setDouble(5,chest.getZ());
-                ResultSet rs = pstmt.executeQuery();
-                int counter_chest = -1;
-                while (rs.next()) { counter_chest = rs.getInt("counter"); }
-                    // recupero l'id della chest
-                    pstmt = MySql.c.prepareStatement(GET_ID_CHEST);//SELECT `id` FROM `CHEST` WHERE `player` = ? AND `world` = ? AND `counter` = ?
-                    pstmt.setString(1,player.getName());
-                    pstmt.setString(2,Albatros.oldWorld);
-                    pstmt.setInt(3,counter_chest);
-                    rs = pstmt.executeQuery();
-                    int id_chest = -1;
-                    while (rs.next()) { id_chest = rs.getInt("id"); }
+                if(listachests.contains(chest)){
+                    //SALVA CIò CHE C'è DENTRO SUL DB
+                    PreparedStatement pstmt = null;
+                    try {
+                        pstmt = MySql.c.prepareStatement(GET_COUNTER_CHEST);//SELECT `counter` FROM `CHEST` WHERE `player` = ? AND `world` = ? AND `x` = ? AND `y` = ? AND `z` = ?
+                        pstmt.setString(1,player.getName());
+                        pstmt.setString(2,e.getPlayer().getWorld().getName());
+                        pstmt.setDouble(3,chest.getX());
+                        pstmt.setDouble(4,chest.getY());
+                        pstmt.setDouble(5,chest.getZ());
+                        ResultSet rs = pstmt.executeQuery();
+                        int counter_chest = -1;
+                        while (rs.next()) { counter_chest = rs.getInt("counter"); }
+                        // recupero l'id della chest
+                        pstmt = MySql.c.prepareStatement(GET_ID_CHEST);//SELECT `id` FROM `CHEST` WHERE `player` = ? AND `world` = ? AND `counter` = ?
+                        pstmt.setString(1,player.getName());
+                        pstmt.setString(2,Albatros.oldWorld);
+                        pstmt.setInt(3,counter_chest);
+                        rs = pstmt.executeQuery();
+                        int id_chest = -1;
+                        while (rs.next()) { id_chest = rs.getInt("id"); }
                         //recupero l'inventario
                         //per ogni ItemStack devo recuperare AMOUNT - DURABILITY - ENCHANTMENT booelan - TYPE
                         // cancello tutto ciò che sta nella tabella ITESTACK
@@ -189,8 +191,14 @@ public class ItemPlacedListener implements Listener {
                     } catch (SQLException ex) {
                         ex.printStackTrace();
                     }
+                }
             }
+        }catch (Exception ex){
+            return;
         }
+
+
+
     }
 
 
@@ -199,6 +207,7 @@ public class ItemPlacedListener implements Listener {
         if(!(e.getPlayer() instanceof  Player)){ return; }
         Player player = (Player) e.getPlayer();
         Inventory inv = e.getInventory();
+
         if(!inv.getType().equals(InventoryType.CHEST)){
             return;
         }
@@ -207,11 +216,10 @@ public class ItemPlacedListener implements Listener {
             return;
         }
 
-
         Chest chest = (Chest) inv.getHolder();
 
-        if(Albatros.getOnePlayerChestMap(player.getDisplayName())==null){return;}
-        if(!Albatros.getOnePlayerChestMap(player.getDisplayName()).contains(chest)){ return;     }
+        if(Albatros.getOnePlayerChestMap(player.getDisplayName()) == null){ return; }
+        if(!Albatros.getOnePlayerChestMap(player.getDisplayName()).contains(chest)){ return; }
 
 
         //da id_chest dalla posizione del blocco
@@ -240,7 +248,7 @@ public class ItemPlacedListener implements Listener {
             rs = pstmt.executeQuery();
             int id_chest = -1;
             while (rs.next()) { id_chest = rs.getInt("id"); }
-
+            System.out.println(id_chest);
             //recupero tutti i dati e li inserisco nella chest
             pstmt = c.prepareStatement(GET_ALL_ITEMSTACK);//SELECT `id` FROM `CHEST` WHERE `x` = ? AND `y` = ? AND `z` = ?
             pstmt.setInt(1,id_chest);

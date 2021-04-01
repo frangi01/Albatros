@@ -10,8 +10,8 @@ import java.util.logging.Logger;
 public class MySql {
     private static String URL = "jdbc:mysql://localhost:3306/";
 
-    private final static String USER = "";
-    private final static String PASSWORD = "";
+    private final static String USER = "root";
+    private final static String PASSWORD = "@6W9{Xb8";
     
     
     private final static String DBNAME = "Albatros";
