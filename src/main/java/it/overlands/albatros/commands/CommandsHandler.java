@@ -26,14 +26,17 @@ public class CommandsHandler implements CommandExecutor {
                 String cmdargs = args[0];
                 switch (cmdargs.toLowerCase()) {
                     case _REGISTRA:
+                        // togli il  nick
+                        sender.performCommand("nick off");
                         //inizia la sequenza per piazzare e memorizzare le casse
-                        if(Albatros.getExecutingPlayers().contains(sender.getDisplayName())){
+                        if(Albatros.getExecutingPlayers().contains(sender.getName())){
+                        if(Albatros.getExecutingPlayers().contains(sender.getName())){
                             //comando già attivo
                             sender.sendMessage("Comando già attivo: piazza le chests o scrivi \"/albatros termina\" per completare la procedura");
                         }else {
                             //comando non attivo
                             try {
-                                if (Albatros.getOnePlayerChestMap(sender.getDisplayName()).size() == Albatros.get_MAXNUMCHEST()) {
+                                if (Albatros.getOnePlayerChestMap(sender.getName()).size() == Albatros.get_MAXNUMCHEST()) {
                                     //max numero chest raggiunto
                                     sender.sendMessage("Numero massimo di chests raggiunto: usa \"/albatros resetta\"" +
                                             " per ricominciare a registrare");
@@ -43,7 +46,7 @@ public class CommandsHandler implements CommandExecutor {
                                 //prima volta che usa /albatros registra, non fare nulla
                             }
                                 sender.sendMessage("Piazza le chest per registrarle");
-                                Albatros.addExecutingPlayer(sender.getDisplayName());
+                                Albatros.addExecutingPlayer(sender.getName());
                         }
                         break;
                     case _TERMINA:
@@ -52,11 +55,11 @@ public class CommandsHandler implements CommandExecutor {
                          * (EG vuoi piazzare solo 3 casse su 5 e fare altro)**/
 
                         sender.sendMessage("registrazione chests terminata!");
-                        Albatros.removeExecutingPlayer(sender.getDisplayName());
+                        Albatros.removeExecutingPlayer(sender.getName());
                         break;
                     case _HELP:
                         //funzione di help
-                        String message ="\\albatros registra --> inizia la sequenza per piazzare e memorizzare le casse\n"+
+                        String message = "\\albatros registra --> inizia la sequenza per piazzare e memorizzare le casse\n"+
                                 "\\albatros termina --> termina la sequenza, le casse attualmente memorizzare rimarranno attive\n"+
                                 "\\albatros listachests --> numero chest piazzate\n";
                         sender.sendMessage(message);

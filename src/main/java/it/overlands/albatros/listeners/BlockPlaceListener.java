@@ -31,6 +31,8 @@ public class BlockPlaceListener implements Listener {
     // all'evento del blocco piazzato
     @EventHandler
     public void BlockPlaceEvent(BlockPlaceEvent e) {
+
+
         //System.out.println(e.getBlockPlaced().getLocation());
         //JSONObject json = new JSONObject();
         //json.put("",e.getBlockPlaced().getType())
@@ -39,8 +41,10 @@ public class BlockPlaceListener implements Listener {
         Player issuer = e.getPlayer();
         ArrayList<String> ep = Albatros.getExecutingPlayers();
 
+
+
         /*se il player che ha piazzato la cassa non ha attivato il comando l'evento è ignorato */
-        if(!ep.contains(issuer.getDisplayName())){return;}
+        if(!ep.contains(issuer.getName())){return;}
 
         if(pb.getType().equals(Material.CHEST)){
             //se è nel mondo giusto
@@ -57,7 +61,7 @@ public class BlockPlaceListener implements Listener {
                     return;
                 }
 
-                int aux = Albatros.addChest2Player(issuer.getDisplayName(),placed_block);
+                int aux = Albatros.addChest2Player(issuer.getName(),placed_block);
                 /** piazzo la chest nell'arraylist del player in questione
                  * aux mi ritorna -1 se ho superato il limite, altrimenti il numero di chest
                  * attualmente piazzate.
@@ -72,12 +76,12 @@ public class BlockPlaceListener implements Listener {
                 else if(aux == _MAXNUMCHEST){
                     String message = "Chest confermata, hai finito!";
                     issuer.sendMessage(message);
-                    Albatros.removeExecutingPlayer(issuer.getDisplayName());
+                    Albatros.removeExecutingPlayer(issuer.getName());
                 }
                 if (aux == -1){
                     e.setCancelled(true);
                     issuer.sendMessage("Limite chest raggiunto operazione terminata");
-                    Albatros.removeExecutingPlayer(issuer.getDisplayName());
+                    Albatros.removeExecutingPlayer(issuer.getName());
                 }
             //}
         }

@@ -48,6 +48,9 @@ public class ItemPlacedListener implements Listener {
         Player player = (Player) e.getPlayer();
         Inventory inv = e.getInventory();
 
+        // togli il  nick
+        player.performCommand("nick off");
+
         if(!inv.getType().equals(InventoryType.CHEST)){
             return;
         }
@@ -208,18 +211,21 @@ public class ItemPlacedListener implements Listener {
         Player player = (Player) e.getPlayer();
         Inventory inv = e.getInventory();
 
+        // togli il  nick
+        player.performCommand("nick off");
+
         if(!inv.getType().equals(InventoryType.CHEST)){
             return;
         }
 
-        if(!Albatros.getPlayerList().contains(player.getDisplayName())){
+        if(!Albatros.getPlayerList().contains(player.getName())){
             return;
         }
 
         Chest chest = (Chest) inv.getHolder();
 
-        if(Albatros.getOnePlayerChestMap(player.getDisplayName()) == null){ return; }
-        if(!Albatros.getOnePlayerChestMap(player.getDisplayName()).contains(chest)){ return; }
+        if(Albatros.getOnePlayerChestMap(player.getName()) == null){ return; }
+        if(!Albatros.getOnePlayerChestMap(player.getName()).contains(chest)){ return; }
 
 
         //da id_chest dalla posizione del blocco
