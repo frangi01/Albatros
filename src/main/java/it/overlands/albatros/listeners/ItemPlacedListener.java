@@ -197,6 +197,7 @@ public class ItemPlacedListener implements Listener {
                 }
             }
         }catch (Exception ex){
+            player.sendMessage("Si è verificato un errore contatta uno staffer");
             return;
         }
 
