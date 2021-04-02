@@ -76,7 +76,7 @@ public class ItemPlacedListener implements Listener {
 
                         pstmt = MySql.c.prepareStatement(GET_COUNTER_CHEST);//SELECT `counter` FROM `CHEST` WHERE `player` = ? AND `world` = ? AND `x` = ? AND `y` = ? AND `z` = ?
                         pstmt.setString(1,player.getName());
-                        pstmt.setString(2,e.getPlayer().getWorld().getName());
+                        pstmt.setString(2,String.valueOf(e.getPlayer().getServer().getPort()));
                         pstmt.setDouble(3,chest.getX());
                         pstmt.setDouble(4,chest.getY());
                         pstmt.setDouble(5,chest.getZ());
@@ -86,7 +86,7 @@ public class ItemPlacedListener implements Listener {
                         // recupero l'id della chest
                         pstmt = MySql.c.prepareStatement(GET_ID_CHEST);//SELECT `id` FROM `CHEST` WHERE `player` = ? AND `world` = ? AND `counter` = ?
                         pstmt.setString(1,player.getName());
-                        pstmt.setString(2,Albatros.oldWorld);
+                        pstmt.setString(2,Albatros.oldWorldport);
                         pstmt.setInt(3,counter_chest);
                         rs = pstmt.executeQuery();
                         int id_chest = -1;
@@ -235,7 +235,7 @@ public class ItemPlacedListener implements Listener {
 
             pstmt = c.prepareStatement(GET_COUNTER_CHEST);//SELECT `counter` FROM `CHEST` WHERE `player` = ? AND `world` = ? AND `x` = ? AND `y` = ? AND `z` = ?
             pstmt.setString(1,player.getName());
-            pstmt.setString(2,e.getPlayer().getWorld().getName());
+            pstmt.setString(2,String.valueOf(e.getPlayer().getServer().getPort()));
             pstmt.setDouble(3,chest.getX());
             pstmt.setDouble(4,chest.getY());
             pstmt.setDouble(5,chest.getZ());
@@ -249,7 +249,7 @@ public class ItemPlacedListener implements Listener {
             // recupero l'id della chest
             pstmt = c.prepareStatement(GET_ID_CHEST);//SELECT `id` FROM `CHEST` WHERE `player` = ? AND `world` = ? AND `counter` = ?
             pstmt.setString(1,player.getName());
-            pstmt.setString(2,Albatros.oldWorld);
+            pstmt.setString(2,Albatros.oldWorldport);
             pstmt.setInt(3,counter_chest);
             rs = pstmt.executeQuery();
             int id_chest = -1;

@@ -4,6 +4,9 @@ import it.overlands.albatros.commands.CommandsHandler;
 import it.overlands.albatros.database.MySql;
 import it.overlands.albatros.listeners.BlockPlaceListener;
 import it.overlands.albatros.listeners.ItemPlacedListener;
+import org.bukkit.Bukkit;
+import org.bukkit.Server;
+import org.bukkit.World;
 import org.bukkit.block.Chest;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
@@ -18,7 +21,6 @@ import java.util.Set;
 public final class Albatros extends JavaPlugin {
     private static Albatros instance;
     private static final int _MAXNUMCHEST = 5;
-
     //playerCheck tiene il conto di quante casse hanno claimato contiene
     private static HashMap<String, ArrayList<Chest>> playerChestsMap = new HashMap<>();
     // player che hanno lanciato il comando e stanno lavorando con le casse
@@ -29,6 +31,9 @@ public final class Albatros extends JavaPlugin {
 
     public static final String oldWorld = "magazzino";
     public static final String newWorld = "world";
+
+    public static final String oldWorldport = "25566";
+    public static final String newWorldport = "25598";
 
     /***************** playerChest functions ******************************/
     public static HashMap<String, ArrayList<Chest>> getPlayerChestsMap(){return playerChestsMap;}
@@ -51,7 +56,7 @@ public final class Albatros extends JavaPlugin {
         return null;
     }
 
-    public static int addChest2Player(String p,Chest chest){
+    public static int addChest2Player(String p,Chest chest, int server_name){
         //aggiunge la chest al player e ritorna il numero di chest attuali,
         // -1 se ha superato il limite
         if(playerChestsMap.containsKey(p)){
@@ -63,7 +68,7 @@ public final class Albatros extends JavaPlugin {
                 try {
                     PreparedStatement pstmt = MySql.c.prepareStatement(MySql.ADD_CHEST);
                     pstmt.setString (1, p);
-                    pstmt.setString (2, chest.getLocation().getWorld().getName());
+                    pstmt.setString (2, String.valueOf(server_name));
                     pstmt.setDouble (3, chest.getLocation().getX());
                     pstmt.setDouble (4, chest.getLocation().getY());
                     pstmt.setDouble (5, chest.getLocation().getZ());

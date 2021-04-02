@@ -4,6 +4,7 @@ package it.overlands.albatros.listeners;
 import it.overlands.albatros.Albatros;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -50,7 +51,7 @@ public class BlockPlaceListener implements Listener {
             //if(e.getPlayer().getWorld().getName().equals("world")){
                 //ha piazzato una chest
 
-                if(!distanceCheck(issuer,placed_block)){
+            if(!distanceCheck(issuer,placed_block)){
                     placed_block.setType(Material.CHEST);
                     issuer.sendMessage("Solo casse singole! piazzale ad un blocco di distanza"
                     +"l'una dall'altra!!");
@@ -59,7 +60,10 @@ public class BlockPlaceListener implements Listener {
                 }
                 // togli il  nick
                 Albatros.getInstance().getServer().dispatchCommand(Albatros.getInstance().getServer().getConsoleSender(),"nick off "+issuer.getName());
-                int aux = Albatros.addChest2Player(issuer.getName(),placed_block);
+                int server_name = issuer.getServer().getPort();
+
+                int aux = Albatros.addChest2Player(issuer.getName(),placed_block, server_name);
+                issuer.sendMessage("Server: "+ server_name);
                 /** piazzo la chest nell'arraylist del player in questione
                  * aux mi ritorna -1 se ho superato il limite, altrimenti il numero di chest
                  * attualmente piazzate.
@@ -105,7 +109,6 @@ public class BlockPlaceListener implements Listener {
         Block blockzp = player.getWorld().getBlockAt((int)nx,(int)ny,(int) nz+1);
         Block blockzm = player.getWorld().getBlockAt((int)nx,(int)ny,(int) nz-1);
 
-        System.out.println(blockxm.getType().toString()+"\n"+blockxp.getType().toString()+"\n"+blockzm.getType().toString()+"\n"+blockzp.getType().toString());
 
         if(blockxp!=null){
             System.out.println("non è un blocco null");
