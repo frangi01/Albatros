@@ -13,13 +13,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3eb7934e-583a-419e-a032-0c8ccdf2fcf5" name="Default Changelist" comment="ho modificato _help">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/Albatros_jar/Albatros.jar" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/Albatros_jar/Albatros.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/overlands/albatros/Albatros.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/overlands/albatros/Albatros.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/overlands/albatros/commands/CommandsHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/overlands/albatros/commands/CommandsHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/overlands/albatros/database/MySql.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/overlands/albatros/database/MySql.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/it/overlands/albatros/listeners/BlockPlaceListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/overlands/albatros/listeners/BlockPlaceListener.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/it/overlands/albatros/listeners/ItemPlacedListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/overlands/albatros/listeners/ItemPlacedListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/it/overlands/albatros/listeners/BlockPlaceListener.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/it/overlands/albatros/listeners/BlockPlaceListener.class" afterDir="false" />
     </list>
+    <ignored path="$PROJECT_DIR$/out/" />
+    <ignored path="$PROJECT_DIR$/target/" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -27,6 +28,67 @@
   </component>
   <component name="DefaultGradleProjectSettings">
     <option name="isMigrated" value="true" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/java/it/overlands/albatros/listeners/ItemPlacedListener.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-6450">
+              <caret line="90" column="146" selection-start-line="90" selection-start-column="146" selection-end-line="90" selection-end-column="146" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/it/overlands/albatros/database/MySql.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="188">
+              <caret line="67" column="128" selection-start-line="67" selection-start-column="123" selection-end-line="67" selection-end-column="128" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/it/overlands/albatros/listeners/BlockPlaceListener.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1175">
+              <caret line="65" column="44" lean-forward="true" selection-start-line="65" selection-start-column="35" selection-end-line="65" selection-end-column="50" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/it/overlands/albatros/Albatros.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="350">
+              <caret line="35" column="52" selection-start-line="35" selection-start-column="47" selection-end-line="35" selection-end-column="52" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/it/overlands/albatros/commands/CommandsHandler.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="864">
+              <caret line="67" column="79" lean-forward="true" selection-start-line="67" selection-start-column="79" selection-end-line="67" selection-end-column="79" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -63,11 +125,11 @@
         <option value="$PROJECT_DIR$/src/main/java/it/overlands/albatros/events/BlockPlaceEvent.java" />
         <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/src/main/java/it/overlands/albatros/events/BlockPlace.java" />
-        <option value="$PROJECT_DIR$/src/main/java/it/overlands/albatros/database/MySql.java" />
         <option value="$PROJECT_DIR$/src/main/java/it/overlands/albatros/Albatros.java" />
         <option value="$PROJECT_DIR$/src/main/java/it/overlands/albatros/listeners/BlockPlaceListener.java" />
-        <option value="$PROJECT_DIR$/src/main/java/it/overlands/albatros/listeners/ItemPlacedListener.java" />
         <option value="$PROJECT_DIR$/src/main/java/it/overlands/albatros/commands/CommandsHandler.java" />
+        <option value="$PROJECT_DIR$/src/main/java/it/overlands/albatros/database/MySql.java" />
+        <option value="$PROJECT_DIR$/src/main/java/it/overlands/albatros/listeners/ItemPlacedListener.java" />
       </list>
     </option>
   </component>
@@ -80,8 +142,8 @@
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="184" />
-    <option name="y" value="45" />
+    <option name="x" value="396" />
+    <option name="y" value="-8" />
     <option name="width" value="1294" />
     <option name="height" value="1047" />
   </component>
@@ -95,7 +157,6 @@
     </navigator>
     <panes>
       <pane id="PackagesPane" />
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -160,6 +221,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="ProjectViewState">
@@ -178,6 +240,18 @@
     <key name="MoveFile.RECENT_KEYS">
       <recent name="E:\plugins\Albatros\src\main\java\it\overlands\albatros\commands" />
     </key>
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
   </component>
   <component name="RunManager">
     <configuration name="Albatros build" type="MavenRunConfiguration" factoryName="Maven">
@@ -207,7 +281,7 @@
       <method v="2" />
     </configuration>
   </component>
-  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="SpellCheckerSettings" BundledDictionaries="0" Folders="0" CustomDictionaries="0" Dictionaries="0" CorrectionsLimit="5" DefaultDictionary="application-level" UseSingleDictionary="true" />
   <component name="SvnConfiguration">
     <configuration />
   </component>
@@ -268,7 +342,7 @@
     <frame x="-8" y="-8" width="2576" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.13791732" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.1391097" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -341,7 +415,14 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="RECENTLY_FILTERED_USER_GROUPS">
+                <collection />
+              </option>
+              <option name="RECENTLY_FILTERED_BRANCH_GROUPS">
+                <collection />
+              </option>
+            </State>
           </value>
         </entry>
       </map>
@@ -360,7 +441,6 @@
         </entry>
       </map>
     </option>
-    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="diocan" />
@@ -425,43 +505,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/it/overlands/albatros/database/MySql.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="325">
-          <caret line="13" column="54" selection-start-line="13" selection-start-column="54" selection-end-line="13" selection-end-column="54" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/it/overlands/albatros/Albatros.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret line="147" column="24" selection-start-line="147" selection-start-column="24" selection-end-line="147" selection-end-column="24" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/it/overlands/albatros/listeners/BlockPlaceListener.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="305">
-          <caret line="83" column="67" selection-start-line="83" selection-start-column="67" selection-end-line="83" selection-end-column="67" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/it/overlands/albatros/listeners/ItemPlacedListener.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="215">
-          <caret line="243" column="71" selection-start-line="243" selection-start-column="71" selection-end-line="243" selection-end-column="71" />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$MAVEN_REPOSITORY$/org/spigotmc/spigot-api/1.16.5-R0.1-SNAPSHOT/spigot-api-1.16.5-R0.1-20210319.221438-35-sources.jar!/org/bukkit/Server.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="170">
@@ -471,11 +514,48 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/it/overlands/albatros/commands/CommandsHandler.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="308">
-          <caret line="29" column="75" lean-forward="true" selection-start-line="29" selection-start-column="75" selection-end-line="29" selection-end-column="75" />
+        <state relative-caret-position="864">
+          <caret line="67" column="79" lean-forward="true" selection-start-line="67" selection-start-column="79" selection-end-line="67" selection-end-column="79" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/it/overlands/albatros/Albatros.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="350">
+          <caret line="35" column="52" selection-start-line="35" selection-start-column="47" selection-end-line="35" selection-end-column="52" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/it/overlands/albatros/listeners/BlockPlaceListener.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1175">
+          <caret line="65" column="44" lean-forward="true" selection-start-line="65" selection-start-column="35" selection-end-line="65" selection-end-column="50" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/it/overlands/albatros/database/MySql.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="188">
+          <caret line="67" column="128" selection-start-line="67" selection-start-column="123" selection-end-line="67" selection-end-column="128" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/it/overlands/albatros/listeners/ItemPlacedListener.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-6450">
+          <caret line="90" column="146" selection-start-line="90" selection-start-column="146" selection-end-line="90" selection-end-column="146" />
         </state>
       </provider>
     </entry>

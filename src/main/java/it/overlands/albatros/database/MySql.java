@@ -74,7 +74,7 @@ public class MySql {
     public final static String DEL_ALL_ECHATMENTS = "SELECT * FROM `ENCHANTMENTS` WHERE `itemstack` = ? OR `shulker` = ?";
 
     private final static String GET_ALL_CHESTS = "SELECT * FROM `CHEST`";
-    public final static String GET_COUNTER_CHEST = "SELECT `counter` FROM `CHEST` WHERE `player` = ? AND `world` = ? AND `x` = ? AND `y` = ? AND `z` = ?";
+    public final static String GET_COUNTER_CHEST = "SELECT `counter`,`player` FROM `CHEST` WHERE `world` = ? AND `x` = ? AND `y` = ? AND `z` = ?";
 
     public final static String GET_ID_CHEST = "SELECT `id` FROM `CHEST` WHERE `player` = ? AND `world` = ? AND `counter` = ?";
 

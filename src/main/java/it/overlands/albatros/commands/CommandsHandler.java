@@ -37,8 +37,7 @@ public class CommandsHandler implements CommandExecutor {
                             try {
                                 if (Albatros.getOnePlayerChestMap(sender.getName()).size() == Albatros.get_MAXNUMCHEST()) {
                                     //max numero chest raggiunto
-                                    sender.sendMessage("Numero massimo di chests raggiunto: usa \"/albatros resetta\"" +
-                                            " per ricominciare a registrare");
+                                    sender.sendMessage("Numero massimo di chests raggiunto");
                                     break;
                                 }
                             }catch (NullPointerException ex){

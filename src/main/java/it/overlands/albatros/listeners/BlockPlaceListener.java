@@ -60,6 +60,7 @@ public class BlockPlaceListener implements Listener {
                 }
                 // togli il  nick
                 Albatros.getInstance().getServer().dispatchCommand(Albatros.getInstance().getServer().getConsoleSender(),"nick off "+issuer.getName());
+                // ottieni la porta
                 int server_name = issuer.getServer().getPort();
 
                 int aux = Albatros.addChest2Player(issuer.getName(),placed_block, server_name);

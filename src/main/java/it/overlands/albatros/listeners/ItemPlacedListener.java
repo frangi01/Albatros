@@ -75,28 +75,40 @@ public class ItemPlacedListener implements Listener {
                         Albatros.getInstance().getServer().dispatchCommand(Albatros.getInstance().getServer().getConsoleSender(),"nick off "+player.getName());
 
                         pstmt = MySql.c.prepareStatement(GET_COUNTER_CHEST);//SELECT `counter` FROM `CHEST` WHERE `player` = ? AND `world` = ? AND `x` = ? AND `y` = ? AND `z` = ?
-                        pstmt.setString(1,player.getName());
-                        pstmt.setString(2,String.valueOf(e.getPlayer().getServer().getPort()));
-                        pstmt.setDouble(3,chest.getX());
-                        pstmt.setDouble(4,chest.getY());
-                        pstmt.setDouble(5,chest.getZ());
+                        //pstmt.setString(1,player.getName());
+                        pstmt.setString(1,String.valueOf(e.getPlayer().getServer().getPort()));
+                        pstmt.setInt(2,chest.getX());
+                        pstmt.setInt(3,chest.getY());
+                        pstmt.setInt(4,chest.getZ());
                         ResultSet rs = pstmt.executeQuery();
                         int counter_chest = -1;
-                        while (rs.next()) { counter_chest = rs.getInt("counter"); }
+                        String player_chest = "";
+                        while (rs.next()) { counter_chest = rs.getInt("counter");  player_chest = rs.getString("player"); }
+
+                        System.out.println("a "+player_chest);
+
                         // recupero l'id della chest
                         pstmt = MySql.c.prepareStatement(GET_ID_CHEST);//SELECT `id` FROM `CHEST` WHERE `player` = ? AND `world` = ? AND `counter` = ?
-                        pstmt.setString(1,player.getName());
+                        pstmt.setString(1,player_chest);
                         pstmt.setString(2,Albatros.oldWorldport);
                         pstmt.setInt(3,counter_chest);
                         rs = pstmt.executeQuery();
                         int id_chest = -1;
                         while (rs.next()) { id_chest = rs.getInt("id"); }
+
+                        System.out.println("b "+id_chest);
+
                         //recupero l'inventario
                         //per ogni ItemStack devo recuperare AMOUNT - DURABILITY - ENCHANTMENT booelan - TYPE
                         // cancello tutto ciò che sta nella tabella ITESTACK
                         pstmt = MySql.c.prepareStatement(MySql.DEL_ALL_ITEMS);
                         pstmt.setInt (1, id_chest);
+
+                        System.out.println(pstmt.toString());
+
                         pstmt.execute();
+
+
                         for (ItemStack i : chest.getInventory()) {
                             if (i == null) { continue;                        }
                             pstmt = MySql.c.prepareStatement(MySql.ADD_ITEM, Statement.RETURN_GENERATED_KEYS);
@@ -207,6 +219,8 @@ public class ItemPlacedListener implements Listener {
 
     @EventHandler
     public void inv(InventoryOpenEvent e) {
+        //System.out.println("a"+e.getPlayer().getName());
+
         if(!(e.getPlayer() instanceof  Player)){ return; }
         Player player = (Player) e.getPlayer();
         Inventory inv = e.getInventory();
@@ -215,15 +229,15 @@ public class ItemPlacedListener implements Listener {
             return;
         }
 
-        if(!Albatros.getPlayerList().contains(player.getName())){
+        /*if(!Albatros.getPlayerList().contains(player.getName())){
             return;
-        }
+        }*/
 
         Chest chest = (Chest) inv.getHolder();
 
-        if(Albatros.getOnePlayerChestMap(player.getName()) == null){ return; }
+        /*if(Albatros.getOnePlayerChestMap(player.getName()) == null){ return; }
         if(!Albatros.getOnePlayerChestMap(player.getName()).contains(chest)){ return; }
-
+*/
 
         //da id_chest dalla posizione del blocco
         PreparedStatement pstmt = null;
@@ -233,22 +247,29 @@ public class ItemPlacedListener implements Listener {
             // togli il  nick
             Albatros.getInstance().getServer().dispatchCommand(Albatros.getInstance().getServer().getConsoleSender(),"nick off "+player.getName());
 
-            pstmt = c.prepareStatement(GET_COUNTER_CHEST);//SELECT `counter` FROM `CHEST` WHERE `player` = ? AND `world` = ? AND `x` = ? AND `y` = ? AND `z` = ?
-            pstmt.setString(1,player.getName());
-            pstmt.setString(2,String.valueOf(e.getPlayer().getServer().getPort()));
-            pstmt.setDouble(3,chest.getX());
-            pstmt.setDouble(4,chest.getY());
-            pstmt.setDouble(5,chest.getZ());
-            ResultSet rs = pstmt.executeQuery();
-            int counter_chest = -1;
-            while (rs.next()) { counter_chest = rs.getInt("counter"); }
+            System.out.println("parte");
 
+            pstmt = c.prepareStatement(GET_COUNTER_CHEST);//SELECT `counter` FROM `CHEST` WHERE `world` = ? AND `x` = ? AND `y` = ? AND `z` = ?
+            //pstmt.setString(1,player.getName());
+            pstmt.setString(1,String.valueOf(e.getPlayer().getServer().getPort()));
+            pstmt.setInt(2,chest.getX());
+            pstmt.setInt(3,chest.getY());
+            pstmt.setInt(4,chest.getZ());
+            ResultSet rs = pstmt.executeQuery();
+
+            System.out.println(pstmt.toString());
+            int counter_chest = -1;
+            String player_chest = "";
+            while (rs.next()) { counter_chest = rs.getInt("counter"); player_chest = rs.getString("player"); }
+
+
+            System.out.println("a "+player_chest);
             //reset chest inventory
             chest.getInventory().clear();
 
             // recupero l'id della chest
             pstmt = c.prepareStatement(GET_ID_CHEST);//SELECT `id` FROM `CHEST` WHERE `player` = ? AND `world` = ? AND `counter` = ?
-            pstmt.setString(1,player.getName());
+            pstmt.setString(1,player_chest);
             pstmt.setString(2,Albatros.oldWorldport);
             pstmt.setInt(3,counter_chest);
             rs = pstmt.executeQuery();
