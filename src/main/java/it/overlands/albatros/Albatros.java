@@ -92,7 +92,7 @@ public final class Albatros extends JavaPlugin {
             try {
                 PreparedStatement pstmt = MySql.c.prepareStatement(MySql.ADD_CHEST);
                 pstmt.setString (1, p);
-                pstmt.setString (2, chest.getLocation().getWorld().getName());
+                pstmt.setString (2,  String.valueOf(server_name));
                 pstmt.setDouble (3, chest.getLocation().getX());
                 pstmt.setDouble (4, chest.getLocation().getY());
                 pstmt.setDouble (5, chest.getLocation().getZ());
